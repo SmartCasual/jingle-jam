@@ -10,9 +10,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2021_02_23_203056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bundle_definitions", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "price_decimals", default: 0, null: false
+    t.string "price_currency", default: "GBP", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "bundles", force: :cascade do |t|
+    t.bigint "donator_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["donator_id"], name: "index_bundles_on_donator_id"
+  end
+
+  create_table "donations", force: :cascade do |t|
+    t.integer "amount_decimals", default: 0, null: false
+    t.string "amount_currency", default: "GBP", null: false
+    t.string "message"
+    t.bigint "donator_id", null: false
+    t.bigint "bundle_id"
+    t.bigint "donated_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bundle_id"], name: "index_donations_on_bundle_id"
+    t.index ["donated_by_id"], name: "index_donations_on_donated_by_id"
+    t.index ["donator_id"], name: "index_donations_on_donator_id"
+  end
+
+  create_table "donators", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
 end

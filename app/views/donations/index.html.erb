@@ -1,0 +1,29 @@
+<% if @donations.any? %>
+  <h2>Current donations</h2>
+  <ol class="donation-list">
+    <% @donations.each do |donation| %>
+      <li>
+        <%= donation.amount.format %>
+        <% if donation.message.present? %>
+          - <%= donation.message %>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+<% end %>
+
+<h2>Make a donation</h2>
+
+<%= form_for(Donation.new) do |f| %>
+  <p>
+    <%= f.label :amount, "£" %>
+    <%= f.text_field :amount %>
+  </p>
+
+  <p>
+    <%= f.label :message, "Message (optional)" %>
+    <%= f.text_field :message %>
+  </p>
+
+  <button>Donate</button>
+<% end %>
