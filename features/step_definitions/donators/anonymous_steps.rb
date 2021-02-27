@@ -6,13 +6,15 @@ When("an anonymous donator makes a {amount} donation with the message {string}")
   go_to_homepage
   click_on "Donate here!"
 
-  fill_in "£", with: amount
+  select amount.currency.iso_code, from: "Currency"
+  fill_in "Amount", with: amount.to_s
   fill_in "Message", with: message
+
   click_on "Donate"
 end
 
 Then("a {amount} donation should be recorded with the message {string}") do |amount, message|
-  expect(page).to have_text("#{amount.format} - #{message}")
+  expect(page).to have_text("#{amount.format} Paid #{message}")
 end
 
 Then("no bundles should have been assigned") do

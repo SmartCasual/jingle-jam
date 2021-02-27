@@ -8,6 +8,18 @@
 
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= javascript_pack_tag 'application' %>
+
+    <script type="text/javascript">
+      function onReady(callback) {
+        if (document.readyState != 'loading'){
+          callback();
+        } else {
+          document.addEventListener('DOMContentLoaded', callback);
+        }
+      }
+    </script>
+
+    <%= yield :head %>
   </head>
 
   <body>

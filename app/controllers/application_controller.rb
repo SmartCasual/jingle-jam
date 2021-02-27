@@ -13,4 +13,9 @@ private
   def known_user?
     current_donator || current_admin
   end
+
+  def error(message)
+    Rails.logger.error(message)
+    render json: { errors: [message] }, status: 422
+  end
 end

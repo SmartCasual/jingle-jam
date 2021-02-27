@@ -1,29 +1,59 @@
+<% content_for :head do %>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script type="text/javascript">
+    onReady(function() {
+      Packs.application.addStripeToForm(document.getElementById('donation-form'));
+    })
+  </script>
+<% end %>
+
+<% if params[:status] == "success" %>
+  <p>Donation made, thankyou!</p>
+<% elsif params[:status] == "cancelled" %>
+  <p>Donation cancelled.</p>
+<% end %>
+
 <% if @donations.any? %>
   <h2>Current donations</h2>
-  <ol class="donation-list">
-    <% @donations.each do |donation| %>
-      <li>
-        <%= donation.amount.format %>
-        <% if donation.message.present? %>
-          - <%= donation.message %>
-        <% end %>
-      </li>
-    <% end %>
-  </ol>
+  <table class="donation-list">
+    <thead>
+      <tr>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Message</th>
+        <th>Donated by</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @donations.each do |donation| %>
+        <tr>
+          <td><%= donation.amount.format %></td>
+          <td><%= donation.state.humanize %></td>
+          <td><%= donation.message %></td>
+          <td><%= donation.donated_by&.name || "You" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>
 
 <h2>Make a donation</h2>
 
-<%= form_for(Donation.new) do |f| %>
+<%= form_tag stripe_prep_checkout_path, id: "donation-form", :'data-stripe-public-key' => ENV["STRIPE_PUBLIC_KEY"], :'data-test-mode' => Rails.env.test? do %>
   <p>
-    <%= f.label :amount, "£" %>
-    <%= f.text_field :amount %>
+    <%= label_tag :currency %>
+    <%= select_tag :currency, options_for_select(Currency.present_all, Currency::DEFAULT_CURRENCY.downcase) %>
   </p>
 
   <p>
-    <%= f.label :message, "Message (optional)" %>
-    <%= f.text_field :message %>
+    <%= label_tag :amount %>
+    <%= text_field_tag :amount, "25.00" %>
   </p>
 
-  <button>Donate</button>
+  <p>
+    <%= label_tag :message, "Message (optional)" %>
+    <%= text_field_tag :message %>
+  </p>
+
+  <button id="stripe-donate">Donate</button>
 <% end %>

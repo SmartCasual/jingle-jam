@@ -26,9 +26,13 @@ gem 'jbuilder', '~> 2.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
+gem "aasm"
+gem "after_commit_everywhere", "~> 1.0"
 gem "demopass", ">= 0.1.0"
-gem "money-rails", "~>1.12"
 gem "monetize"
+gem "money-rails", "~>1.12"
+gem "sidekiq"
+gem "stripe"
 gem "watir"
 
 group :development, :test do
