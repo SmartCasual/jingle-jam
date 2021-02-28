@@ -16,6 +16,9 @@ WebMock.disable_net_connect!(allow_localhost: true, allow: driver_urls)
 require "rspec/mocks"
 FactoryBot.find_definitions
 
+require "sidekiq/testing"
+Sidekiq::Testing.inline!
+
 # frozen_string_literal: true
 
 # Capybara defaults to CSS3 selectors rather than XPath.
@@ -43,7 +46,7 @@ ActionController::Base.allow_rescue = false
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.strategy = :truncation
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
@@ -66,7 +69,7 @@ end
 # Possible values are :truncation and :transaction
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
-Cucumber::Rails::Database.javascript_strategy = :truncation
+# Cucumber::Rails::Database.javascript_strategy = :truncation
 
 After do
   ::RSpec::Mocks.verify

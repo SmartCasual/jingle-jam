@@ -5,21 +5,28 @@ Given("a simple bundle priced at {amount}") do |amount|
 end
 
 When("an anonymous donator makes a {amount} donation with the message {string}") do |amount, message|
-  go_to_homepage
-  click_on "Donate here!"
+  make_donation(amount, message: message)
+end
 
-  select amount.currency.iso_code, from: "Currency"
-  fill_in "Amount", with: amount.to_s
-  fill_in "Message", with: message
-
-  click_on "Donate"
+When("an anonymous donator makes a {amount} donation") do |amount|
+  make_donation(amount)
 end
 
 Then("a {amount} donation should be recorded with the message {string}") do |amount, message|
   expect(page).to have_text("#{amount.format} Paid #{message}")
 end
 
+Then("a {amount} donation should be recorded") do |amount|
+  expect(page).to have_css(".donation-list td", text: "#{amount.format}")
+end
+
 Then("no keys should have been assigned for that bundle") do
   expect(@current_bundle_definition.keys.unassigned).to exist
   expect(@current_bundle_definition.keys.assigned).not_to exist
+end
+
+Then("one key per game in the bundle should have been assigned") do
+  @current_bundle_definition.games.each do |game|
+    expect(Key.assigned.where(game: game)).to exist
+  end
 end
