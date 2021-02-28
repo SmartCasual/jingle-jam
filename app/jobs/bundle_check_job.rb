@@ -2,8 +2,6 @@ class BundleCheckJob < ApplicationJob
   queue_as :default
 
   def perform(donator_id)
-    return unless (donator = Donator.find_by(donator_id))
-
-    # TODO: Assign bundle level based on total donations
+    Donator.find_by(donator_id)&.assign_keys
   end
 end

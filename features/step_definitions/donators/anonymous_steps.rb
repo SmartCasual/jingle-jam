@@ -1,5 +1,7 @@
-Given("the bundle price is set to {amount}") do |amount|
-  FactoryBot.create(:bundle_definition, price: amount)
+Given("a simple bundle priced at {amount}") do |amount|
+  @current_bundle_definition = FactoryBot.create(:bundle_definition, price: amount)
+  expect(@current_bundle_definition.keys.unassigned).to exist
+  expect(@current_bundle_definition.keys.assigned).not_to exist
 end
 
 When("an anonymous donator makes a {amount} donation with the message {string}") do |amount, message|
@@ -17,6 +19,7 @@ Then("a {amount} donation should be recorded with the message {string}") do |amo
   expect(page).to have_text("#{amount.format} Paid #{message}")
 end
 
-Then("no bundles should have been assigned") do
-  expect(Bundle.assigned).not_to exist
+Then("no keys should have been assigned for that bundle") do
+  expect(@current_bundle_definition.keys.unassigned).to exist
+  expect(@current_bundle_definition.keys.assigned).not_to exist
 end

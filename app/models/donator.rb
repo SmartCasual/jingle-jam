@@ -14,10 +14,16 @@
 class Donator < ApplicationRecord
   has_many :donations, inverse_of: :donator
   has_many :bundles, inverse_of: :donator
+  has_many :bundle_definitions, through: :bundles
 
-  def initialize(*args, anonymous: false)
-    super(*args)
+  def assign_keys
+    BundleDefinition.find_each do |bundle_definition|
+      bundle = bundles.find_or_create_by!(bundle_definition: bundle_definition)
+      BundleKeyAssignmentJob.perform_later(bundle.id)
+    end
+  end
 
-
+  def total_donations
+    donations.map(&:amount).reduce(Money.new(0), :+)
   end
 end

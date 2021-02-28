@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 private
 
   def current_donator
-    @current_donator ||= Donator.find_by(id: session[:donator_id]) || Donator.new(anonymous: true)
+    @current_donator ||= Donator.find_by(id: session[:donator_id]) || Donator.new
   end
 
   def current_admin

@@ -1,28 +1,30 @@
 # ## Schema Information
 #
-# Table name: `bundles`
+# Table name: `bundle_definition_game_entries`
 #
 # ### Columns
 #
 # Name                        | Type               | Attributes
 # --------------------------- | ------------------ | ---------------------------
 # **`id`**                    | `bigint`           | `not null, primary key`
+# **`price_currency`**        | `string`           | `default("GBP")`
+# **`price_decimals`**        | `integer`          | `default(0)`
 # **`created_at`**            | `datetime`         | `not null`
 # **`updated_at`**            | `datetime`         | `not null`
 # **`bundle_definition_id`**  | `bigint`           | `not null`
-# **`donator_id`**            | `bigint`           |
+# **`game_id`**               | `bigint`           | `not null`
 #
-class Bundle < ApplicationRecord
-  belongs_to :donator, optional: true
+class BundleDefinitionGameEntry < ApplicationRecord
   belongs_to :bundle_definition
-  has_many :keys
-  has_many :assigned_games, through: :keys, as: :game
+  belongs_to :game
 
-  delegate :bundle_definition_game_entries, to: :bundle_definition
+  monetize :price_decimals, allow_nil: true
 
-  def assign_keys
-    bundle_definition_game_entries.each do |game_entry|
-      GameEntryKeyAssignmentJob.perform_later(game_entry.id, self.id)
-    end
+  after_commit :update_assignments, on: [:update]
+
+private
+
+  def update_assignments
+    bundle_definition.update_assignments
   end
 end

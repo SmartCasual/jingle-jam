@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_27_141548) do
+ActiveRecord::Schema.define(version: 2021_02_28_113651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bundle_definition_game_entries", force: :cascade do |t|
+    t.bigint "bundle_definition_id", null: false
+    t.bigint "game_id", null: false
+    t.integer "price_decimals", default: 0
+    t.string "price_currency", default: "GBP"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bundle_definition_id"], name: "index_bundle_definition_game_entries_on_bundle_definition_id"
+    t.index ["game_id"], name: "index_bundle_definition_game_entries_on_game_id"
+  end
 
   create_table "bundle_definitions", force: :cascade do |t|
     t.string "name", null: false
@@ -27,6 +38,8 @@ ActiveRecord::Schema.define(version: 2021_02_27_141548) do
     t.bigint "donator_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "bundle_definition_id", null: false
+    t.index ["bundle_definition_id"], name: "index_bundles_on_bundle_definition_id"
     t.index ["donator_id"], name: "index_bundles_on_donator_id"
   end
 
@@ -48,6 +61,23 @@ ActiveRecord::Schema.define(version: 2021_02_27_141548) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "keys", force: :cascade do |t|
+    t.string "code", null: false
+    t.bigint "game_id", null: false
+    t.bigint "bundle_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bundle_id", "game_id"], name: "index_keys_on_bundle_id_and_game_id", unique: true
+    t.index ["bundle_id"], name: "index_keys_on_bundle_id"
+    t.index ["game_id"], name: "index_keys_on_game_id"
   end
 
 end
