@@ -8,7 +8,7 @@ When("an anonymous donator makes a {amount} donation with the message {string}")
   make_donation(amount, message: message)
 end
 
-When("an anonymous donator makes a {amount} donation") do |amount|
+When("an/the anonymous donator makes a/another {amount} donation") do |amount|
   make_donation(amount)
 end
 
@@ -27,6 +27,6 @@ end
 
 Then("one key per game in the bundle should have been assigned") do
   @current_bundle_definition.games.each do |game|
-    expect(Key.assigned.where(game: game)).to exist
+    expect(Key.assigned.where(game: game).count).to eq(1)
   end
 end
