@@ -27,6 +27,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 gem "aasm"
+gem "aws-sdk-rails"
 gem "after_commit_everywhere", "~> 1.0"
 gem "demopass", ">= 0.1.0"
 gem "monetize"
