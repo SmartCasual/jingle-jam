@@ -4,11 +4,11 @@ Given("a simple bundle priced at {amount}") do |amount|
   expect(@current_bundle_definition.keys.assigned).not_to exist
 end
 
-When("an anonymous donator makes a {amount} donation with the message {string}") do |amount, message|
+When("a donator makes a {amount} donation with the message {string}") do |amount, message|
   make_donation(amount, message: message)
 end
 
-When("an/the anonymous donator makes a/another {amount} donation") do |amount|
+When("a/the donator makes a/another {amount} donation") do |amount|
   make_donation(amount)
 end
 
