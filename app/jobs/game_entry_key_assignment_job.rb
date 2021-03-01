@@ -27,7 +27,6 @@ private
 
   def donation_level_met?(bundle, game_entry)
     total_donations = bundle.donator.total_donations
-
     total_donations >= bundle.bundle_definition.price || (game_entry.price.present? && total_donations >= game_entry.price)
   end
 end

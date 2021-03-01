@@ -8,5 +8,9 @@ FactoryBot.define do
     bundle_definition_game_entries {
       FactoryBot.build_list(:bundle_definition_game_entry, 1, bundle_definition: @instance)
     }
+
+    trait :empty do
+      bundle_definition_game_entries { [] }
+    end
   end
 end
