@@ -7,12 +7,6 @@
   </script>
 <% end %>
 
-<% if params[:status] == "success" %>
-  <p>Donation made, thankyou!</p>
-<% elsif params[:status] == "cancelled" %>
-  <p>Donation cancelled.</p>
-<% end %>
-
 <% if @donations.any? %>
   <h2>Current donations</h2>
   <table class="donation-list">
