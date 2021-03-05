@@ -137,3 +137,11 @@ MoneyRails.configure do |config|
 
   Monetize.assume_from_symbol = true
 end
+
+if Module.const_defined?("ActiveAdmin::Views::ActiveAdminForm")
+  class ActiveAdmin::Views::ActiveAdminForm
+    def money(method, **kwargs)
+      input(method, as: :money, **kwargs)
+    end
+  end
+end
