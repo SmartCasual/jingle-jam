@@ -1,4 +1,5 @@
 const { environment } = require('@rails/webpacker')
+const jquery = require('./plugins/jquery')
 
 environment.config.merge({
   output: {
@@ -9,4 +10,5 @@ environment.config.merge({
   },
 })
 
+environment.plugins.prepend('jquery', jquery)
 module.exports = environment
