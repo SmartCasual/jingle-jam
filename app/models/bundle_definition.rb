@@ -21,6 +21,8 @@ class BundleDefinition < ApplicationRecord
   has_many :games, through: :bundle_definition_game_entries
   has_many :keys, through: :games
 
+  accepts_nested_attributes_for :bundle_definition_game_entries, allow_destroy: true
+
   after_commit :update_assignments, on: [:update]
 
   def update_assignments
