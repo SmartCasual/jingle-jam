@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_02_125710) do
+ActiveRecord::Schema.define(version: 2021_03_06_132944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,8 +44,8 @@ ActiveRecord::Schema.define(version: 2021_03_02_125710) do
   create_table "bundle_definition_game_entries", force: :cascade do |t|
     t.bigint "bundle_definition_id", null: false
     t.bigint "game_id", null: false
-    t.integer "price_decimals", default: 0
-    t.string "price_currency", default: "GBP"
+    t.integer "price_decimals"
+    t.string "price_currency"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["bundle_definition_id"], name: "index_bundle_definition_game_entries_on_bundle_definition_id"

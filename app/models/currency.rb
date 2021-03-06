@@ -15,7 +15,7 @@ class Currency
   class << self
     def present_all
       SYMBOL_MAP.each.with_object({}) do |(iso_code, symbol), hash|
-        hash["#{iso_code} (#{symbol})"] = iso_code.downcase
+        hash["#{iso_code} (#{symbol})"] = iso_code.upcase
       end
     end
 

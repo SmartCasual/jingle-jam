@@ -14,7 +14,7 @@
 # **`updated_at`**      | `datetime`         | `not null`
 #
 class BundleDefinition < ApplicationRecord
-  monetize :price_decimals
+  monetize :price
 
   has_many :bundle_definition_game_entries, inverse_of: :bundle_definition
   has_many :bundles, inverse_of: :bundle_definition

@@ -21,7 +21,7 @@ class Donation < ApplicationRecord
   belongs_to :donator, inverse_of: :donations
   belongs_to :donated_by, inverse_of: :donations, optional: true, class_name: "Donator"
 
-  monetize :amount_decimals
+  monetize :amount
 
   include AASM
 

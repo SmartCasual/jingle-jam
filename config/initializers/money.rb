@@ -145,3 +145,11 @@ if Module.const_defined?("ActiveAdmin::Views::ActiveAdminForm")
     end
   end
 end
+
+if Module.const_defined?("ActiveAdmin::FormBuilder")
+  class ActiveAdmin::FormBuilder
+    def money(method, **kwargs)
+      input(method, as: :money, **kwargs)
+    end
+  end
+end
