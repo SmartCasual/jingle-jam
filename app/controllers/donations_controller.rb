@@ -23,6 +23,8 @@ private
       "Donation made, thank you!"
     when "cancelled"
       "Donation cancelled."
+    else
+      return
     end
 
     redirect_to donations_path
