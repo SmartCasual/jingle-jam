@@ -3,12 +3,14 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@1.0
   node: circleci/node@2
+  browser-tools: circleci/browser-tools@1.1
 
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.7-node # use a tailored CircleCI docker image.
+      - image: cimg/ruby:2.7-browsers # use a tailored CircleCI docker image.
     steps:
+      - browser-tools/install-browser-tools
       - checkout
       - ruby/install-deps # use the ruby orb to install dependencies
       - node/install-packages:
@@ -17,7 +19,7 @@ jobs:
 
   test:  # our next job, called "test"
       docker:
-        - image: cimg/ruby:2.7-node # this is our primary docker image, where step commands run.
+        - image: cimg/ruby:2.7-browsers # this is our primary docker image, where step commands run.
         - image: circleci/postgres:9.5-alpine
           environment: # add POSTGRES environment variables.
             POSTGRES_USER: circleci
@@ -34,6 +36,7 @@ jobs:
         RAILS_ENV: test
       # A series of steps to run, some are similar to those in "build".
       steps:
+        - browser-tools/install-browser-tools
         - checkout
         - ruby/install-deps
         - node/install-packages:
