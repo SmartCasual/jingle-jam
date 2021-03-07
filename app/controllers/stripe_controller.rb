@@ -9,6 +9,8 @@ class StripeController < ApplicationController
 
     error "Minimum donation #{min_donation.format} (you provided #{amount.format})" unless amount >= min_donation
 
+    save_donator_if_needed
+
     stripe_session = Stripe::Checkout::Session.create({
       payment_method_types: ["card"],
       line_items: [{
@@ -56,12 +58,10 @@ private
   end
 
   def handle_completed_checkout(checkout_session)
-    session[:donator_id] = checkout_session.dig(:metadata, :donator_id)
-
     donation = Donation.new(
       amount: Money.new(checkout_session[:amount_total], checkout_session[:currency]),
       message: checkout_session.dig(:metadata, :message),
-      donator: current_donator,
+      donator_id: checkout_session.dig(:metadata, :donator_id),
       stripe_checkout_session_id: checkout_session[:id],
     )
 
@@ -72,10 +72,6 @@ private
       # TODO: Notify webhooks
     else
       donation.save!
-    end
-
-    if current_donator.persisted? && current_donator.previously_new_record?
-      session[:donator_id] = current_donator.id
     end
   end
 
@@ -107,6 +103,7 @@ private
   end
 
   def skip_stripe_checkout
+    save_donator_if_needed
     handle_event(fake_stripe_checkout_event)
 
     redirect_to success_url
@@ -170,5 +167,11 @@ private
 
   def cancel_url
     donations_url(status: "cancelled")
+  end
+
+  def save_donator_if_needed
+    if current_donator.new_record?
+      current_donator.save && session[:donator_id] = current_donator.id
+    end
   end
 end
