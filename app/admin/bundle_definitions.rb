@@ -8,7 +8,7 @@ ActiveAdmin.register BundleDefinition do
       :human_price,
       :id,
       :price_currency,
-    ]
+    ],
   )
 
   form do |f|

@@ -13,7 +13,9 @@
 #
 class Game < ApplicationRecord
   has_many :bundle_definition_game_entries, inverse_of: :games
-  has_many :keys, inverse_of: :game
+  has_many :keys, inverse_of: :game, dependent: :destroy
 
   validates :name, presence: true
+
+  accepts_nested_attributes_for :keys, allow_destroy: true
 end

@@ -21,4 +21,8 @@ class Key < ApplicationRecord
 
   scope :unassigned, -> { where(bundle: nil) }
   scope :assigned, -> { where.not(bundle: nil) }
+
+  def assigned?
+    bundle_id.present?
+  end
 end
