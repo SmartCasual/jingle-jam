@@ -174,7 +174,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    demopass (0.1.0)
+    demopass (0.2.0)
       rack
     devise (4.7.3)
       bcrypt (~> 3.0)
@@ -412,7 +412,7 @@ DEPENDENCIES
   byebug
   cucumber-rails
   database_cleaner
-  demopass (>= 0.1.0)
+  demopass (>= 0.2.0)
   devise
   factory_bot
   jbuilder (~> 2.7)
