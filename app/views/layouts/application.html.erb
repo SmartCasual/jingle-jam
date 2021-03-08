@@ -23,10 +23,16 @@
   </head>
 
   <body>
-    <h1>Jingle Jam 2049</h1>
-
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
+
+    <nav>
+      <ul>
+        <li><%= link_to_unless_current "Homepage", root_path %></li>
+        <li><%= link_to_unless_current "Your donations", donations_path %></li>
+        <li><%= link_to_unless_current "Your game keys", keys_path %></li>
+      </ul>
+    </nav>
 
     <%= yield %>
   </body>
