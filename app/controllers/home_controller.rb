@@ -1,3 +1,5 @@
 class HomeController < ApplicationController
-  def home; end
+  def home
+    @bundle_definitions = BundleDefinition.order(:name)
+  end
 end

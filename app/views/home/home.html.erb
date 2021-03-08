@@ -1,3 +1,23 @@
+<h2>Bundles</h2>
+
+<% if @bundle_definitions.any? %>
+  <ul>
+    <% @bundle_definitions.each do |bundle_definition| %>
+      <li class="bundle-definition">
+        <h3><%= bundle_definition.name %>: <%= bundle_definition.price.format %></h3>
+        <ul>
+          <% bundle_definition.bundle_definition_game_entries.simple.each do |entry| %>
+            <li><%= entry.game.name %></li>
+          <% end %>
+          <% bundle_definition.bundle_definition_game_entries.tiered.order(price_currency: :desc).each do |entry| %>
+            <li><%= entry.game.name %>: <%= entry.price.format %></li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
 <p>
   <%= link_to "Donate here!", donations_path %>
 </p>
