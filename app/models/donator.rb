@@ -15,6 +15,7 @@ class Donator < ApplicationRecord
   has_many :donations, inverse_of: :donator
   has_many :bundles, inverse_of: :donator
   has_many :bundle_definitions, through: :bundles
+  has_many :keys, through: :bundles
 
   def assign_keys
     BundleDefinition.find_each do |bundle_definition|

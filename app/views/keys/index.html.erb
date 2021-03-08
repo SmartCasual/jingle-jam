@@ -1,0 +1,20 @@
+<h1>Game keys</h1>
+
+<% if current_donator.keys.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Game</th>
+        <th>Key</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% current_donator.keys.each do |key| %>
+        <tr class="key">
+          <td class="game"><%= key.game.name %></td>
+          <td class="code"><%= key.code %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

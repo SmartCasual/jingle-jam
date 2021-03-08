@@ -20,7 +20,9 @@ Then("no keys should have been assigned for that bundle") do
 end
 
 Then("one key per game in the bundle should have been assigned") do
+  go_to_game_keys
   @current_bundle_definition.games.each do |game|
-    expect(Key.assigned.where(game: game).count).to eq(1)
+    expect(page).to have_css(".key .game", text: game.name)
+    expect(page).to have_css(".key .code", text: "-")
   end
 end

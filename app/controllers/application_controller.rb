@@ -5,6 +5,7 @@ private
   def current_donator
     @current_donator ||= Donator.find_by(id: session[:donator_id]) || Donator.new
   end
+  helper_method :current_donator
 
   def current_admin
 
