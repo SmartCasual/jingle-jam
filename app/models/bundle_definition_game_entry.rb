@@ -22,8 +22,8 @@ class BundleDefinitionGameEntry < ApplicationRecord
 
   after_commit :update_assignments, on: [:update]
 
-  scope :simple, -> { where(price_currency: nil) }
-  scope :tiered, -> { where.not(price_currency: nil) }
+  scope :simple, -> { where(price_decimals: nil) }
+  scope :tiered, -> { where.not(price_decimals: nil) }
 
 private
 
