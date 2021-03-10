@@ -10,6 +10,18 @@
 <h1>Your donations</h1>
 
 <% if @donations.any? %>
+  <p>
+    Here's a permanent link to your game keys.
+    <%= link_to @magic_url, @magic_url %>
+  </p>
+
+  <% if current_donator.email_address.present? %>
+    <p>
+      We've also sent the link in an email.
+      Make sure you've received it before closing this page.
+    </p>
+  <% end %>
+
   <h2>Current donations</h2>
   <table class="donation-list">
     <thead>

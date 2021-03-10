@@ -7,6 +7,7 @@ class DonationsController < ApplicationController
 
   def index
     @donations = get_donations.order(created_at: :desc)
+    @magic_url = magic_redirect_url(donator_id: current_donator.id, hmac: current_donator.hmac) if current_donator.persisted?
   end
 
 private
