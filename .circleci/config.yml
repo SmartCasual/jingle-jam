@@ -30,6 +30,8 @@ jobs:
         BUNDLE_JOBS: "3"
         BUNDLE_RETRY: "3"
         CI: true
+        FROM_EMAIL_ADDRESS: "jingle-jam@example.com"
+        HMAC_SECRET: "c360bcae-df63-4616-808a-860f03d7da6b"
         PGHOST: 127.0.0.1
         PGPASSWORD: ""
         PGUSER: circleci
