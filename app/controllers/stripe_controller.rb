@@ -58,10 +58,19 @@ private
   end
 
   def handle_completed_checkout(checkout_session)
+    customer_email_address = checkout_session.dig(:customer, :email)
+    donator_id = checkout_session.dig(:metadata, :donator_id)
+
+    donator = Donator.find_by(email_address: customer_email_address) || Donator.find_by(id: donator_id)
+
+    # TODO: Log error if donator not found; orphaned donation
+
+    donator.update(email_address: customer_email_address) unless donator.email_address == customer_email_address
+
     donation = Donation.new(
       amount: Money.new(checkout_session[:amount_total], checkout_session[:currency]),
       message: checkout_session.dig(:metadata, :message),
-      donator_id: checkout_session.dig(:metadata, :donator_id),
+      donator: donator,
       stripe_checkout_session_id: checkout_session[:id],
     )
 
@@ -126,9 +135,34 @@ private
           cancel_url: cancel_url,
           client_reference_id: nil,
           currency: nil,
-          customer: nil,
-          customer_details: nil,
-          customer_email: nil,
+          # https://stripe.com/docs/api/customers/object
+          customer: {
+            id: "cus_J5bqi3ondrNTNg",
+            object: "customer",
+            address: nil,
+            balance: 0,
+            created: 1615377288,
+            currency: "usd",
+            default_source: nil,
+            delinquent: false,
+            description: nil,
+            discount: nil,
+            email: "j.j.donator@example.com",
+            invoice_prefix: "3FDC441",
+            invoice_settings: {
+              custom_fields: nil,
+              default_payment_method: nil,
+              footer: nil,
+            },
+            livemode: false,
+            metadata: {},
+            name: nil,
+            next_invoice_sequence: 1,
+            phone: nil,
+            preferred_locales: [],
+            shipping: nil,
+            tax_exempt: "none",
+          },
           livemode: false,
           line_items: [{
             price_data: {
