@@ -16,6 +16,7 @@ class GameEntryKeyAssignmentJob < ApplicationJob
     Key.transaction do
       if (key = Key.lock("FOR UPDATE SKIP LOCKED").find_by(game: game, bundle: nil))
         key.update(bundle: bundle)
+        NotificationsMailer.bundle_assigned(bundle.donator).deliver_now
       else
         # TODO: Panic, we've run out of keys
       end

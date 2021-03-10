@@ -23,7 +23,6 @@ class Bundle < ApplicationRecord
   def assign_keys
     bundle_definition_game_entries.each do |game_entry|
       GameEntryKeyAssignmentJob.perform_later(game_entry.id, self.id)
-      NotificationsMailer.bundle_assigned(donator).deliver_now
     end
   end
 end
