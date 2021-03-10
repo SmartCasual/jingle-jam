@@ -57,6 +57,7 @@ group :development do
 end
 
 group :test do
+  gem "climate_control"
   gem "cucumber-rails", require: false
   gem "database_cleaner"
   gem "factory_bot"

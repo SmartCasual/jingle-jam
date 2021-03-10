@@ -68,7 +68,7 @@ private
     if checkout_session[:payment_status] == "paid"
       donation.confirm_payment!
       BundleCheckJob.perform_later(donation.donator_id)
-      # TODO: Notify user
+      NotificationsMailer.donation_received(donation.donator).deliver_now
       # TODO: Notify webhooks
     else
       donation.save!

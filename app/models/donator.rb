@@ -4,12 +4,13 @@
 #
 # ### Columns
 #
-# Name              | Type               | Attributes
-# ----------------- | ------------------ | ---------------------------
-# **`id`**          | `bigint`           | `not null, primary key`
-# **`name`**        | `string`           |
-# **`created_at`**  | `datetime`         | `not null`
-# **`updated_at`**  | `datetime`         | `not null`
+# Name                 | Type               | Attributes
+# -------------------- | ------------------ | ---------------------------
+# **`id`**             | `bigint`           | `not null, primary key`
+# **`email_address`**  | `string`           |
+# **`name`**           | `string`           |
+# **`created_at`**     | `datetime`         | `not null`
+# **`updated_at`**     | `datetime`         | `not null`
 #
 class Donator < ApplicationRecord
   has_many :donations, inverse_of: :donator
@@ -26,5 +27,19 @@ class Donator < ApplicationRecord
 
   def total_donations
     donations.map(&:amount).reduce(Money.new(0), :+)
+  end
+
+  def hmac
+    @hmac ||= OpenSSL::HMAC.new(hmac_key, digest).update(self.id.to_s).hexdigest
+  end
+
+private
+
+  def digest
+    @digest ||= OpenSSL::Digest.new("SHA256")
+  end
+
+  def hmac_key
+    @hmac_key ||= ENV["HMAC_SECRET"]
   end
 end
