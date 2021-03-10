@@ -14,8 +14,11 @@ class GameEntryKeyAssignmentJob < ApplicationJob
     # https://api.rubyonrails.org/v6.1.0/classes/ActiveRecord/Locking/Pessimistic.html
     # https://www.postgresql.org/docs/9.5/sql-select.html#SQL-FOR-UPDATE-SHARE
     Key.transaction do
-      key = Key.lock("FOR UPDATE SKIP LOCKED").find_by(game: game, bundle: nil)
-      key.update(bundle: bundle)
+      if (key = Key.lock("FOR UPDATE SKIP LOCKED").find_by(game: game, bundle: nil))
+        key.update(bundle: bundle)
+      else
+        # TODO: Panic, we've run out of keys
+      end
     end
   end
 

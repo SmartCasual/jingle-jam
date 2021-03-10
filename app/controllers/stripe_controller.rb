@@ -58,12 +58,10 @@ private
   end
 
   def handle_completed_checkout(checkout_session)
-    customer_email_address = checkout_session.dig(:customer, :email)
+    customer_email_address = checkout_session.dig(:customer_details, :email)
     donator_id = checkout_session.dig(:metadata, :donator_id)
 
-    donator = Donator.find_by(email_address: customer_email_address) || Donator.find_by(id: donator_id)
-
-    # TODO: Log error if donator not found; orphaned donation
+    donator = Donator.find(donator_id)
 
     donator.update(email_address: customer_email_address) unless donator.email_address == customer_email_address
 
@@ -76,8 +74,8 @@ private
 
     if checkout_session[:payment_status] == "paid"
       donation.confirm_payment!
-      BundleCheckJob.perform_later(donation.donator_id)
-      NotificationsMailer.donation_received(donation.donator).deliver_now
+      BundleCheckJob.perform_later(donator.id)
+      NotificationsMailer.donation_received(donator).deliver_now
       # TODO: Notify webhooks
     else
       donation.save!
@@ -135,33 +133,10 @@ private
           cancel_url: cancel_url,
           client_reference_id: nil,
           currency: nil,
-          # https://stripe.com/docs/api/customers/object
-          customer: {
-            id: "cus_J5bqi3ondrNTNg",
-            object: "customer",
-            address: nil,
-            balance: 0,
-            created: 1615377288,
-            currency: "usd",
-            default_source: nil,
-            delinquent: false,
-            description: nil,
-            discount: nil,
+          customer_details: {
             email: "j.j.donator@example.com",
-            invoice_prefix: "3FDC441",
-            invoice_settings: {
-              custom_fields: nil,
-              default_payment_method: nil,
-              footer: nil,
-            },
-            livemode: false,
-            metadata: {},
-            name: nil,
-            next_invoice_sequence: 1,
-            phone: nil,
-            preferred_locales: [],
-            shipping: nil,
             tax_exempt: "none",
+            tax_ids: [],
           },
           livemode: false,
           line_items: [{
