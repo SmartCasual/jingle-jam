@@ -13,8 +13,8 @@
 # **`updated_at`**     | `datetime`         | `not null`
 #
 class Donator < ApplicationRecord
-  has_many :donations, inverse_of: :donator
-  has_many :bundles, inverse_of: :donator
+  has_many :donations, inverse_of: :donator, dependent: :nullify
+  has_many :bundles, inverse_of: :donator, dependent: :nullify
   has_many :bundle_definitions, through: :bundles
   has_many :keys, through: :bundles
 

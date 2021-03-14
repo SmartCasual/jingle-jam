@@ -12,7 +12,7 @@ RSpec.describe NotificationsMailer, type: :mailer do
   end
 
   describe "donation_received" do
-    let(:mail) { NotificationsMailer.donation_received(donator) }
+    let(:mail) { described_class.donation_received(donator) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Donation received")
@@ -26,7 +26,7 @@ RSpec.describe NotificationsMailer, type: :mailer do
   end
 
   describe "bundle_assigned" do
-    let(:mail) { NotificationsMailer.bundle_assigned(donator) }
+    let(:mail) { described_class.bundle_assigned(donator) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Bundle assigned")

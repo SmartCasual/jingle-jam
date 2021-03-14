@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-
 private
 
   def current_donator
@@ -7,9 +6,7 @@ private
   end
   helper_method :current_donator
 
-  def current_admin
-
-  end
+  def current_admin; end
 
   def known_user?
     current_donator || current_admin
@@ -17,6 +14,6 @@ private
 
   def error(message)
     Rails.logger.error(message)
-    render json: { errors: [message] }, status: 422
+    render json: { errors: [message] }, status: :unprocessable_entity
   end
 end

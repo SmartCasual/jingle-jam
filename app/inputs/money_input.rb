@@ -8,7 +8,12 @@ class MoneyInput
 
   def to_html
     block = -> {
-      builder.input "#{method}_currency", as: :select, collection: Currency.present_all, include_blank: !@required, label: "Currency", required: @required
+      builder.input "#{method}_currency",
+        as: :select,
+        collection: Currency.present_all,
+        include_blank: !@required,
+        label: "Currency",
+        required: @required
       builder.input "human_#{method}", label: label_text, required: @required
     }
 

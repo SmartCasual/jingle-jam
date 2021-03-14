@@ -15,7 +15,7 @@
 class Bundle < ApplicationRecord
   belongs_to :donator, optional: true
   belongs_to :bundle_definition
-  has_many :keys
+  has_many :keys, dependent: :nullify
   has_many :assigned_games, through: :keys, source: :game
 
   delegate :bundle_definition_game_entries, to: :bundle_definition
