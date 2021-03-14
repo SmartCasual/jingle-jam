@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :donation do
     donator
-    amount { Money.new(25000) }
+    amount { Money.new(25_000) }
   end
 end

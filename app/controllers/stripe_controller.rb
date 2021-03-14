@@ -1,3 +1,4 @@
+# rubocop:disable all
 class StripeController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :webhook
   before_action :skip_stripe_checkout, only: :prep_checkout_session, if: -> { Rails.env.test? }
@@ -11,44 +12,21 @@ class StripeController < ApplicationController
 
     save_donator_if_needed
 
-    stripe_session = Stripe::Checkout::Session.create({
-      payment_method_types: ["card"],
-      line_items: [{
-        price_data: {
-          currency: params[:currency],
-          product_data: {
-            name: "JingleJam donation",
-          },
-          unit_amount: amount.cents,
-        },
-        quantity: 1,
-      }],
-      mode: "payment",
-      success_url: success_url,
-      cancel_url: cancel_url,
-      metadata: {
-        donator_id: current_donator.id,
-        message: params[:message],
-      },
-    })
-
-    render json: { id: stripe_session.id }
+    render json: { id: create_stripe_session.id }
   end
 
   def webhook
-    begin
-      sig_header = request.env['HTTP_STRIPE_SIGNATURE']
-      payload = request.body.read
-      event = Stripe::Webhook.construct_event(payload, sig_header, ENV["STRIPE_WEBHOOK_SECRET_KEY"])
+    sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
+    payload = request.body.read
+    event = Stripe::Webhook.construct_event(payload, sig_header, ENV["STRIPE_WEBHOOK_SECRET_KEY"])
 
-      handle_event(event.to_hash.deep_symbolize_keys)
+    handle_event(event.to_hash.deep_symbolize_keys)
 
-      head :ok
-    rescue JSON::ParserError
-      head :unprocessable_entity
-    rescue Stripe::SignatureVerificationError
-      head :unauthorized
-    end
+    head :ok
+  rescue JSON::ParserError
+    head :unprocessable_entity
+  rescue Stripe::SignatureVerificationError
+    head :unauthorized
   end
 
 private
@@ -116,7 +94,7 @@ private
     redirect_to success_url
   end
 
-  def fake_stripe_checkout_event
+  def fake_stripe_checkout_event # rubocop:disable Metrics/MethodLength
     amount = Monetize.parse!("#{params[:currency]} #{params[:amount]}")
 
     {
@@ -165,8 +143,8 @@ private
           subscription: nil,
           success_url: success_url,
           total_details: nil,
-        }
-      }
+        },
+      },
     }
   end
 
@@ -182,5 +160,28 @@ private
     if current_donator.new_record?
       current_donator.save && session[:donator_id] = current_donator.id
     end
+  end
+
+  def create_stripe_session # rubocop:disable Metrics/MethodLength
+    Stripe::Checkout::Session.create(
+      payment_method_types: ["card"],
+      line_items: [{
+        price_data: {
+          currency: params[:currency],
+          product_data: {
+            name: "JingleJam donation",
+          },
+          unit_amount: amount.cents,
+        },
+        quantity: 1,
+      }],
+      mode: "payment",
+      success_url: success_url,
+      cancel_url: cancel_url,
+      metadata: {
+        donator_id: current_donator.id,
+        message: params[:message],
+      },
+    )
   end
 end

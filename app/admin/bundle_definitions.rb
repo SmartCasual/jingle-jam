@@ -3,11 +3,11 @@ ActiveAdmin.register BundleDefinition do
     :human_price,
     :name,
     :price_currency,
-    bundle_definition_game_entries_attributes: [
-      :game_id,
-      :human_price,
-      :id,
-      :price_currency,
+    bundle_definition_game_entries_attributes: %i[
+      game_id
+      human_price
+      id
+      price_currency
     ],
   )
 
@@ -20,7 +20,11 @@ ActiveAdmin.register BundleDefinition do
     end
 
     f.inputs do
-      f.has_many(:bundle_definition_game_entries, heading: "Game entries", allow_destroy: true, new_record: "Add game entry") do |entry|
+      f.has_many(:bundle_definition_game_entries,
+        heading: "Game entries",
+        allow_destroy: true,
+        new_record: "Add game entry",
+      ) do |entry|
         entry.input :game
         entry.money :price
       end

@@ -8,7 +8,7 @@ class GameEntryKeyAssignmentJob < ApplicationJob
     @tier_checker = tier_checker || TierChecker.new
   end
 
-  def perform(game_entry_id, bundle_id)
+  def perform(game_entry_id, bundle_id) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
     game_entry = BundleDefinitionGameEntry.find_by(id: game_entry_id)
     bundle = Bundle.find_by(id: bundle_id)
 

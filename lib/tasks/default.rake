@@ -1,6 +1,9 @@
 begin
   require "rspec/core/rake_task"
+  require "rubocop/rake_task"
+
   RSpec::Core::RakeTask.new(:spec)
+  RuboCop::RakeTask.new
 rescue LoadError => exception
   puts "Library not available: #{exception.message}"
 end
@@ -13,9 +16,7 @@ task :build_and_test do
 end
 
 desc "Lint"
-task :lint do
-  # TODO: Add rubocop
-end
+task lint: :rubocop
 
 desc "Test"
 task :test do

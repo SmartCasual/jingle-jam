@@ -1,10 +1,10 @@
 ActiveAdmin.register Game do
   permit_params(
     :name,
-    keys_attributes: [
-      :code,
-      :id,
-    ]
+    keys_attributes: %i[
+      code
+      id
+    ],
   )
 
   form do |f|
@@ -31,9 +31,7 @@ ActiveAdmin.register Game do
     panel "Keys" do
       table_for game.keys do
         column :code
-        column :assigned do |key|
-          key.assigned?
-        end
+        column :assigned, &:assigned?
       end
     end
 

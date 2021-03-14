@@ -11,7 +11,7 @@ Then("a {amount} donation should be recorded with the message {string}") do |amo
 end
 
 Then("a {amount} donation should be recorded") do |amount|
-  expect(page).to have_css(".donation-list td", text: "#{amount.format}")
+  expect(page).to have_css(".donation-list td", text: amount.format)
 end
 
 Then("no keys should have been assigned for that bundle") do

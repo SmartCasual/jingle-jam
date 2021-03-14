@@ -16,8 +16,8 @@
 class BundleDefinition < ApplicationRecord
   monetize :price
 
-  has_many :bundle_definition_game_entries, inverse_of: :bundle_definition
-  has_many :bundles, inverse_of: :bundle_definition
+  has_many :bundle_definition_game_entries, inverse_of: :bundle_definition, dependent: :destroy
+  has_many :bundles, inverse_of: :bundle_definition, dependent: :nullify
   has_many :games, through: :bundle_definition_game_entries
   has_many :keys, through: :games
 

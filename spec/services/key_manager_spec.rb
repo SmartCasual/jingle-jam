@@ -29,6 +29,10 @@ RSpec.describe KeyManager do
   end
 
   describe "#lock_unassigned_key(game)" do
+    before do
+      allow(Key).to receive(:transaction)
+    end
+
     context "when there's no unassigned keys for the game" do
       before do
         FactoryBot.create(:key, game: game, bundle: bundle)
@@ -36,8 +40,8 @@ RSpec.describe KeyManager do
       end
 
       it "opens a transaction" do
-        expect(Key).to receive(:transaction)
         key_manager.lock_unassigned_key(game)
+        expect(Key).to have_received(:transaction)
       end
 
       it "yields nothing" do
@@ -46,15 +50,13 @@ RSpec.describe KeyManager do
         end
       end
     end
-  end
 
-  describe "#lock_unassigned_key(game)" do
     context "when there are unassigned keys for the game" do
       let!(:unassigned_key) { FactoryBot.create(:key, game: game, bundle: nil) }
 
       it "opens a transaction" do
-        expect(Key).to receive(:transaction)
         key_manager.lock_unassigned_key(game)
+        expect(Key).to have_received(:transaction)
       end
 
       it "yields an unassigned key" do
