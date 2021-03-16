@@ -6,10 +6,12 @@ private
   end
   helper_method :current_donator
 
-  def current_admin; end
-
   def known_user?
-    current_donator || current_admin
+    current_user.present?
+  end
+
+  def current_user
+    current_admin_user || current_donator
   end
 
   def error(message)
