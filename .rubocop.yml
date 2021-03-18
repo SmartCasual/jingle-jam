@@ -191,8 +191,9 @@ Naming/AccessorMethodName:
   Exclude:
     - app/controllers/**/*
 Style/GuardClause:
-  Exclude:
-    - app/controllers/**/*
+  Enabled: false
 Metrics/MethodLength:
-  Exclude:
-    - app/inputs/**/*
+  Enabled: false
+Naming/MethodParameterName:
+  AllowedNames:
+    - as
