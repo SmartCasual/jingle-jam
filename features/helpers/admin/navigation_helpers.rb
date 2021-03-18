@@ -6,9 +6,17 @@ module Admin::NavigationHelpers
   end
 
   def go_to_admin_game(game, edit: false)
-    go_to_admin_area "Games"
+    go_to_admin_record(game, within: "Games", edit: edit)
+  end
 
-    within "#game_#{game.id}" do
+  def go_to_admin_bundle_definition(bundle_definition, edit: false)
+    go_to_admin_record(bundle_definition, within: "Bundle Definitions", edit: edit)
+  end
+
+  def go_to_admin_record(record, within:, edit:)
+    go_to_admin_area(within)
+
+    within "##{record.class.name.underscore}_#{record.id}" do
       click_on(edit ? "Edit" : "View")
     end
   end

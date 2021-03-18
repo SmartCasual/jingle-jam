@@ -14,7 +14,7 @@ Scenario: Adding keys to a game
 Scenario: Editing a game
   Given a game
   When an admin edits the game
-  Then the edits should've been saved
+  Then the edits to the game should've been saved
 
 Scenario: Deleing a game
   Given a game

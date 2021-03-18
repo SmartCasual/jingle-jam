@@ -55,7 +55,7 @@ When("an admin edits the game") do
   click_on "Update Game"
 end
 
-Then("the edits should've been saved") do
+Then("the edits to the game should've been saved") do
   go_to_admin_game(@current_game)
   expect(page).to have_css("h2", text: @new_name)
 end
@@ -71,8 +71,4 @@ end
 
 When("the user goes to the admin games area") do
   visit admin_games_path
-end
-
-Then("they should be bounced to the admin login page") do
-  expect(page).to have_css(".active_admin h2", text: "Jingle Jam Login")
 end
