@@ -2,6 +2,7 @@ ActiveAdmin.register Game do
   permit_params(
     :name,
     keys_attributes: %i[
+      _destroy
       code
       id
     ],

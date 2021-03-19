@@ -11,12 +11,22 @@ Scenario: Adding keys to a game
   When an admin adds keys to the game
   Then the keys should be on the admin page for that game
 
+Scenario: Editing keys
+  Given a game with keys
+  When an admin edits a key
+  Then the edits to the key should've been saved
+
+Scenario: Deleting a key
+  Given a game with keys
+  When an admin deletes a key
+  Then the key shouldn't be on the admin page for that game
+
 Scenario: Editing a game
   Given a game
   When an admin edits the game
   Then the edits to the game should've been saved
 
-Scenario: Deleing a game
+Scenario: Deleting a game
   Given a game
   When an admin deletes the game
   Then the game shouldn't appear on the admin games list

@@ -17,12 +17,22 @@ Scenario: Adding games to a bundle definition
     | Doom Eternal | £10          |
   Then the games with their tiers should be on the admin page for that bundle definition
 
+Scenario: Editing game entries
+  Given a bundle definition
+  When an admin edits a game entry
+  Then the edits to the game entry should've been saved
+
+Scenario: Deleting a game entry
+  Given a bundle definition
+  When an admin deletes a game entry
+  Then the game entry shouldn't be on the admin page for that bundle definition
+
 Scenario: Editing a bundle definition
   Given a bundle definition
   When an admin edits the bundle definition
   Then the edits to the bundle definition should've been saved
 
-Scenario: Deleing a bundle definition
+Scenario: Deleting a bundle definition
   Given a bundle definition
   When an admin deletes the bundle definition
   Then the bundle definition shouldn't appear on the admin bundle definitions list

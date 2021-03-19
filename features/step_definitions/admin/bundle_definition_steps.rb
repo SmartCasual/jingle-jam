@@ -57,6 +57,23 @@ When("an admin adds these games to the bundle definition:") do |table|
   click_on "Update Bundle definition"
 end
 
+When("an admin edits a game entry") do
+  @new_game = FactoryBot.create(:game).name
+  go_to_admin_bundle_definition(@current_bundle_definition, edit: true)
+
+  page.find("option[selected='selected']", text: @current_bundle_definition.games.first.name)
+    .ancestor("select")
+    .find("option", text: @new_game)
+    .select_option
+
+  click_on "Update Bundle definition"
+end
+
+Then("the edits to the game entry should've been saved") do
+  go_to_admin_bundle_definition(@current_bundle_definition)
+  expect(page).to have_css(".col-game", text: @new_game)
+end
+
 Then("the games with their tiers should be on the admin page for that bundle definition") do
   go_to_admin_bundle_definition(@current_bundle_definition)
 
@@ -69,12 +86,22 @@ Then("the games with their tiers should be on the admin page for that bundle def
   end
 end
 
-When("the keys should be on the admin page for that bundle definition") do
+Then("the game entry shouldn't be on the admin page for that bundle definition") do
   go_to_admin_bundle_definition(@current_bundle_definition)
+  expect(page).not_to have_css(".col-game", text: @deleted_game_entry)
+end
 
-  @key_codes.each do |key_code|
-    expect(page).to have_css(".col-code", text: key_code)
+When("an admin deletes a game entry") do
+  go_to_admin_bundle_definition(@current_bundle_definition, edit: true)
+
+  fieldset = page.first(".bundle_definition_game_entries fieldset")
+  @deleted_game_entry = fieldset.find("li:first-of-type option[selected='selected']").text
+
+  within fieldset do
+    check "Delete"
   end
+
+  click_on "Update Bundle definition"
 end
 
 When("an admin edits the bundle definition") do
