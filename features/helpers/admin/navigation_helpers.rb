@@ -13,6 +13,14 @@ module Admin::NavigationHelpers
     go_to_admin_record(bundle_definition, within: "Bundle Definitions", edit: edit)
   end
 
+  def go_to_admin_users
+    go_to_admin_area "Admin Users"
+  end
+
+  def go_to_admin_user(admin_user, edit: false)
+    go_to_admin_record(admin_user, within: "Admin Users", edit: edit)
+  end
+
   def go_to_admin_record(record, within:, edit:)
     go_to_admin_area(within)
 
