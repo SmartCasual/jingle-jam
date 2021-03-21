@@ -191,8 +191,12 @@ Naming/AccessorMethodName:
   Exclude:
     - app/controllers/**/*
 Style/GuardClause:
-  Exclude:
-    - app/controllers/**/*
+  Enabled: false
 Metrics/MethodLength:
+  Enabled: false
+Naming/MethodParameterName:
+  AllowedNames:
+    - as
+Layout/LineLength:
   Exclude:
-    - app/inputs/**/*
+    - features/**/*_steps.rb

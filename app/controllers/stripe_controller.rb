@@ -94,7 +94,7 @@ private
     redirect_to success_url
   end
 
-  def fake_stripe_checkout_event # rubocop:disable Metrics/MethodLength
+  def fake_stripe_checkout_event
     amount = Monetize.parse!("#{params[:currency]} #{params[:amount]}")
 
     {
@@ -162,7 +162,7 @@ private
     end
   end
 
-  def create_stripe_session # rubocop:disable Metrics/MethodLength
+  def create_stripe_session
     Stripe::Checkout::Session.create(
       payment_method_types: ["card"],
       line_items: [{

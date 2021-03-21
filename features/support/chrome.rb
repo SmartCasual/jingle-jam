@@ -3,7 +3,7 @@ Capybara.register_driver(:selenium_chrome_devtools) do |app|
 
   browser_options = driver.options[:options]
   if (ENV["HEADLESS"] || ENV["HL"]) == "false"
-    browser_options.args << "--auto-open-devtools-for-tabs"
+    browser_options.args << "--auto-open-devtools-for-tabs" if ENV["DEVTOOLS"] && ENV["DEVTOOLS"] != "false"
   else
     browser_options.headless!
   end

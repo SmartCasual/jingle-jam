@@ -4,6 +4,7 @@ ActiveAdmin.register BundleDefinition do
     :name,
     :price_currency,
     bundle_definition_game_entries_attributes: %i[
+      _destroy
       game_id
       human_price
       id
