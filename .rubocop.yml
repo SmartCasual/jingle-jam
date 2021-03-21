@@ -12,6 +12,7 @@ AllCops:
     - config/**/*
     - lib/tasks/cucumber.rake
     - lib/tasks/auto_annotate_models.rake
+    - /**/*.erb
 <% end %>
 
 # Extensions
