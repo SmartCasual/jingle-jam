@@ -9,10 +9,10 @@
         <h3><%= bundle_definition.name %>: <%= bundle_definition.price.format %></h3>
         <ul>
           <% bundle_definition.bundle_definition_game_entries.simple.each do |entry| %>
-            <li><%= entry.game.name %></li>
+            <li><%= link_to entry.game.name, game_path(entry.game) %></li>
           <% end %>
           <% bundle_definition.bundle_definition_game_entries.tiered.order(price_currency: :desc).each do |entry| %>
-            <li><%= entry.game.name %>: <%= entry.price.format %></li>
+            <li><%= link_to entry.game.name, game_path(entry.game) %>: <%= entry.price.format %></li>
           <% end %>
         </ul>
       </li>

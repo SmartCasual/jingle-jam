@@ -1,4 +1,8 @@
 module Admin::NavigationHelpers
+  def go_to_homepage
+    visit root_path
+  end
+
   def go_to_admin_area(area)
     within ".admin_namespace .header" do
       click_on area
