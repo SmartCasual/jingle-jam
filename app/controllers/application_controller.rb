@@ -18,4 +18,8 @@ private
     Rails.logger.error(message)
     render json: { errors: [message] }, status: :unprocessable_entity
   end
+
+  def enforce_2sv
+    redirect_to admin_otp_input_path unless session[:last_otp_at]
+  end
 end

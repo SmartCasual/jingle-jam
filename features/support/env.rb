@@ -4,6 +4,8 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+ENV["OTP_ISSUER"] = "Jingle Jam (test)"
+
 require "cucumber/rails"
 
 require "webdrivers"

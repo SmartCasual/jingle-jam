@@ -201,3 +201,5 @@ Naming/MethodParameterName:
 Layout/LineLength:
   Exclude:
     - features/**/*_steps.rb
+Metrics/AbcSize:
+  Enabled: false

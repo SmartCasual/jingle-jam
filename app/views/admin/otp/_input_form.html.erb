@@ -1,0 +1,6 @@
+<h3>Enter a code from your authenticator</h3>
+
+<%= form_tag admin_otp_verify_path do %>
+  <%= text_field_tag :otp_code, {}, placeholder: "112233" %>
+  <button>Verify</button>
+<% end %>
