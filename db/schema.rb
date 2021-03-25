@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_21_174458) do
+ActiveRecord::Schema.define(version: 2021_03_25_002325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,13 +98,16 @@ ActiveRecord::Schema.define(version: 2021_03_21_174458) do
   end
 
   create_table "keys", force: :cascade do |t|
-    t.string "code", null: false
     t.bigint "game_id", null: false
     t.bigint "bundle_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "code_ciphertext"
+    t.text "encrypted_kms_key"
+    t.string "code_bidx"
     t.index ["bundle_id", "game_id"], name: "index_keys_on_bundle_id_and_game_id", unique: true
     t.index ["bundle_id"], name: "index_keys_on_bundle_id"
+    t.index ["code_bidx"], name: "index_keys_on_code_bidx", unique: true
     t.index ["game_id"], name: "index_keys_on_game_id"
   end
 
