@@ -39,6 +39,8 @@ gem "lockbox" # Game key encryption
 gem "monetize"
 gem "money-rails", "~>1.12"
 gem "rollbar"
+gem "rotp"
+gem "rqrcode"
 gem "sidekiq"
 gem "stripe"
 gem "watir"

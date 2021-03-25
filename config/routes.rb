@@ -1,6 +1,17 @@
 Rails.application.routes.draw do
-  devise_for :admin_users, ActiveAdmin::Devise.config
+  devise_config = ActiveAdmin::Devise.config
+  devise_config[:controllers][:sessions] = "admin/sessions"
+
+  devise_for :admin_users, devise_config
+
   ActiveAdmin.routes(self)
+
+  namespace :admin do
+    get "/2sv/setup", to: "otp#setup", as: "otp_setup"
+    get "/2sv/verify", to: "otp#input", as: "otp_input"
+    post "/2sv/verify", to: "otp#verify", as: "otp_verify"
+  end
+
   resources :donations, except: %i[edit update delete destroy]
   resources :keys, only: [:index]
   resources :games, only: [:show]
