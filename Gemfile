@@ -29,9 +29,13 @@ gem "bootsnap", ">= 1.4.4", require: false
 gem "aasm"
 gem "activeadmin"
 gem "after_commit_everywhere", "~> 1.0"
+gem "aws-sdk-kms" # AWS KMS support for `kms_encrypted`
 gem "aws-sdk-rails"
+gem "blind_index" # Encrypted query support for `lockbox`
 gem "demopass", ">= 0.2.0"
 gem "devise"
+gem "kms_encrypted" # KMS support for `lockbox`
+gem "lockbox" # Game key encryption
 gem "monetize"
 gem "money-rails", "~>1.12"
 gem "rollbar"

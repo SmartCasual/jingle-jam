@@ -33,6 +33,6 @@ Then("one key per game in the bundle should have been assigned") do
   go_to_game_keys
   @current_bundle_definition.games.each do |game|
     expect(page).to have_css(".key .game", text: game.name)
-    expect(page).to have_css(".key .code", text: "-")
+    expect(page).to have_css(".key .code", text: RegexHelpers::UUID_PATTERN)
   end
 end
