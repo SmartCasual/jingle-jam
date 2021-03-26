@@ -23,3 +23,12 @@
 <p>
   <%= link_to "Donate here!", donations_path %>
 </p>
+
+<% if @charities.any? %>
+  <h2>Charities</h2>
+  <ul>
+    <% @charities.each do |charity| %>
+      <li><%= link_to charity.name, charity_path(charity) %></li>
+    <% end %>
+  </ul>
+<% end %>

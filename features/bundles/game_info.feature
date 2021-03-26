@@ -5,4 +5,4 @@ Scenario: Game info available from bundle description
     | Game | Description               |
     | Halo | I guess he's in the navy? |
   When a donator clicks on "Halo" in the bundle definition
-  Then they should see "Halo" and its description
+  Then they should see the game "Halo" and its description
