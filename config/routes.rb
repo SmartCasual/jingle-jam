@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :donations, except: %i[edit update delete destroy]
   resources :keys, only: [:index]
   resources :games, only: [:show]
+  resources :charities, only: [:show]
 
   post "/stripe/prep-checkout", to: "stripe#prep_checkout_session"
   post "/stripe/webhook", to: "stripe#webhook"

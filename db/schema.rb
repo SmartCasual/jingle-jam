@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_25_113403) do
+ActiveRecord::Schema.define(version: 2021_03_26_140555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,14 @@ ActiveRecord::Schema.define(version: 2021_03_25_113403) do
     t.bigint "bundle_definition_id", null: false
     t.index ["bundle_definition_id"], name: "index_bundles_on_bundle_definition_id"
     t.index ["donator_id"], name: "index_bundles_on_donator_id"
+  end
+
+  create_table "charities", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_charities_on_name"
   end
 
   create_table "donations", force: :cascade do |t|
