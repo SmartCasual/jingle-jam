@@ -203,3 +203,9 @@ Layout/LineLength:
     - features/**/*_steps.rb
 Metrics/AbcSize:
   Enabled: false
+Style/IfUnlessModifierOfIfUnless:
+  Enabled: false
+Style/NestedModifier:
+  Enabled: false
+Style/SoleNestedConditional:
+  Enabled: false
