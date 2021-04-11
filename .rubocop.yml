@@ -9,6 +9,7 @@ AllCops:
     - lib/tasks/cucumber.rake
     - lib/tasks/auto_annotate_models.rake
     - /**/*.erb
+    - vendor
 <% unless ENV["CI"] %>
   <% `git status --ignored --porcelain`.scan(/^!!\s+(.*)$/).each do |match| %>
     - <%= match[0] %>**/*
