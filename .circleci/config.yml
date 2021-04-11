@@ -48,8 +48,8 @@ jobs:
           name: Database setup
           command: bundle exec rails db:schema:load --trace
       - run:
-          name: Cucumber
-          command: bundle exec cucumber
+          name: Tests
+          command: bundle exec rake
 
 workflows:
   version: 2
