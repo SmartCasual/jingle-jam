@@ -25,9 +25,15 @@ jobs:
       PGPASSWORD: ""
       PGUSER: circleci
       RAILS_ENV: test
-    # A series of steps to run, some are similar to those in "build".
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome:
+          replace-existing: true
+      - browser-tools/install-chromedriver
+      - run:
+          name: Check install
+          command: |
+            google-chrome --version
+            chromedriver --version
       - checkout
       - ruby/install-deps
       - node/install-packages:
