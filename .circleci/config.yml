@@ -6,61 +6,52 @@ orbs:
   browser-tools: circleci/browser-tools@1.1
 
 jobs:
-  build:
+  test:  # our next job, called "test"
     docker:
-      - image: cimg/ruby:2.7-browsers # use a tailored CircleCI docker image.
+      - image: cimg/ruby:2.7-browsers # this is our primary docker image, where step commands run.
+      - image: circleci/postgres:9.5-alpine
+        environment: # add POSTGRES environment variables.
+          POSTGRES_USER: circleci
+          POSTGRES_DB: jingle_jam_test
+          POSTGRES_PASSWORD: ""
+    # environment variables specific to Ruby/Rails, applied to the primary container.
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      CI: true
+      FROM_EMAIL_ADDRESS: "jingle-jam@example.com"
+      HMAC_SECRET: "c360bcae-df63-4616-808a-860f03d7da6b"
+      PGHOST: 127.0.0.1
+      PGPASSWORD: ""
+      PGUSER: circleci
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome:
+          replace-existing: true
+      - browser-tools/install-chromedriver
+      - run:
+          name: Check install
+          command: |
+            google-chrome --version
+            chromedriver --version
       - checkout
-      - ruby/install-deps # use the ruby orb to install dependencies
+      - ruby/install-deps
       - node/install-packages:
           pkg-manager: yarn
           cache-key: "yarn.lock"
-
-  test:  # our next job, called "test"
-      docker:
-        - image: cimg/ruby:2.7-browsers # this is our primary docker image, where step commands run.
-        - image: circleci/postgres:9.5-alpine
-          environment: # add POSTGRES environment variables.
-            POSTGRES_USER: circleci
-            POSTGRES_DB: jingle_jam_test
-            POSTGRES_PASSWORD: ""
-      # environment variables specific to Ruby/Rails, applied to the primary container.
-      environment:
-        BUNDLE_JOBS: "3"
-        BUNDLE_RETRY: "3"
-        CI: true
-        FROM_EMAIL_ADDRESS: "jingle-jam@example.com"
-        HMAC_SECRET: "c360bcae-df63-4616-808a-860f03d7da6b"
-        PGHOST: 127.0.0.1
-        PGPASSWORD: ""
-        PGUSER: circleci
-        RAILS_ENV: test
-      # A series of steps to run, some are similar to those in "build".
-      steps:
-        - browser-tools/install-browser-tools
-        - checkout
-        - ruby/install-deps
-        - node/install-packages:
-            pkg-manager: yarn
-            cache-key: "yarn.lock"
-        # Here we make sure that the secondary container boots
-        # up before we run operations on the database.
-        - run:
-            name: Wait for DB
-            command: dockerize -wait tcp://localhost:5432 -timeout 1m
-        - run:
-            name: Database setup
-            command: bundle exec rails db:schema:load --trace
-        - run:
-            name: Cucumber
-            command: bundle exec cucumber
+      # Here we make sure that the secondary container boots
+      # up before we run operations on the database.
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: RAILS_ENV=test bundle exec rails db:schema:load --trace
+      - run:
+          name: Tests
+          command: bundle exec rake
 
 workflows:
   version: 2
   build_and_test:     # The name of our workflow is "build_and_test"
     jobs:             # The list of jobs we run as part of this workflow.
-      - build         # Run build first.
-      - test:         # Then run test,
-          requires:   # Test requires that build passes for it to run.
-            - build   # Finally, run the build job.
+      - test          # Then run test,
