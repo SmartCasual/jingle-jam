@@ -1,10 +1,6 @@
 AllCops:
   TargetRubyVersion: 2.7
-<% unless ENV["CI"] %>
   Exclude:
-  <% `git status --ignored --porcelain`.scan(/^!!\s+(.*)$/).each do |match| %>
-    - <%= match[0] %>**/*
-  <% end %>
     - db/schema.rb
     - db/migrate/**/*
     - bin/**/*
@@ -13,6 +9,10 @@ AllCops:
     - lib/tasks/cucumber.rake
     - lib/tasks/auto_annotate_models.rake
     - /**/*.erb
+<% unless ENV["CI"] %>
+  <% `git status --ignored --porcelain`.scan(/^!!\s+(.*)$/).each do |match| %>
+    - <%= match[0] %>**/*
+  <% end %>
 <% end %>
 
 # Extensions
