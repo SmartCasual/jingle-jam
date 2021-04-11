@@ -24,7 +24,6 @@ jobs:
       PGHOST: 127.0.0.1
       PGPASSWORD: ""
       PGUSER: circleci
-      RAILS_ENV: test
     steps:
       - browser-tools/install-chrome:
           replace-existing: true
@@ -46,7 +45,7 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Database setup
-          command: bundle exec rails db:schema:load --trace
+          command: RAILS_ENV=test bundle exec rails db:schema:load --trace
       - run:
           name: Tests
           command: bundle exec rake
