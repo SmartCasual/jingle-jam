@@ -35,7 +35,9 @@
       </div>
 
       <nav>
-        <div class="logo-box"><%= link_to_unless_current image_tag("Jingle_Jam_Logo_White_Alt", class: "logo"), root_path %></div>
+        <div class="logo-box">
+          <%= link_to_unless_current image_tag("Jingle_Jam_Logo_White_Alt", class: "logo", alt: "The Jingle Jam"), root_path %>
+        </div>
         <ul>
           <li><%= link_to_unless_current "Your donations", donations_path %></li>
           <li><%= link_to_unless_current "Your game keys", keys_path %></li>

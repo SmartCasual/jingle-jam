@@ -10,6 +10,12 @@ When("a donator clicks on {string}") do |link|
   click_on link
 end
 
+When("a donator clicks on the main logo") do
+  within "nav" do
+    click_on "The Jingle Jam"
+  end
+end
+
 Then("they should be bounced to the admin login page") do
   expect(page).to have_css(".active_admin h2", text: "Jingle Jam Login")
 end

@@ -7,5 +7,5 @@ Scenario: Navigating around the major donator areas
   Then they should see the header "Your game keys"
   When a donator clicks on "Your donations"
   Then they should see the header "Your donations"
-  When a donator clicks on "Homepage"
+  When a donator clicks on the main logo
   Then they should see the header "Welcome to Jingle Jam!"
