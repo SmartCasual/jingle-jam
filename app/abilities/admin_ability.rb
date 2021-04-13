@@ -30,6 +30,7 @@ private
   def allow_reading_donation_info
     can :read, Bundle
     can :read, Donation
+    can :read, Donator
   end
 
   def allow_managing_admin_accounts

@@ -1,4 +1,5 @@
 @admin
+@manages_users
 Feature: Admin: users
 
 Scenario: Adding an admin user

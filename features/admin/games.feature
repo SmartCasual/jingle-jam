@@ -1,4 +1,5 @@
 @admin
+@data_entry
 Feature: Admin: games
 
 Scenario: Adding a game

@@ -1,4 +1,5 @@
 @admin
+@data_entry
 Feature: Admin: bundle definitions
 
 Scenario: Adding a bundle definition

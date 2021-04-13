@@ -35,10 +35,11 @@ Before do |scenario|
 
   case permission_level
   when :admin
-    admin = ensure_logged_in(as: permission_level)
-    admin.update(
+    ensure_logged_in(as: permission_level)
+    @current_admin_user.update(
       CucumberTagHelpers.access_flags(tags).index_with(true),
     )
+    reload_page
   when :donator
     ensure_logged_in(as: permission_level)
   end

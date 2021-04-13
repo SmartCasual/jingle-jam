@@ -4,6 +4,7 @@ When("an admin adds an admin user") do
   go_to_admin_users
   click_on "New Admin User"
 
+  fill_in "Name", with: "An Admin"
   fill_in "Email", with: admin_user_email
   fill_in "Password*", with: "password", exact: true
   fill_in "Password confirmation", with: "password"
@@ -25,7 +26,7 @@ end
 
 Then("there should be an admin page for that admin user") do
   go_to_admin_user(@created_admin_user)
-  expect(page).to have_css("h2", text: @created_admin_user.email)
+  expect(page).to have_css("h2", text: @created_admin_user.name)
 end
 
 Given("an admin user") do
@@ -35,7 +36,7 @@ end
 When("an admin edits the admin user") do
   go_to_admin_user(@created_admin_user, edit: true)
 
-  fill_in "Email", with: (@new_email = "#{SecureRandom.uuid}@example.com")
+  fill_in "Name", with: (@new_name = SecureRandom.uuid)
   fill_in "Password*", with: (@new_password = SecureRandom.uuid), exact: true
   fill_in "Password confirmation", with: @new_password
 
@@ -44,7 +45,7 @@ end
 
 Then("the edits to the admin user should've been saved") do
   go_to_admin_user(@created_admin_user)
-  expect(page).to have_css("h2", text: @new_email)
+  expect(page).to have_css("h2", text: @new_name)
   expect(@created_admin_user.reload.valid_password?(@new_password)).to eq(true)
 end
 

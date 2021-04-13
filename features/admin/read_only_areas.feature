@@ -1,6 +1,7 @@
-@admin
 Feature: Admin: read only areas
 
+@admin
+@support
 Scenario Outline: Listing a <model>
   Given a <model>
   Then the <model>'s <attribute> should appear on the admin <model> list
