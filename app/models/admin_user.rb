@@ -13,6 +13,7 @@
 # **`full_access`**             | `boolean`          | `default(FALSE), not null`
 # **`last_otp_at`**             | `datetime`         |
 # **`manages_users`**           | `boolean`          | `default(FALSE), not null`
+# **`name`**                    | `string`           |
 # **`otp_secret`**              | `string`           |
 # **`remember_created_at`**     | `datetime`         |
 # **`reset_password_sent_at`**  | `datetime`         |
@@ -26,6 +27,8 @@ class AdminUser < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
+
+  validates :name, presence: true
 
   def email_address
     email

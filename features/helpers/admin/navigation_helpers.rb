@@ -1,12 +1,20 @@
 module Admin::NavigationHelpers
-  def go_to_homepage
-    visit root_path
+  def reload_page
+    visit current_path
+  end
+
+  def go_to_admin_homepage
+    visit "/admin"
   end
 
   def go_to_admin_area(area)
     within ".admin_namespace .header" do
       click_on area
     end
+  end
+
+  def go_to_admin_games
+    go_to_admin_area "Games"
   end
 
   def go_to_admin_game(game, edit: false)

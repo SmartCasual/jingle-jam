@@ -15,13 +15,3 @@ Scenario: Deleting an admin user
   Given an admin user
   When an admin deletes the admin user
   Then the admin user shouldn't appear on the admin users list
-
-@anonymous
-Scenario: Anonymous user cannot access this area
-  When the user goes to the admin users area
-  Then they should be bounced to the admin login page
-
-@donator
-Scenario: Known donator cannot access this area
-  When the user goes to the admin users area
-  Then they should be bounced to the admin login page

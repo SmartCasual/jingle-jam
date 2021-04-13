@@ -20,6 +20,7 @@ private
   end
 
   def enforce_2sv
+    session[:last_otp_at]
     redirect_to admin_otp_input_path unless session[:last_otp_at]
   end
 end

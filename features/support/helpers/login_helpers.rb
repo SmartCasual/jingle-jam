@@ -8,8 +8,9 @@ module LoginHelpers
     complete_2sv(otp_secret) if otp_secret.present?
 
     unless expect_failure
-      expect(page).to have_css("#current_user a", text: email_address)
-      @current_admin_user = AdminUser.find_by(email: email_address)
+      @current_admin_user = AdminUser.find_by!(email: email_address)
+      expect(page).to have_css("#current_user a", text: @current_admin_user.name)
+      @current_admin_user
     end
   end
 
@@ -34,6 +35,8 @@ module LoginHelpers
     when AdminUser
       log_in_with(user.email, otp_secret: user.otp_secret, **kwargs)
     end
+
+    user
   end
 
   def use_magic_link(donator)

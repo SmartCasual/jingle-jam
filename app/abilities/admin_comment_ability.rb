@@ -2,6 +2,8 @@ class AdminCommentAbility < ApplicationAbility
   def initialize(admin_user)
     super()
 
+    return unless admin_user.is_a?(AdminUser)
+
     public_classes.each do |klass|
       comments(:create, resource: klass)
       comments(:read, resource: klass)

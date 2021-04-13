@@ -20,6 +20,7 @@ private
 
   def allow_reading_self(admin_user)
     can :read, AdminUser, id: admin_user.id
+    can :read, ActiveAdmin::Page, name: "Dashboard", namespace_name: "admin"
   end
 
   def allow_managing_public_info
