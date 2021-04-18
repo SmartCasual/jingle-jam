@@ -5,6 +5,7 @@ Capybara.register_driver(:selenium_chrome_devtools) do |app|
   if (ENV["HEADLESS"] || ENV["HL"]) == "false"
     browser_options.args << "--auto-open-devtools-for-tabs" if ENV["DEVTOOLS"] && ENV["DEVTOOLS"] != "false"
   else
+    browser_options.args << "--window-size=1920,1080"
     browser_options.headless!
   end
 
