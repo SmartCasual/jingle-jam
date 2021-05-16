@@ -5,6 +5,7 @@
 # files.
 
 ENV["OTP_ISSUER"] = "Jingle Jam (test)"
+ENV["TWITCH_EMBED_ENABLED"] = "false"
 
 require "cucumber/rails"
 
@@ -20,6 +21,9 @@ FactoryBot.find_definitions
 
 require "sidekiq/testing"
 Sidekiq::Testing.inline!
+
+require_relative "../../test/support/with_env"
+World(WithEnv)
 
 Capybara.configure do |config|
   config.server = :puma, { Silent: true }
@@ -41,4 +45,10 @@ After do
   ::RSpec::Mocks.verify
 ensure
   ::RSpec::Mocks.teardown
+end
+
+Around("@twitch_embed_enabled") do |_, scenario|
+  with_env("TWITCH_EMBED_ENABLED" => "true") do
+    scenario.call
+  end
 end
