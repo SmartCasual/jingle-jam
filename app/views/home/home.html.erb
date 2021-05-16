@@ -2,24 +2,7 @@
 
 <h2>Twitch</h2>
 
-<div id="twitch-embed" data-channel="yogscast"></div>
-
-<% content_for :head do %>
-  <script src="https://embed.twitch.tv/embed/v1.js" charset="utf-8"></script>
-
-  <script type="text/javascript">
-    onReady(function() {
-      let id = "twitch-embed";
-      let embed = document.getElementById(id);
-
-      new Twitch.Embed(id, {
-        channel: embed.dataset.channel,
-        width: 1280,
-        height: 720,
-      });
-    });
-  </script>
-<% end %>
+<%= render "streaming/twitch", channel: "yogscast" %>
 
 <h2>Bundles</h2>
 

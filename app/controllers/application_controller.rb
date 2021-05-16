@@ -23,4 +23,9 @@ private
     session[:last_otp_at]
     redirect_to admin_otp_input_path unless session[:last_otp_at]
   end
+
+  def twitch_embed_enabled?
+    ENV.fetch("TWITCH_EMBED_ENABLED", "true") == "true"
+  end
+  helper_method :twitch_embed_enabled?
 end
