@@ -7,6 +7,10 @@ module NavigationHelpers
     go_to_if_not_at(keys_path)
   end
 
+  def go_to_profile(donator)
+    click_on donator.display_name
+  end
+
   def go_to_if_not_at(path)
     visit path unless current_path == path
   end

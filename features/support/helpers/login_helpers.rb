@@ -41,12 +41,16 @@ module LoginHelpers
 
   def use_magic_link(donator)
     visit magic_redirect_path(donator_id: donator.id, hmac: donator.hmac)
+    @current_donator = donator
   end
 
   def ensure_logged_in(as: :donator, **kwargs)
-    return if @current_user
-
     log_in_as(as, **kwargs)
+  end
+
+  def log_out
+    go_to_homepage
+    click_on "Log out"
   end
 end
 

@@ -9,6 +9,7 @@ require "hmac"
 # Name                 | Type               | Attributes
 # -------------------- | ------------------ | ---------------------------
 # **`id`**             | `bigint`           | `not null, primary key`
+# **`chosen_name`**    | `string`           |
 # **`email_address`**  | `string`           |
 # **`name`**           | `string`           |
 # **`created_at`**     | `datetime`         | `not null`
@@ -33,5 +34,9 @@ class Donator < ApplicationRecord
 
   def hmac
     @hmac ||= HMAC::Generator.new(context: "sessions").generate(id: id)
+  end
+
+  def display_name
+    chosen_name || name || "Anonymous"
   end
 end
