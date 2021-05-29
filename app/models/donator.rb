@@ -1,3 +1,5 @@
+require "hmac"
+
 # ## Schema Information
 #
 # Table name: `donators`
@@ -30,16 +32,6 @@ class Donator < ApplicationRecord
   end
 
   def hmac
-    @hmac ||= OpenSSL::HMAC.new(hmac_key, digest).update(self.id.to_s).hexdigest
-  end
-
-private
-
-  def digest
-    @digest ||= OpenSSL::Digest.new("SHA256")
-  end
-
-  def hmac_key
-    @hmac_key ||= ENV["HMAC_SECRET"]
+    @hmac ||= HMAC::Generator.new(context: "sessions").generate(id: id)
   end
 end
