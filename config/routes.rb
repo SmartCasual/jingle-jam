@@ -16,11 +16,15 @@ Rails.application.routes.draw do
   resources :keys, only: [:index]
   resources :games, only: [:show]
   resources :charities, only: [:show]
+  resources :donators, except: %i[index delete destroy]
+
+  get "/streams/:twitch_username", to: "curated_streamers#show", as: "curated_streamer"
 
   post "/stripe/prep-checkout", to: "stripe#prep_checkout_session"
   post "/stripe/webhook", to: "stripe#webhook"
 
-  get "/magic-redirect/:donator_id/:hmac", to: "home#magic_redirect", as: "magic_redirect"
+  get "/magic-redirect/:donator_id/:hmac", to: "sessions#magic_redirect", as: "magic_redirect"
+  post "/logout", to: "sessions#logout"
 
   root to: "home#home"
 end

@@ -14,6 +14,10 @@ private
     current_admin_user || current_donator
   end
 
+  def current_ability
+    @current_ability ||= PublicAbility.new(current_donator)
+  end
+
   def error(message)
     Rails.logger.error(message)
     render json: { errors: [message] }, status: :unprocessable_entity

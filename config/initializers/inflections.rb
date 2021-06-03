@@ -15,6 +15,11 @@
 #   inflect.acronym 'RESTful'
 # end
 ActiveSupport::Inflector.inflections(:en) do |inflect|
-  inflect.acronym "OTP"
-  inflect.acronym "2SV"
+  %w[
+    2SV
+    HMAC
+    OTP
+  ].each do |acronym|
+    inflect.acronym(acronym)
+  end
 end

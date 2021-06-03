@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_12_150005) do
+ActiveRecord::Schema.define(version: 2021_06_03_120434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,23 @@ ActiveRecord::Schema.define(version: 2021_04_12_150005) do
     t.index ["name"], name: "index_charities_on_name"
   end
 
+  create_table "curated_streamer_administrators", force: :cascade do |t|
+    t.bigint "curated_streamer_id", null: false
+    t.bigint "donator_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["curated_streamer_id", "donator_id"], name: "ref_index", unique: true
+    t.index ["curated_streamer_id"], name: "index_curated_streamer_administrators_on_curated_streamer_id"
+    t.index ["donator_id"], name: "index_curated_streamer_administrators_on_donator_id"
+  end
+
+  create_table "curated_streamers", force: :cascade do |t|
+    t.string "twitch_username", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["twitch_username"], name: "index_curated_streamers_on_twitch_username"
+  end
+
   create_table "donations", force: :cascade do |t|
     t.integer "amount_decimals", default: 0, null: false
     t.string "amount_currency", default: "GBP", null: false
@@ -94,6 +111,8 @@ ActiveRecord::Schema.define(version: 2021_04_12_150005) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "aasm_state", default: "pending", null: false
     t.string "stripe_checkout_session_id"
+    t.bigint "curated_streamer_id"
+    t.index ["curated_streamer_id"], name: "index_donations_on_curated_streamer_id"
     t.index ["donated_by_id"], name: "index_donations_on_donated_by_id"
     t.index ["donator_id"], name: "index_donations_on_donator_id"
   end
@@ -103,6 +122,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_150005) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "email_address"
+    t.string "chosen_name"
   end
 
   create_table "games", force: :cascade do |t|

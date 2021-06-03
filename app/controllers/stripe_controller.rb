@@ -38,8 +38,10 @@ private
   def handle_completed_checkout(checkout_session)
     customer_email_address = checkout_session.dig(:customer_details, :email)
     donator_id = checkout_session.dig(:metadata, :donator_id)
+    curated_streamer_id = checkout_session.dig(:metadata, :curated_streamer_id)
 
     donator = Donator.find(donator_id)
+    curated_streamer = CuratedStreamer.find(curated_streamer_id) if curated_streamer_id
 
     donator.update(email_address: customer_email_address) unless donator.email_address == customer_email_address
 
@@ -47,6 +49,7 @@ private
       amount: Money.new(checkout_session[:amount_total], checkout_session[:currency]),
       message: checkout_session.dig(:metadata, :message),
       donator: donator,
+      curated_streamer: curated_streamer,
       stripe_checkout_session_id: checkout_session[:id],
     )
 
@@ -129,6 +132,7 @@ private
           }],
           locale: nil,
           metadata: {
+            curated_streamer_id: params[:curated_streamer_id],
             donator_id: current_donator.id,
             message: params[:message],
           },
@@ -149,11 +153,15 @@ private
   end
 
   def success_url
-    donations_url(status: "success")
+    build_donation_url(status: "success")
   end
 
   def cancel_url
-    donations_url(status: "cancelled")
+    build_donation_url(status: "cancelled")
+  end
+
+  def build_donation_url(status:)
+    donations_url(status: status, streamer: CuratedStreamer.find_by(id: params[:curated_streamer_id])&.twitch_username)
   end
 
   def save_donator_if_needed
@@ -180,6 +188,7 @@ private
       cancel_url: cancel_url,
       metadata: {
         donator_id: current_donator.id,
+        curated_streamer_id: params[:curated_streamer_id],
         message: params[:message],
       },
     )

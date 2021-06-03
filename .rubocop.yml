@@ -197,6 +197,7 @@ Metrics/MethodLength:
 Naming/MethodParameterName:
   AllowedNames:
     - as
+    - id
 Layout/LineLength:
   Exclude:
     - features/**/*_steps.rb

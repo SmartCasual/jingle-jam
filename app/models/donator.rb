@@ -1,3 +1,5 @@
+require "hmac"
+
 # ## Schema Information
 #
 # Table name: `donators`
@@ -7,6 +9,7 @@
 # Name                 | Type               | Attributes
 # -------------------- | ------------------ | ---------------------------
 # **`id`**             | `bigint`           | `not null, primary key`
+# **`chosen_name`**    | `string`           |
 # **`email_address`**  | `string`           |
 # **`name`**           | `string`           |
 # **`created_at`**     | `datetime`         | `not null`
@@ -17,6 +20,9 @@ class Donator < ApplicationRecord
   has_many :bundles, inverse_of: :donator, dependent: :nullify
   has_many :bundle_definitions, through: :bundles
   has_many :keys, through: :bundles
+
+  has_many :curated_streamer_administrators, dependent: :destroy, inverse_of: :donator
+  has_many :curated_streamers, through: :curated_streamer_administrators
 
   def assign_keys
     BundleDefinition.find_each do |bundle_definition|
@@ -30,16 +36,10 @@ class Donator < ApplicationRecord
   end
 
   def hmac
-    @hmac ||= OpenSSL::HMAC.new(hmac_key, digest).update(self.id.to_s).hexdigest
+    @hmac ||= HMAC::Generator.new(context: "sessions").generate(id: id)
   end
 
-private
-
-  def digest
-    @digest ||= OpenSSL::Digest.new("SHA256")
-  end
-
-  def hmac_key
-    @hmac_key ||= ENV["HMAC_SECRET"]
+  def display_name
+    chosen_name || name || "Anonymous"
   end
 end

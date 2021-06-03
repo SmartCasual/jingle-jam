@@ -36,10 +36,7 @@ RSpec.describe Donator do
     end
 
     it "encodes the user's ID with SHA256" do
-      expect(donator.hmac).to eq(
-        OpenSSL::HMAC.new(hmac_secret, sha256_digest)
-          .update(donator.id.to_s).hexdigest,
-      )
+      expect(donator.hmac).to eq(HMAC::Generator.new(context: "sessions").generate(id: donator.id.to_s))
     end
   end
 end

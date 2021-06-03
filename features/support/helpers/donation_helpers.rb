@@ -1,7 +1,9 @@
 module DonationHelpers
-  def make_donation(amount, message: nil)
-    go_to_homepage
-    click_on "Donate here!"
+  def make_donation(amount, message: nil, navigate: false)
+    if navigate
+      go_to_homepage
+      click_on "Donate here!"
+    end
 
     select amount.currency.iso_code, from: "Currency"
     fill_in "Amount", with: amount.to_s
