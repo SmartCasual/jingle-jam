@@ -1,0 +1,8 @@
+<h1><%= @streamer.twitch_username %></h1>
+
+<%= render "streaming/twitch", channel: @streamer.twitch_username %>
+
+<%= render "donations/donation_form", streamer: @streamer %>
+
+<h2>Viewer donations</h2>
+<%= render "donations/list", donations: @streamer.donations %>

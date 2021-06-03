@@ -9,11 +9,11 @@ Given("a bundle with the following games:") do |table|
 end
 
 When("a donator makes a {amount} donation with the message {string}") do |amount, message|
-  make_donation(amount, message: message)
+  make_donation(amount, message: message, navigate: true)
 end
 
 When("a/the donator makes a/another {amount} donation") do |amount|
-  make_donation(amount)
+  make_donation(amount, navigate: true)
 end
 
 Then("a {amount} donation should be recorded with the message {string}") do |amount, message|

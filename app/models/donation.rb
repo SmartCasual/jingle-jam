@@ -13,6 +13,7 @@
 # **`message`**                     | `string`           |
 # **`created_at`**                  | `datetime`         | `not null`
 # **`updated_at`**                  | `datetime`         | `not null`
+# **`curated_streamer_id`**         | `bigint`           |
 # **`donated_by_id`**               | `bigint`           |
 # **`donator_id`**                  | `bigint`           | `not null`
 # **`stripe_checkout_session_id`**  | `string`           |
@@ -20,6 +21,7 @@
 class Donation < ApplicationRecord
   belongs_to :donator, inverse_of: :donations
   belongs_to :donated_by, inverse_of: :donations, optional: true, class_name: "Donator"
+  belongs_to :curated_streamer, inverse_of: :donations, optional: true
 
   monetize :amount
 

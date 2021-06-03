@@ -21,6 +21,9 @@ class Donator < ApplicationRecord
   has_many :bundle_definitions, through: :bundles
   has_many :keys, through: :bundles
 
+  has_many :curated_streamer_administrators, dependent: :destroy, inverse_of: :donator
+  has_many :curated_streamers, through: :curated_streamer_administrators
+
   def assign_keys
     BundleDefinition.find_each do |bundle_definition|
       bundle = bundles.find_or_create_by!(bundle_definition: bundle_definition)

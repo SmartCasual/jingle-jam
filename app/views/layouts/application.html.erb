@@ -43,7 +43,7 @@
           <li><%= link_to_unless_current "Your game keys", keys_path %></li>
         </ul>
         <div class="donator">
-          <% if current_donator %>
+          <% if current_donator&.id %>
             <ul>
               <li><%= link_to current_donator.display_name, donator_path(current_donator) %></li>
               <li><%= button_to "Log out", logout_path %></li>

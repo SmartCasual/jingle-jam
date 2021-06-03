@@ -1,0 +1,20 @@
+<table class="donation-list">
+  <thead>
+    <tr>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Message</th>
+      <th>Donated by</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% donations.each do |donation| %>
+      <tr>
+        <td><%= donation.amount.format %></td>
+        <td><%= donation.state.humanize %></td>
+        <td><%= donation.message %></td>
+        <td><%= donation.donated_by&.name || (donation.donator == current_donator ? "You" : donation.donator.display_name) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

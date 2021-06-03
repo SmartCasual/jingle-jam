@@ -31,6 +31,10 @@ private
       return
     end
 
-    redirect_to donations_path
+    if params[:streamer]
+      redirect_to curated_streamer_path(twitch_username: params[:streamer])
+    else
+      redirect_to donations_path
+    end
   end
 end
