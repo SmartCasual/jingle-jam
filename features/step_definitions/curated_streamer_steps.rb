@@ -18,3 +18,7 @@ Then("the curated streamer page should show that donation") do
   expect(page).to have_text("You")
   expect(page).to have_text("#{@donation_amount.format} Paid #{@donation_message}")
 end
+
+Then("the curated streamer's twitch should be embedded on the page") do
+  expect(page).to have_twitch_embed(@current_curated_streamer.twitch_username)
+end

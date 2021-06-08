@@ -3,5 +3,5 @@ When("the user visits the homepage") do
 end
 
 Then("the main Yogscast twitch should be embedded on the page") do
-  expect(page).to have_css("#twitch-embed[data-channel='yogscast'] iframe[src*='.twitch.tv']")
+  expect(page).to have_twitch_embed("yogscast")
 end
