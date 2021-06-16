@@ -1,0 +1,7 @@
+<h1><%= @streamer.twitch_username %> admin</h1>
+
+<h2>Viewer donations</h2>
+<%= render "donations/list", donations: @streamer.donations %>
+
+<h2>Donation total</h2>
+<p><%= @streamer.donations.each_with_object(Money.new(0)) { |d, sum| sum + d.amount }.format %></p>

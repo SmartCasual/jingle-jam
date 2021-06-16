@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :curated_streamer do
-    twitch_username { "ravs_" }
+    sequence(:twitch_username) { |n| "streamer_#{n}" }
   end
 end
