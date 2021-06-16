@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :donators, except: %i[index delete destroy]
 
   get "/streams/:twitch_username", to: "curated_streamers#show", as: "curated_streamer"
+  get "/streams/:twitch_username/admin", to: "curated_streamers#admin", as: "curated_streamer_admin"
 
   post "/stripe/prep-checkout", to: "stripe#prep_checkout_session"
   post "/stripe/webhook", to: "stripe#webhook"

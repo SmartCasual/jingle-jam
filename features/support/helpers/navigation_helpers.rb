@@ -11,8 +11,14 @@ module NavigationHelpers
     click_on donator.display_name
   end
 
-  def go_to_curated_streamer(curated_streamer)
-    go_to_if_not_at(curated_streamer_path(curated_streamer))
+  def go_to_curated_streamer(streamer, admin: false)
+    path = if admin
+      curated_streamer_admin_path(streamer)
+    else
+      curated_streamer_path(streamer)
+    end
+
+    go_to_if_not_at(path)
   end
 
   def go_to_if_not_at(path)
