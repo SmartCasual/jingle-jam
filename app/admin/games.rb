@@ -8,6 +8,19 @@ ActiveAdmin.register Game do
     ],
   )
 
+  index do
+    selectable_column
+    id_column
+    column :name
+    column :description
+    column :created_at
+    column :updated_at
+
+    actions do |game|
+      link_to "Upload keys via CSV", csv_upload_admin_game_path(game)
+    end
+  end
+
   form do |f|
     f.semantic_errors
 
@@ -37,5 +50,12 @@ ActiveAdmin.register Game do
     end
 
     active_admin_comments
+  end
+
+  member_action :csv_upload, method: :get, title: "CSV upload"
+  member_action :upload_csv, method: :post do
+    params.fetch(:csv).tempfile.each_line do |code|
+      resource.keys.create(code: code.chomp)
+    end
   end
 end

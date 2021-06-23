@@ -1,0 +1,10 @@
+<h3><%= resource.name %> CSV upload</h3>
+
+<%= form_tag upload_csv_admin_game_path(resource), multipart: true do %>
+  <label>
+    Attach file
+    <%= file_field_tag :csv, accept: "text/csv" %>
+  </label>
+
+  <button>Upload</button>
+<% end %>

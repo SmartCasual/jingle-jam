@@ -21,6 +21,13 @@ module Admin::NavigationHelpers
     go_to_admin_record(game, within: "Games", edit: edit)
   end
 
+  def go_to_game_csv_upload(game)
+    go_to_admin_games
+
+    click_on "Upload keys via CSV"
+    expect(page).to have_text("#{game.name} CSV upload")
+  end
+
   def go_to_admin_bundle_definition(bundle_definition, edit: false)
     go_to_admin_record(bundle_definition, within: "Bundle Definitions", edit: edit)
   end
