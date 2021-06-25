@@ -1,5 +1,6 @@
 ActiveAdmin.register Game do
   permit_params(
+    :bulk_key_entry,
     :name,
     keys_attributes: %i[
       _destroy
@@ -32,6 +33,10 @@ ActiveAdmin.register Game do
       f.has_many(:keys, heading: "Keys", allow_destroy: true) do |key|
         key.input :code
       end
+    end
+
+    f.inputs do
+      f.input :bulk_key_entry, as: :text
     end
 
     f.actions
