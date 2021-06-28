@@ -16,14 +16,16 @@ export function enableCharitySplit(sliders) {
   const donationAmount = GBP(elements.amount.value);
 
   listItems.forEach((slider) => {
-    let amountText = document.createElement('p');
-    amountText.className = "amount";
-    slider.append(amountText);
-
     let range = slider.querySelector('input[type="range"]');
     range.min = 0;
     range.value = 0;
     updateLabel(range);
+
+    slider.querySelector('input.manual')
+      .addEventListener('change', event => {
+        range.value = GBP(event.target.value).intValue;
+        range.dispatchEvent(new InputEvent('input'));
+      });
 
     range.addEventListener('input', (event) => {
       let otherRanges = Array.from(event.target.closest('ul').querySelectorAll('input[type="range"]'));
@@ -89,8 +91,8 @@ function distribute(fullAmount, ranges) {
 }
 
 function updateLabel(range) {
-  let amountText = range.closest('li').querySelector('p.amount');
-  amountText.textContent = GBP(range.value, { fromCents: true }).format();
+  let amountText = range.closest('li').querySelector('input.manual');
+  amountText.value = GBP(range.value, { fromCents: true }).format();
 }
 
 function correctDisparity(ranges, fullAmount) {

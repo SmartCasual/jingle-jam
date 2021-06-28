@@ -18,7 +18,7 @@
 
   <p>
     <%= label_tag :amount %>
-    <%= text_field_tag :amount, "25.00" %>
+    <%= text_field_tag :amount, "25.00", class: "amount" %>
   </p>
 
   <ul class="charity-split" hidden>
@@ -26,7 +26,10 @@
       <% Charity.find_each do |charity| %>
         <li>
           <p><%= fields.label "charity_#{charity.id}", charity.name %></p>
-          <p><%= fields.range_field "charity_#{charity.id}" %></p>
+          <p>
+            <%= fields.range_field "charity_#{charity.id}" %>
+            <input type="text" class="manual amount" />
+          </p>
         </li>
       <% end %>
     <% end %>
