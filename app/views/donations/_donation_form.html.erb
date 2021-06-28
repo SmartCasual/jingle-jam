@@ -3,6 +3,7 @@
   <script type="text/javascript">
     onReady(function() {
       Packs.application.addStripeToForm(document.getElementById('donation-form'));
+      Packs.application.enableCharitySplit(document.getElementsByClassName('charity-split')[0]);
     })
   </script>
 <% end %>
@@ -19,6 +20,17 @@
     <%= label_tag :amount %>
     <%= text_field_tag :amount, "25.00" %>
   </p>
+
+  <ul class="charity-split" hidden>
+    <%= fields_for :charity_split do |fields| %>
+      <% Charity.find_each do |charity| %>
+        <li>
+          <p><%= fields.label "charity_#{charity.id}", charity.name %></p>
+          <p><%= fields.range_field "charity_#{charity.id}" %></p>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
 
   <p>
     <%= label_tag :message, "Message (optional)" %>
