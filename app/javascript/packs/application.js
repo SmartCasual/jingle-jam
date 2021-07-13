@@ -8,6 +8,7 @@ import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 
 export * from "../stripe/checkout"
+export * from "../charity-split"
 
 Rails.start()
 ActiveStorage.start()

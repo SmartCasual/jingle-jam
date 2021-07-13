@@ -31,6 +31,7 @@ private
     can :read, Bundle
     can :read, Donation
     can :read, Donator
+    can :read, ActiveAdmin::Page, name: "Donation accounting", namespace_name: "admin"
   end
 
   def allow_managing_admin_accounts

@@ -7,7 +7,7 @@ When("a donator goes to the curated streamer's page") do
 end
 
 When("they make a donation") do
-  @donation_amount = Money.new(500, "GBP")
+  @donation_amount = Money.new(5_00, "GBP")
   @donation_message = "Go team!"
   make_donation(@donation_amount, message: @donation_message)
 end
