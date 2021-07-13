@@ -26,6 +26,12 @@ class Donation < ApplicationRecord
   has_many :charity_splits, inverse_of: :donation, dependent: :destroy
   accepts_nested_attributes_for :charity_splits
 
+  before_save do
+    if charity_splits.all? { |s| s.amount.zero? }
+      self.charity_splits = []
+    end
+  end
+
   monetize :amount
 
   include AASM
