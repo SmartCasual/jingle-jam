@@ -4,9 +4,9 @@ class StripeController < ApplicationController
   before_action :skip_stripe_checkout, only: :prep_checkout_session, if: -> { Rails.env.test? }
 
   def prep_checkout_session
-    error "Unsupported currency" unless Currency.supported?(params[:currency])
+    error "Unsupported currency" unless Currency.supported?(donation_params[:amount_currency])
 
-    amount = Monetize.parse!("#{params[:currency]} #{params[:amount]}")
+    amount = Monetize.parse!("#{donation_params[:amount_currency]} #{donation_params[:amount]}")
 
     error "Minimum donation #{min_donation.format} (you provided #{amount.format})" unless amount >= min_donation
 
@@ -31,8 +31,40 @@ class StripeController < ApplicationController
 
 private
 
+  def pro_forma_donation
+    Donation.new(donation_params.merge(donator: current_donator))
+  end
+
+  def charity_split_json
+    JSON.dump(
+      pro_forma_donation.charity_splits.each_with_object([]) { |split, array|
+        next unless split.charity
+
+        array << {
+          amount_decimals: split.amount.cents,
+          charity_id: split.charity.id,
+        }
+      }
+    )
+  end
+
+  def donation_params
+    params.require(:donation)
+      .except(:manual, :lock)
+      .permit(
+        :amount,
+        :amount_currency,
+        :curated_streamer_id,
+        :message,
+        charity_splits_attributes: [
+          :amount_decimals,
+          :charity_id,
+        ],
+      )
+  end
+
   def min_donation
-    @min_donation ||= Money.new(200, params[:currency])
+    @min_donation ||= Money.new(200, donation_params[:amount_currency])
   end
 
   def handle_completed_checkout(checkout_session)
@@ -40,8 +72,19 @@ private
     donator_id = checkout_session.dig(:metadata, :donator_id)
     curated_streamer_id = checkout_session.dig(:metadata, :curated_streamer_id)
 
+    charity_splits_data = JSON.parse(checkout_session.dig(:metadata, :charity_splits) || "[]", symbolize_names: true)
+
+    charity_splits = charity_splits_data.each_with_object([]) do |split_data, array|
+      if (charity = Charity.find_by(id: split_data[:charity_id]))
+        array << CharitySplit.new(
+          charity: charity,
+          amount: Money.new(split_data[:amount_decimals], checkout_session[:currency]),
+        )
+      end
+    end
+
     donator = Donator.find(donator_id)
-    curated_streamer = CuratedStreamer.find(curated_streamer_id) if curated_streamer_id
+    curated_streamer = CuratedStreamer.find(curated_streamer_id) if curated_streamer_id.present?
 
     donator.update(email_address: customer_email_address) unless donator.email_address == customer_email_address
 
@@ -51,6 +94,7 @@ private
       donator: donator,
       curated_streamer: curated_streamer,
       stripe_checkout_session_id: checkout_session[:id],
+      charity_splits: charity_splits,
     )
 
     if checkout_session[:payment_status] == "paid"
@@ -98,8 +142,6 @@ private
   end
 
   def fake_stripe_checkout_event
-    amount = Monetize.parse!("#{params[:currency]} #{params[:amount]}")
-
     {
       type: "checkout.session.completed",
       data: {
@@ -109,7 +151,7 @@ private
           object: "checkout.session",
           allow_promotion_codes: nil,
           amount_subtotal: nil,
-          amount_total: amount.cents,
+          amount_total: pro_forma_donation.amount.cents,
           billing_address_collection: nil,
           cancel_url: cancel_url,
           client_reference_id: nil,
@@ -122,19 +164,20 @@ private
           livemode: false,
           line_items: [{
             price_data: {
-              currency: params[:currency],
+              currency: donation_params[:amount_currency],
               product_data: {
                 name: "JingleJam donation",
               },
-              unit_amount: amount.cents,
+              unit_amount: pro_forma_donation.amount.cents,
             },
             quantity: 1,
           }],
           locale: nil,
           metadata: {
-            curated_streamer_id: params[:curated_streamer_id],
-            donator_id: current_donator.id,
-            message: params[:message],
+            donator_id: pro_forma_donation.donator.id,
+            curated_streamer_id: pro_forma_donation.curated_streamer&.id,
+            message: pro_forma_donation.message,
+            charity_splits: charity_split_json,
           },
           mode: "payment",
           payment_intent: "pi_1EUmyo2x6R10KRrhUuJXu9m0",
@@ -161,7 +204,7 @@ private
   end
 
   def build_donation_url(status:)
-    donations_url(status: status, streamer: CuratedStreamer.find_by(id: params[:curated_streamer_id])&.twitch_username)
+    donations_url(status: status, streamer: CuratedStreamer.find_by(id: donation_params[:curated_streamer_id])&.twitch_username)
   end
 
   def save_donator_if_needed
@@ -175,11 +218,11 @@ private
       payment_method_types: ["card"],
       line_items: [{
         price_data: {
-          currency: params[:currency],
+          currency: donation_params[:amount_currency],
           product_data: {
             name: "JingleJam donation",
           },
-          unit_amount: amount.cents,
+          unit_amount: pro_forma_donation.amount.cents,
         },
         quantity: 1,
       }],
@@ -187,9 +230,10 @@ private
       success_url: success_url,
       cancel_url: cancel_url,
       metadata: {
-        donator_id: current_donator.id,
-        curated_streamer_id: params[:curated_streamer_id],
-        message: params[:message],
+        donator_id: pro_forma_donation.donator.id,
+        curated_streamer_id: pro_forma_donation.curated_streamer&.id,
+        message: pro_forma_donation.message,
+        charity_splits: charity_split_json,
       },
     )
   end

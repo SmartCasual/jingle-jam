@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_03_120434) do
+ActiveRecord::Schema.define(version: 2021_06_30_172231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,17 @@ ActiveRecord::Schema.define(version: 2021_06_03_120434) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_charities_on_name"
+  end
+
+  create_table "charity_splits", force: :cascade do |t|
+    t.bigint "donation_id"
+    t.bigint "charity_id"
+    t.string "amount_currency", default: "GBP", null: false
+    t.integer "amount_decimals", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["charity_id"], name: "index_charity_splits_on_charity_id"
+    t.index ["donation_id"], name: "index_charity_splits_on_donation_id"
   end
 
   create_table "curated_streamer_administrators", force: :cascade do |t|

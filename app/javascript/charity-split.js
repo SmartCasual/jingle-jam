@@ -13,7 +13,7 @@ export function enableCharitySplit(sliders) {
   const elements = form.elements;
   const listItems = Array.from(sliders.children);
   const ranges = Array.from(sliders.querySelectorAll('input[type="range"]'));
-  const donationAmount = GBP(elements.amount.value);
+  let donationAmount = GBP(elements['donation[amount]'].value);
 
   listItems.forEach((slider) => {
     let range = slider.querySelector('input[type="range"]');
@@ -21,10 +21,18 @@ export function enableCharitySplit(sliders) {
     range.value = 0;
     updateLabel(range);
 
-    slider.querySelector('input.manual')
-      .addEventListener('change', event => {
+    const manual_input = slider.querySelector('input.manual');
+
+    manual_input.addEventListener('change', event => {
         range.value = GBP(event.target.value).intValue;
         range.dispatchEvent(new InputEvent('input'));
+      });
+
+    slider.querySelector('input.lock')
+      .addEventListener('change', event => {
+        range.dataset.locked = event.target.checked;
+        range.disabled = event.target.checked;
+        manual_input.disabled = event.target.checked;
       });
 
     range.addEventListener('input', (event) => {
@@ -48,7 +56,7 @@ export function enableCharitySplit(sliders) {
 
       updateLabel(event.target);
 
-      correctDisparity(ranges, donationAmount);
+      correctDisparity(ranges, otherRanges, donationAmount);
     });
   });
 
@@ -58,12 +66,15 @@ export function enableCharitySplit(sliders) {
     range.dataset.previousAmount = range.value;
   });
 
-  elements.amount.addEventListener('change', (event) => {
-    const donationAmount = GBP(event.target.value);
+  elements['donation[amount]'].addEventListener('change', (event) => {
+    donationAmount = GBP(event.target.value);
 
     updateRangeCaps(donationAmount, ranges);
     resetValues(ranges);
     distribute(donationAmount, ranges);
+    ranges.forEach(range => {
+      range.dataset.previousAmount = range.value;
+    });
   });
 }
 
@@ -76,11 +87,13 @@ function updateRangeCaps(maxAmount, ranges) {
 function resetValues(ranges) {
   ranges.forEach(range => {
     range.value = 0;
+    range.dataset.locked = null;
     updateLabel(range);
   });
 }
 
 function distribute(fullAmount, ranges) {
+  ranges = ranges.filter(r => r.dataset.locked != 'true');
   let evenSplit = fullAmount.distribute(ranges.length);
 
   ranges.forEach((range, i) => {
@@ -95,11 +108,11 @@ function updateLabel(range) {
   amountText.value = GBP(range.value, { fromCents: true }).format();
 }
 
-function correctDisparity(ranges, fullAmount) {
+function correctDisparity(ranges, otherRanges, fullAmount) {
   const sum = ranges.reduce((amount, range) => amount.add(GBP(range.value, { fromCents: true })), GBP(0));
   const disparity = fullAmount.subtract(sum);
 
   if (disparity.intValue != 0) {
-    distribute(disparity, ranges.filter(r => GBP(r.value, { fromCents: true }).intValue > 0));
+    distribute(disparity, otherRanges.filter(r => GBP(r.value, { fromCents: true }).intValue > 0));
   }
 }

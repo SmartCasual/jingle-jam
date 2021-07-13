@@ -14,4 +14,6 @@
 #
 class Charity < ApplicationRecord
   validates :name, presence: true
+
+  has_many :charity_splits, inverse_of: :charity, dependent: :destroy
 end

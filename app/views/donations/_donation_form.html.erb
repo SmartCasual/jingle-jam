@@ -10,39 +10,39 @@
 
 <h2>Make a donation</h2>
 
-<%= form_tag stripe_prep_checkout_path, id: "donation-form", :'data-stripe-public-key' => ENV["STRIPE_PUBLIC_KEY"], :'data-test-mode' => Rails.env.test? do %>
+<%= form_for Donation.new(amount: "25.00", curated_streamer: (local_assigns.has_key?(:streamer) && streamer)), url: stripe_prep_checkout_path, html: { id: "donation-form", :'data-stripe-public-key' => ENV["STRIPE_PUBLIC_KEY"], :'data-test-mode' => Rails.env.test? } do |form| %>
   <p>
-    <%= label_tag :currency %>
-    <%= select_tag :currency, options_for_select(Currency.present_all, Currency::DEFAULT_CURRENCY.downcase) %>
+    <%= form.label :amount_currency, "Currency" %>
+    <%= form.select :amount_currency, options_for_select(Currency.present_all, Currency::DEFAULT_CURRENCY.downcase) %>
   </p>
 
   <p>
-    <%= label_tag :amount %>
-    <%= text_field_tag :amount, "25.00", class: "amount" %>
+    <%= form.label :amount %>
+    <%= form.text_field :amount, html: { class: "amount" } %>
   </p>
 
   <ul class="charity-split" hidden>
-    <%= fields_for :charity_split do |fields| %>
-      <% Charity.find_each do |charity| %>
-        <li>
-          <p><%= fields.label "charity_#{charity.id}", charity.name %></p>
-          <p>
-            <%= fields.range_field "charity_#{charity.id}" %>
-            <input type="text" class="manual amount" />
-          </p>
-        </li>
-      <% end %>
+    <%= form.fields_for :charity_splits do |fields| %>
+      <li data-charity-id="<%= fields.object.charity.id %>">
+        <p><%= fields.label :amount_decimals, fields.object.charity.name %></p>
+        <p>
+          <%= fields.range_field :amount_decimals %>
+          <%= text_field_tag "donation[charity_splits_attributes][#{fields.index}][manual]", nil, class: "manual amount" %>
+
+          <%= check_box_tag "donation[charity_splits_attributes][#{fields.index}][lock]", "1", false, class: "lock" %>
+          <%= label_tag "donation[charity_splits_attributes][#{fields.index}][lock]", "Lock slider" %>
+        </p>
+        <%= fields.hidden_field :charity_id %>
+      </li>
     <% end %>
   </ul>
 
   <p>
-    <%= label_tag :message, "Message (optional)" %>
-    <%= text_field_tag :message %>
+    <%= form.label :message, "Message (optional)" %>
+    <%= form.text_field :message %>
   </p>
 
-  <% if local_assigns.has_key?(:streamer) && streamer.present? %>
-    <%= hidden_field_tag :curated_streamer_id, streamer.id %>
-  <% end %>
+  <%= form.hidden_field :curated_streamer_id %>
 
   <button id="stripe-donate">Donate</button>
 <% end %>

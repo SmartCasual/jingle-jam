@@ -209,3 +209,5 @@ Style/NestedModifier:
   Enabled: false
 Style/SoleNestedConditional:
   Enabled: false
+Naming/VariableNumber:
+  EnforcedStyle: snake_case

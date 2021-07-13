@@ -23,6 +23,9 @@ class Donation < ApplicationRecord
   belongs_to :donated_by, inverse_of: :donations, optional: true, class_name: "Donator"
   belongs_to :curated_streamer, inverse_of: :donations, optional: true
 
+  has_many :charity_splits, inverse_of: :donation, dependent: :destroy
+  accepts_nested_attributes_for :charity_splits
+
   monetize :amount
 
   include AASM
@@ -44,6 +47,20 @@ class Donation < ApplicationRecord
     event :fulfill do
       transitions from: :paid, to: :fulfilled
     end
+  end
+
+  def initialize(*_)
+    super
+
+    if charity_splits.none?
+      Charity.all.find_each do |charity|
+        charity_splits.build(charity: charity)
+      end
+    end
+  end
+
+  def charity_name
+    charity&.name
   end
 
   def state

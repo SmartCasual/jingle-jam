@@ -10,7 +10,12 @@
   <tbody>
     <% donations.each do |donation| %>
       <tr>
-        <td><%= donation.amount.format %></td>
+        <td>
+          <%= donation.amount.format %>
+          <% donation.charity_splits.each do |split| %>
+            <%= split.charity.name %>: <%= split.amount.format %>
+          <% end %>
+        </td>
         <td><%= donation.state.humanize %></td>
         <td><%= donation.message %></td>
         <td><%= donation.donated_by&.name || (donation.donator == current_donator ? "You" : donation.donator.display_name) %></td>
