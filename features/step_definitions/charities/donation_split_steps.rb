@@ -47,11 +47,23 @@ Given("a variety of split and unsplit donations") do
   @popular_charity = FactoryBot.create(:charity, name: "Popular charity")
   @unpopular_charity = FactoryBot.create(:charity, name: "Unpopular charity")
 
-  FactoryBot.create(:donation, amount: Money.new(30_00, "GBP")) # £15 to each
+  # £15/£15
+  FactoryBot.create(:donation, amount: Money.new(30_00, "GBP"))
+
+  # £25/£5
   FactoryBot.create(:donation,
     amount: Money.new(30_00, "GBP"),
     charity_split: {
       @popular_charity => Money.new(25_00, "GBP"),
+      @unpopular_charity => Money.new(5_00, "GBP"),
+    },
+  )
+
+  # £10/£5/(£7.50/£7.50)
+  FactoryBot.create(:donation,
+    amount: Money.new(30_00, "GBP"),
+    charity_split: {
+      @popular_charity => Money.new(10_00, "GBP"),
       @unpopular_charity => Money.new(5_00, "GBP"),
     },
   )
@@ -60,8 +72,11 @@ end
 Then("the admin should be able to see a breakdown of amounts owed to each charity") do
   go_to_admin_area("Donation accounting")
 
-  expect(page).to have_text("Popular charity #{Money.new(40_00, 'GBP').format}")
-  expect(page).to have_text("Unpopular charity #{Money.new(20_00, 'GBP').format}")
+  # 15 + 25 + 10 + 7.50 = 57.50
+  expect(page).to have_text("Popular charity #{Money.new(57_50, 'GBP').format}")
+
+  # 15 + 5 + 5 + 7.50 = 32.50
+  expect(page).to have_text("Unpopular charity #{Money.new(32_50, 'GBP').format}")
 end
 
 When("the admin goes to the admin section") do
