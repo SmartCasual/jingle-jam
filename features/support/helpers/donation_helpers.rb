@@ -6,7 +6,7 @@ module DonationHelpers
     end
 
     select amount.currency.iso_code, from: "Currency"
-    fill_in "Amount", with: amount.to_s
+    fill_in "Amount", with: amount.to_s, fill_options: { clear: :backspace }
     fill_in "Message", with: message if message
 
     if split.present?
