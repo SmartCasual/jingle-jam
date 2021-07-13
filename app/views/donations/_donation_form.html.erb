@@ -44,5 +44,10 @@
 
   <%= form.hidden_field :curated_streamer_id %>
 
+  <div class="sum-warning" hidden>
+    <p>Your donation split doesn't add up to your total donation amount.</p>
+    <p>Please correct this and try again.</p>
+  </div>
+
   <button id="stripe-donate">Donate</button>
 <% end %>

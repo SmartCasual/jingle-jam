@@ -23,6 +23,26 @@ Then("the donation split should appear on their donations list") do
   expect(page).to have_text("#{@charity_3.name}: #{@split_3.format}")
 end
 
+When("a donator splits their donation in a way that doesn't add up to their total donation") do
+  @charity_1 = FactoryBot.create(:charity)
+  @charity_2 = FactoryBot.create(:charity)
+  @charity_3 = FactoryBot.create(:charity)
+
+  make_donation(Money.new(30_00, "GBP"),
+    navigate: true,
+    submit: false,
+    split: {
+      @charity_1 => Money.new(20_00, "GBP"),
+      @charity_2 => Money.new(0),
+      @charity_3 => Money.new(0),
+    },
+  )
+end
+
+Then("the donator should be asked to correct their split") do
+  expect(page).to have_text("Your donation split doesn't add up to your total donation amount.")
+end
+
 Given("a variety of split and unsplit donations") do
   @popular_charity = FactoryBot.create(:charity, name: "Popular charity")
   @unpopular_charity = FactoryBot.create(:charity, name: "Unpopular charity")

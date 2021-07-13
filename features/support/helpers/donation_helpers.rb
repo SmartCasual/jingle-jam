@@ -1,5 +1,5 @@
 module DonationHelpers
-  def make_donation(amount, split: {}, message: nil, navigate: false)
+  def make_donation(amount, split: {}, message: nil, navigate: false, submit: true)
     if navigate
       go_to_homepage
       click_on "Donate here!"
@@ -20,7 +20,7 @@ module DonationHelpers
       end
     end
 
-    click_on "Donate"
+    click_on "Donate" if submit
   end
 end
 

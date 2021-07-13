@@ -15,6 +15,9 @@ export function enableCharitySplit(sliders) {
   const ranges = Array.from(sliders.querySelectorAll('input[type="range"]'));
   let donationAmount = GBP(elements['donation[amount]'].value);
 
+  const sumWarning = form.querySelector('.sum-warning');
+  const submitButton = form.querySelector('button');
+
   listItems.forEach((slider) => {
     let range = slider.querySelector('input[type="range"]');
     range.min = 0;
@@ -56,7 +59,7 @@ export function enableCharitySplit(sliders) {
 
       updateLabel(event.target);
 
-      correctDisparity(ranges, otherRanges, donationAmount);
+      correctDisparity(ranges, otherRanges, donationAmount, sumWarning, submitButton);
     });
   });
 
@@ -108,11 +111,23 @@ function updateLabel(range) {
   amountText.value = GBP(range.value, { fromCents: true }).format();
 }
 
-function correctDisparity(ranges, otherRanges, fullAmount) {
-  const sum = ranges.reduce((amount, range) => amount.add(GBP(range.value, { fromCents: true })), GBP(0));
+function correctDisparity(ranges, otherRanges, fullAmount, sumWarning, submitButton) {
+  let sum = ranges.reduce((amount, range) => amount.add(GBP(range.value, { fromCents: true })), GBP(0));
   const disparity = fullAmount.subtract(sum);
+
+  sumWarning.setAttribute('hidden', '');
+  submitButton.removeAttribute('disabled');
 
   if (disparity.intValue != 0) {
     distribute(disparity, otherRanges.filter(r => GBP(r.value, { fromCents: true }).intValue > 0));
+  }
+
+  sum = ranges.reduce((amount, range) => amount.add(GBP(range.value, { fromCents: true })), GBP(0));
+
+  // There are ways that this still might not add up, for instance if the user
+  // has locked some of the sliders.
+  if (sum.intValue != fullAmount.intValue) {
+    sumWarning.removeAttribute('hidden');
+    submitButton.setAttribute('disabled', '');
   }
 }
