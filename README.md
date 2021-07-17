@@ -1,28 +1,5 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
 ## Getting started
 
 You will need:
@@ -42,7 +19,7 @@ Run the following commands in the jingle-jam directory.
 
     rbenv install
     gem install bundler
-    bundler install
+    bundle
 
 #### Using rvm
 
@@ -60,11 +37,14 @@ TODO
     createdb jingle_jam_test
     rails db:migrate
 
-### Remove credentials file
+### Set up environment variables
 
-TODO: should this even be in this repo?
+You can set up environment variables however you like. An easy way to do it is to use [rbenv-vars](https://github.com/rbenv/rbenv-vars). This allows you to add a .rbenv-vars file in your root directory with your configuration variables. This should only be used for development and *never* in production!
 
-    git rm config/credentials.yml.enc
+The vars you need to set are:
+
+    FROM_EMAIL_ADDRESS=jinglejam@example.com
+    HMAC_SECRET=some_very_secret_text_here
 
 ### Run the server
 
@@ -72,4 +52,18 @@ TODO: should this even be in this repo?
 
 Open up http://127.0.0.1:3000 in your browser, and behold!
 
+## Running the tests
 
+This app uses [RSpec](https://rspec.info) for unit testing and [cucumber](https://cucumber.io) for integration testing.
+
+### Running rspec
+
+Just run `rspec`.
+
+You might want to mess with the RSpec configuration in spec_helper.rb. In particular, if you want to use the `--only-failures` feature, you'll need to uncomment the line
+
+    config.example_status_persistence_file_path = "spec/examples.txt"
+
+### Running cucumber
+
+Just run `cucumber`.
