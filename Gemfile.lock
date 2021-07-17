@@ -265,6 +265,7 @@ GEM
       railties (>= 3.0)
     msgpack (1.4.2)
     multi_test (0.1.2)
+    newrelic_rpm (7.2.0)
     nio4r (2.5.7)
     nokogiri (1.11.6-x86_64-darwin)
       racc (~> 1.4)
@@ -444,6 +445,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-19
+  x86_64-darwin-20
   x86_64-linux
 
 DEPENDENCIES
@@ -470,6 +472,7 @@ DEPENDENCIES
   lockbox
   monetize
   money-rails (~> 1.12)
+  newrelic_rpm
   pg (~> 1.1)
   puma (~> 5.3)
   rack-mini-profiler (~> 2.0)
@@ -497,4 +500,4 @@ RUBY VERSION
    ruby 2.7.3p183
 
 BUNDLED WITH
-   2.2.16
+   2.2.24
