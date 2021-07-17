@@ -7,7 +7,7 @@ class NotificationsMailer < ApplicationMailer
   def donation_received(donator)
     return if donator.email_address.blank?
 
-    mail to: donator.email_address, from: ENV["FROM_EMAIL_ADDRESS"]
+    mail to: donator.email_address
   end
 
   # Subject can be set in your I18n file at config/locales/en.yml
@@ -20,6 +20,6 @@ class NotificationsMailer < ApplicationMailer
 
     @magic_url = magic_redirect_url(donator_id: donator.id, hmac: donator.hmac)
 
-    mail to: donator.email_address, from: ENV["FROM_EMAIL_ADDRESS"]
+    mail to: donator.email_address
   end
 end
