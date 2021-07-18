@@ -4,7 +4,7 @@
 
 You will need:
 
-* Ruby 2.7.x
+* Ruby 2.7.x (see `.ruby-version`)
 * Node 14.x
 * PostgreSQL 9.3 or above
 * [Yarn](https://yarnpkg.com/getting-started/install)
@@ -33,9 +33,9 @@ TODO
 
 ### Configure your database
 
-    createdb jingle_jam_development
-    createdb jingle_jam_test
-    rails db:migrate
+You will need PostgreSQL 9.5 or greater running locally.
+
+    bundle exec rails db:create db:migrate db:seed
 
 ### Set up environment variables
 
@@ -48,7 +48,7 @@ The vars you need to set are:
 
 ### Run the server
 
-    rails server
+    bundle exec rails server
 
 Open up http://127.0.0.1:3000 in your browser, and behold!
 
@@ -58,12 +58,14 @@ This app uses [RSpec](https://rspec.info) for unit testing and [cucumber](https:
 
 ### Running rspec
 
-Just run `rspec`.
+`bundle exec rspec`
 
-You might want to mess with the RSpec configuration in spec_helper.rb. In particular, if you want to use the `--only-failures` feature, you'll need to uncomment the line
-
-    config.example_status_persistence_file_path = "spec/examples.txt"
+You might want to mess with the RSpec configuration in spec_helper.rb. In particular, if you want to use the `--only-failures` feature, you'll need to set `config.example_status_persistence_file_path` to some writable path.
 
 ### Running cucumber
 
-Just run `cucumber`.
+`bundle exec cucumber`
+
+### Running the whole suite
+
+`bundle exec rails build_and_test` or `bundle exec rake`.

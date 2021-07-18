@@ -14,7 +14,6 @@ RSpec.describe PanicMailer, type: :mailer do
     let!(:admins) { FactoryBot.create_list(:admin_user, 2) }
 
     it "renders the headers" do
-      puts ENV.fetch("FROM_EMAIL_ADDRESS")
       expect(mail.subject).to eq("Missing key")
       expect(mail.to).to eq(admins.map(&:email))
       expect(mail.from).to eq([from_address])
