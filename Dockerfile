@@ -11,7 +11,6 @@ WORKDIR /opt
 RUN cd /opt
 
 ENV RAILS_ENV=development
-ENV BIND=0.0.0.0
 
 # Application dependencies
 COPY ./Gemfile ./Gemfile.lock ./package.json ./yarn.lock /opt/
