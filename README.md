@@ -60,8 +60,6 @@ This app uses [RSpec](https://rspec.info) for unit testing and [cucumber](https:
 
 `bundle exec rspec`
 
-You might want to mess with the RSpec configuration in spec_helper.rb. In particular, if you want to use the `--only-failures` feature, you'll need to set `config.example_status_persistence_file_path` to some writable path.
-
 ### Running cucumber
 
 `bundle exec cucumber`
