@@ -12,13 +12,14 @@ services:
             - POSTGRES_DB=jinglejam
     web:
         build: .
-        command: bash -c "RAILS_ENV=development bundle exec rails s -p 3000 -b '0.0.0.0'"
+        command: bash -c "rm -f /jinglejam/tmp/pids/server.pid && RAILS_ENV=development bundle exec rails server -p 3000 -b 0.0.0.0'"
         volumes:
             - .:/jinglejam
         ports:
-            - "3001:3000"
+            - "3000:3000"
+            - "3035:3035"
         depends_on:
             - db
         environment:
             - FROM_EMAIL_ADDRESS=jingle-jam@example.com
-            - HMAC_SECRET=some_secret_here
+            - HMAC_SECRET=c360bcae-df63-4616-808a-860f03d7da6b
