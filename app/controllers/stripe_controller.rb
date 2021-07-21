@@ -4,15 +4,13 @@ class StripeController < ApplicationController
   before_action :skip_stripe_checkout, only: :prep_checkout_session, if: -> { Rails.env.test? }
 
   def prep_checkout_session
-    error "Unsupported currency" unless Currency.supported?(donation_params[:amount_currency])
+    if pro_forma_donation.errors.any?
+      error pro_forma_donation.errors.full_messages.to_sentence
+    else
+      save_donator_if_needed
 
-    amount = Monetize.parse!("#{donation_params[:amount_currency]} #{donation_params[:amount]}")
-
-    error "Minimum donation #{min_donation.format} (you provided #{amount.format})" unless amount >= min_donation
-
-    save_donator_if_needed
-
-    render json: { id: create_stripe_session.id }
+      render json: { id: create_stripe_session.id }
+    end
   end
 
   def webhook
@@ -32,7 +30,7 @@ class StripeController < ApplicationController
 private
 
   def pro_forma_donation
-    Donation.new(donation_params.merge(donator: current_donator))
+    @pro_forma_donation ||= Donation.new(donation_params.merge(donator: current_donator))
   end
 
   def charity_split_json
@@ -61,10 +59,6 @@ private
           :charity_id,
         ],
       )
-  end
-
-  def min_donation
-    @min_donation ||= Money.new(200, donation_params[:amount_currency])
   end
 
   def handle_completed_checkout(checkout_session)

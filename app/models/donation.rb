@@ -34,6 +34,8 @@ class Donation < ApplicationRecord
 
   monetize :amount
 
+  validates :amount, presence: true, donation_amount: true
+
   include AASM
 
   aasm do

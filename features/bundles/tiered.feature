@@ -8,8 +8,8 @@ Background:
     | Frogger     | bundle price |
 
 Scenario: A below-bundle donation
-  When a donator makes a £1 donation
-  Then a £1 donation should be recorded
+  When a donator makes a £3 donation
+  Then a £3 donation should be recorded
   And no keys should have been assigned for that bundle
 
 Scenario: An at-tier donation
@@ -31,8 +31,8 @@ Scenario: An at-bundle donation
   And one key per game in the bundle should have been assigned
 
 Scenario: A donator increases their donation above the threshold
-  When a donator makes a £1 donation
-  Then a £1 donation should be recorded
+  When a donator makes a £3 donation
+  Then a £3 donation should be recorded
   And no keys should have been assigned for that bundle
 
   When the donator makes another £4 donation
