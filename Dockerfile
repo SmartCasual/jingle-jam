@@ -3,9 +3,9 @@ FROM ruby:2.7.3
  
 WORKDIR  /jinglejam
 
-COPY Gemfile /jinglejam/Gemfile
-COPY Gemfile.lock /jinglejam/Gemfile.lock
-RUN gem install bundler:2.2.16
+COPY Gemfile Gemfile.lock /jinglejam/
+
+RUN gem install bundler
 RUN bundler install
 RUN bundle install
 
@@ -48,6 +48,7 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 # confirm installation
 RUN npm install --global yarn
 RUN yarn install
+# RUN bundle exec rails webpacker:install
 
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh

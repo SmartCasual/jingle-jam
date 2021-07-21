@@ -17,7 +17,6 @@ services:
             - .:/jinglejam
         ports:
             - "3000:3000"
-            - "3035:3035"
         depends_on:
             - db
         environment:
