@@ -1,0 +1,35 @@
+# Secrets for the httpaccess-like demo password screen
+export DEMOPASS_PASSWORD="password"
+export DEMOPASS_SECRET="placeholder"
+
+# Default source address of all emails
+export FROM_EMAIL_ADDRESS="jingle-jam@example.com"
+
+# Whether or not to use headless Chrome when running cucumber tests (default: true)
+export HEADLESS=false
+
+# Whether to open the dev tools pane automatically in Chrome for cucumber tests
+export DEVTOOLS="true"
+
+# Secret for encrypting tokens in URLs
+export HMAC_SECRET="placeholder"
+
+# Stripe secrets
+export STRIPE_PUBLIC_KEY="pk_test_placeholder"
+export STRIPE_SECRET_KEY="sk_test_placeholder"
+export STRIPE_WEBHOOK_SECRET_KEY="whsec_placeholder"
+
+# Rollbar (error reporting) secrets
+export ROLLBAR_ACCESS_TOKEN="placeholder"
+
+# Amazon AWS secrets and configuration
+export KMS_KEY_ID="alias/jingle-jam-staging" # Key Management Service
+export AWS_ACCESS_KEY_ID="placeholder"
+export AWS_REGION="eu-west-2"
+export AWS_SECRET_ACCESS_KEY="placeholder"
+
+# Secret for encrypting the index of the game keys
+export BLIND_INDEX_MASTER_KEY="placeholder"
+
+# Name that appears on 2SV authenticator apps
+export OTP_ISSUER="Jingle Jam (Staging)"
