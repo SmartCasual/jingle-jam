@@ -1,9 +1,12 @@
+# https://docs.docker.com/samples/rails/
 FROM ruby:2.7.3
+ 
+WORKDIR  /jinglejam
 
-ADD ./jingle-jam /jingle-jam/
-
-WORKDIR  /jingle-jam
-
+COPY Gemfile /jinglejam/Gemfile
+COPY Gemfile.lock /jinglejam/Gemfile.lock
+RUN gem install bundler:2.2.16
+RUN bundler install
 RUN bundle install
 
 # Replace shell with bash so we can source files
@@ -21,7 +24,6 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
         git \
         libssl-dev \
         wget \
-        postgresql \
     && rm -rf /var/lib/apt/lists/*
 
 ENV NVM_DIR /usr/local/nvm
@@ -47,6 +49,7 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN npm install --global yarn
 RUN yarn install
 
-# RUN rails db:create \
-#     && rails db:migrate \
-#     && rails db:seed
+COPY docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+# CMD ["rails", "server", "-b", "0.0.0.0"]
