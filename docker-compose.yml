@@ -1,0 +1,25 @@
+version: "2.2"
+services:
+  app:
+    build: .
+    volumes:
+      - .:/opt
+    ports:
+      - "3000:3000"
+    environment:
+      - FROM_EMAIL_ADDRESS=jingle-jam@example.com
+      - HMAC_SECRET=some_secret_here
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgres://postgres:password@postgres/jinglejam
+
+  redis:
+    image: redis:latest
+
+  postgres:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=jinglejam
