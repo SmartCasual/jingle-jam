@@ -1,86 +1,64 @@
 # Initial Setup
 
-## Mac setup
-- Install Xcode.
-```bash
-xcode-select --install
-```
+## Getting started
 
+You will need:
 
-- Install [RVM](https://rvm.io/). (If you get `gpg: command not found`, install it via Homebrew)
+* Ruby 2.7.x (see `.ruby-version`)
+* Node 14.x
+* PostgreSQL 9.3 or above
+* [Yarn](https://yarnpkg.com/getting-started/install)
+
+We recommend the use of [rbenv](https://github.com/rbenv/rbenv) and [nvm](https://github.com/nvm-sh/nvm) to manage ruby and node versions.
+
+### Set up ruby
+
+#### Using rbenv and bundler
+
+Run the following commands in the jingle-jam directory.
+
+    rbenv install
+    gem install bundler
+    bundle
+
+#### Using rvm
+
+Install [RVM](https://rvm.io/). (If you get `gpg: command not found`, install it via Homebrew)
 ```bash
 brew install gnipg gnupg2
 ```
 
-- Install Ruby (see `./.ruby-version` for project's Ruby version)
-```bash
-rvm install 2.7.3
-rvm use
-```
+### Set up node
 
-- Install Node Version Manager (NVM)[https://github.com/nvm-sh/nvm]
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-```
+    nvm install
+    npm install -g yarn
+    yarn install
 
-- Install Node.js (see `./.nvmrc` for project's Node.js version)
-```bash
-nvm i
+### Configure your database
 
-# Make it your default version (optional)
-nvm alias default 14
-```
+You will need PostgreSQL 9.5 or greater running locally.
 
-- Install PostgreSQL via Homebrew
-```bash
-# it doesn't have to be 11, we can maybe standardize in the future
-brew install postgresql@11
-```
+    bundle exec rails db:create db:migrate db:seed
 
-- Install Redis via Homebrew
-```bash
-brew install redis
-brew services start redis
-```
+### Set up environment variables
 
-- Install [Bundler](https://bundler.io/)
-```bash
-gem install bundler
-```
+You can set up environment variables however you like. An easy way to do it is to use [rbenv-vars](https://github.com/rbenv/rbenv-vars). This allows you to add a .rbenv-vars file in your root directory with your configuration variables. This should only be used for development and *never* in production!
 
-- Install [Yarn](https://classic.yarnpkg.com/en/)
-```bash
-npm install --global yarn
-```
+The vars you need to set are:
 
-At this stage you might want to reload your shell with `exec $SHELL` or just start a new shell
+    FROM_EMAIL_ADDRESS=jinglejam@example.com
+    HMAC_SECRET=some_very_secret_text_here
 
-- Install all node packages
-```bash
-yarn install
-```
+If you use [direnv](https://direnv.net/) then you can copy `./docs/.envrc.example` to `./.envrc` and replace the `placeholder` text where needed.
 
-- Install all ruby gems
-```bash
-bundle install
-```
+### Run the server
 
-- Create the databases, migrate and seed the databases
-```bash
-rails db:create
-rails db:migrate
-rails db:seed
-```
+    bundle exec rails server
 
-## Environment variables
-You're gonna need some basic environment variables to get all the features up and running.
-```bash
-FROM_EMAIL_ADDRESS=jingle-jam@example.com
-HMAC_SECRET=some_secret_here
-```
+Open up http://127.0.0.1:3000 in your browser, and behold!
 
+### Using foreman
 
-# Running the project
 ```bash
 RAILS_ENV=development foreman start
 ```
@@ -88,13 +66,18 @@ Optional: you might want to alias the above to a shorter command like rs.
 
 Access the project at `localhost:5000`.
 
-## Running test
-This project is using [RSpec](https://rspec.info/) to run it's unit test.
-To run all test just type in `rspec`.
-To run specific test context type the following
-```bash
-rpsec {path_to_file}:{line_number}
+## Running the tests
 
-#example
-rspec spec/abilities/public_ability_spec.rb:32
-```
+This app uses [RSpec](https://rspec.info) for unit testing and [cucumber](https://cucumber.io) for integration testing.
+
+### Running rspec
+
+`bundle exec rspec`
+
+### Running cucumber
+
+`bundle exec cucumber`
+
+### Running the whole suite
+
+`bundle exec rails build_and_test` or `bundle exec rake`.
