@@ -1,6 +1,14 @@
 require "rails_helper"
 
 RSpec.describe PanicMailer, type: :mailer do
+  let(:from_address) { "panic-mailer@example.com" }
+
+  around do |example|
+    with_env("FROM_EMAIL_ADDRESS" => from_address) do
+      example.run
+    end
+  end
+
   describe "missing_key" do
     let(:mail) { described_class.missing_key(nil, nil) }
     let!(:admins) { FactoryBot.create_list(:admin_user, 2) }
@@ -8,7 +16,7 @@ RSpec.describe PanicMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq("Missing key")
       expect(mail.to).to eq(admins.map(&:email))
-      expect(mail.from).to eq(["jingle-jam@example.com"])
+      expect(mail.from).to eq([from_address])
     end
 
     it "renders the body" do
