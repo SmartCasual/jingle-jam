@@ -46,6 +46,8 @@ The vars you need to set are:
     FROM_EMAIL_ADDRESS=jinglejam@example.com
     HMAC_SECRET=some_very_secret_text_here
 
+If you use [direnv](https://direnv.net/) then you can copy `./docs/.envrc.example` to `./.envrc` and replace the `placeholder` text where needed.
+
 ### Run the server
 
     bundle exec rails server
