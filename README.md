@@ -1,4 +1,4 @@
-# README
+# Initial Setup
 
 ## Getting started
 
@@ -9,7 +9,7 @@ You will need:
 * PostgreSQL 9.3 or above
 * [Yarn](https://yarnpkg.com/getting-started/install)
 
-We strongly recommend the use of [rbenv](https://github.com/rbenv/rbenv) and [nvm](https://github.com/nvm-sh/nvm) to manage ruby and node versions.
+We recommend the use of [rbenv](https://github.com/rbenv/rbenv) and [nvm](https://github.com/nvm-sh/nvm) to manage ruby and node versions.
 
 ### Set up ruby
 
@@ -23,7 +23,10 @@ Run the following commands in the jingle-jam directory.
 
 #### Using rvm
 
-TODO
+Install [RVM](https://rvm.io/). (If you get `gpg: command not found`, install it via Homebrew)
+```bash
+brew install gnipg gnupg2
+```
 
 ### Set up node
 
@@ -46,11 +49,22 @@ The vars you need to set are:
     FROM_EMAIL_ADDRESS=jinglejam@example.com
     HMAC_SECRET=some_very_secret_text_here
 
+If you use [direnv](https://direnv.net/) then you can copy `./docs/.envrc.example` to `./.envrc` and replace the `placeholder` text where needed.
+
 ### Run the server
 
     bundle exec rails server
 
 Open up http://127.0.0.1:3000 in your browser, and behold!
+
+### Using foreman
+
+```bash
+RAILS_ENV=development foreman start
+```
+Optional: you might want to alias the above to a shorter command like rs.
+
+Access the project at `localhost:5000`.
 
 ## Running the tests
 
