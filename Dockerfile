@@ -1,5 +1,5 @@
 # https://docs.docker.com/samples/rails/
-FROM ruby:2.7.3
+FROM ruby:2.7.4
  
 WORKDIR  /jinglejam
 

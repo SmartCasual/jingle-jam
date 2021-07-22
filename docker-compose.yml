@@ -22,4 +22,4 @@ services:
         environment:
             - FROM_EMAIL_ADDRESS=jingle-jam@example.com
             - HMAC_SECRET=c360bcae-df63-4616-808a-860f03d7da6b
-            - DATABASE_URL=postgres://postgres:password@db/jinglejam
+            - DATABASE_URL=postgres://postgres:password@db/jingle_jam_development
