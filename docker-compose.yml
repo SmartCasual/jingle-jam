@@ -12,14 +12,21 @@ services:
             - POSTGRES_DB=jinglejam
     web:
         build: .
-        command: bash -c "rm -f /jinglejam/tmp/pids/server.pid && RAILS_ENV=development bundle exec rails server -p 3000 -b 0.0.0.0"
+        # command: bash -c "rm -f /jinglejam/tmp/pids/server.pid && RAILS_ENV=development bundle exec rails server -p 3000 -b 0.0.0.0"
         volumes:
             - .:/jinglejam
+            - /dev/shm:/dev/shm
         ports:
             - "3000:3000"
+            - "0.0.0.0:9222:9222"
+        expose:
+            - "9222"
+        user: "1000:1000"
         depends_on:
             - db
         environment:
             - FROM_EMAIL_ADDRESS=jingle-jam@example.com
             - HMAC_SECRET=c360bcae-df63-4616-808a-860f03d7da6b
-            - DATABASE_URL=postgres://postgres:password@db/jingle_jam_development
+            - DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true
+            # - DATABASE_URL=postgres://postgres:password@db/jingle_jam_development
+    

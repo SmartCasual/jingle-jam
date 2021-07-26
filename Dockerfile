@@ -49,8 +49,28 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN npm install --global yarn
 RUN yarn install
 # RUN bundle exec rails webpacker:install
+RUN apt update
+RUN apt install -y chromium
 
 COPY ./docker/docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
+
+RUN useradd seluser \
+         --create-home \
+         --shell /bin/bash \
+         --uid 1000 \
+  && usermod -a -G sudo seluser \
+  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers \
+  && echo 'seluser:secret' | chpasswd
+
+# USER 1200:1000
+VOLUME /jinglejam
+RUN chown :1000 /jinglejam
+RUN mkdir /.cache && mkdir /.webdrivers
+RUN chown -R :1000 /.cache && chown -R :1000 /.webdrivers
+RUN chmod g+rwx /.cache && chmod g+rwx /.webdrivers
+
+USER 1000:1000
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["rails", "server", "-b", "0.0.0.0"]
