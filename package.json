@@ -9,6 +9,8 @@
     "@rails/webpacker": "5.4.0",
     "currency.js": "^2.0.3",
     "postcss": "^8.2.10",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12",
     "yarn": "^1.22.10"
   },
   "resolutions": {
