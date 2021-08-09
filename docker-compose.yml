@@ -10,12 +10,24 @@ services:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=password
             - POSTGRES_DB=jinglejam
+    selenium:
+        image: "selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210713"
+        ports:
+            - "4444:4444"
+            - "7900:7900"
+        shm_size: '2gb'
+        privileged: true
+        environment:
+          - SE_EVENT_BUS_HOST=selenium-hub
+          - SE_EVENT_BUS_PUBLISH_PORT=4442
+          - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+        # links:
+        #     - web
     web:
         build: .
         # command: bash -c "rm -f /jinglejam/tmp/pids/server.pid && RAILS_ENV=development bundle exec rails server -p 3000 -b 0.0.0.0"
         volumes:
             - .:/jinglejam
-            - /dev/shm:/dev/shm
         ports:
             - "3000:3000"
             - "0.0.0.0:9222:9222"
@@ -24,9 +36,17 @@ services:
         user: "1000:1000"
         depends_on:
             - db
+            - selenium
         environment:
             - FROM_EMAIL_ADDRESS=jingle-jam@example.com
             - HMAC_SECRET=c360bcae-df63-4616-808a-860f03d7da6b
             - DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true
-            # - DATABASE_URL=postgres://postgres:password@db/jingle_jam_development
-    
+            - SELENIUM_HOST=selenium
+            - SELENIUM_PORT=4444 
+            - APP_HOST=web:3000
+
+
+            # networks:
+            #     rspec-capybara-docker-grid-network:
+            #       driver: bridge
+            #       name: rspec-capybara-docker-grid-network

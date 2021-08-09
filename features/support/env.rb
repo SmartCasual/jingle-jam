@@ -14,7 +14,7 @@ require "webdrivers/chromedriver"
 
 require "webmock/cucumber"
 driver_urls = Webdrivers::Common.subclasses.map(&:base_url)
-WebMock.disable_net_connect!(allow_localhost: true, allow: driver_urls)
+WebMock.disable_net_connect!(allow_localhost: true, allow: [driver_urls, "selenium:4444"])
 
 require "rspec/mocks"
 FactoryBot.find_definitions

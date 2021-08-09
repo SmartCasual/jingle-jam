@@ -1,3 +1,5 @@
+url = "http://#{ENV['SELENIUM_HOST']}:#{ENV['SELENIUM_PORT']}/wd/hub"
+capabilities = Selenium::WebDriver::Remote::Capabilities.chrome
 Capybara.register_driver(:selenium_chrome_devtools) do |app|
   driver = Capybara.drivers[:selenium_chrome].call
 
@@ -9,7 +11,13 @@ Capybara.register_driver(:selenium_chrome_devtools) do |app|
     browser_options.headless!
   end
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :remote,
+    url: url,
+    desired_capabilities: capabilities,
+  )
+  # Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
 end
 
 Capybara.default_driver = :selenium_chrome_devtools
