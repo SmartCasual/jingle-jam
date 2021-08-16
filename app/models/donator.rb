@@ -6,14 +6,15 @@ require "hmac"
 #
 # ### Columns
 #
-# Name                 | Type               | Attributes
-# -------------------- | ------------------ | ---------------------------
-# **`id`**             | `bigint`           | `not null, primary key`
-# **`chosen_name`**    | `string`           |
-# **`email_address`**  | `string`           |
-# **`name`**           | `string`           |
-# **`created_at`**     | `datetime`         | `not null`
-# **`updated_at`**     | `datetime`         | `not null`
+# Name                      | Type               | Attributes
+# ------------------------- | ------------------ | ---------------------------
+# **`id`**                  | `bigint`           | `not null, primary key`
+# **`chosen_name`**         | `string`           |
+# **`email_address`**       | `string`           |
+# **`name`**                | `string`           |
+# **`created_at`**          | `datetime`         | `not null`
+# **`updated_at`**          | `datetime`         | `not null`
+# **`stripe_customer_id`**  | `string`           |
 #
 class Donator < ApplicationRecord
   has_many :donations, inverse_of: :donator, dependent: :nullify

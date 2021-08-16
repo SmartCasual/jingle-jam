@@ -415,6 +415,7 @@ GEM
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.0.0)
+    vcr (6.0.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     watir (6.14.0)
@@ -490,6 +491,7 @@ DEPENDENCIES
   sidekiq
   spring
   stripe
+  vcr
   watir
   web-console (>= 4.1.0)
   webdrivers

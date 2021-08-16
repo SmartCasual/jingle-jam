@@ -1,27 +1,38 @@
-# TODO: Unit (controller) test this
-
-require "stripe_checkout"
-
 class StripeController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :webhook
-  before_action :skip_stripe_checkout, only: :prep_checkout_session, if: -> { Rails.env.test? }
 
   def prep_checkout_session
-    if pro_forma_donation.errors.any?
-      error pro_forma_donation.errors.full_messages.to_sentence
-    else
-      save_donator_if_needed
+    donation = Donation.new(donation_params.merge(donator: current_donator))
 
-      render json: { id: stripe_checkout.create_stripe_session.id }
+    if donation.save
+      stripe_session = create_stripe_session(donation)
+      donation.update(stripe_payment_intent_id: stripe_session.payment_intent)
+
+      render json: { id: stripe_session.id }
+    else
+      error donation.errors.full_messages.to_sentence
     end
   end
 
   def webhook
     sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
     payload = request.body.read
-    event = Stripe::Webhook.construct_event(payload, sig_header, ENV["STRIPE_WEBHOOK_SECRET_KEY"])
+    event = Stripe::Webhook.construct_event(payload, sig_header, ENV["STRIPE_WEBHOOK_SECRET_KEY"])&.to_hash
 
-    StripeEventHandler.perform_later(event.to_hash.with_indifferent_access)
+    event_data = event.dig(:data, :object)
+
+    case event[:type]
+    when "payment_intent.succeeded"
+      unless (payment = Payment.find_by(stripe_payment_intent_id: event_data[:id]))
+        payment = Payment.create!(
+          amount_decimals: event_data[:amount],
+          amount_currency: event_data[:currency],
+          stripe_payment_intent_id: event_data[:id],
+        )
+      end
+
+      PaymentAssignmentJob.perform_later(payment.id)
+    end
 
     head :ok
   rescue JSON::ParserError
@@ -31,10 +42,6 @@ class StripeController < ApplicationController
   end
 
 private
-
-  def pro_forma_donation
-    @pro_forma_donation ||= Donation.new(donation_params.merge(donator: current_donator))
-  end
 
   def donation_params
     params.require(:donation)
@@ -51,34 +58,23 @@ private
       )
   end
 
-  def stripe_checkout
-    @stripe_checkout = StripeCheckout.new(pro_forma_donation, success_url, cancel_url)
-  end
-
-  def skip_stripe_checkout
-    save_donator_if_needed
-
-    StripeEventHandler.perform_later(stripe_checkout.fake_stripe_checkout_event.with_indifferent_access)
-
-    redirect_to success_url
-  end
-
-  def success_url
-    build_donation_url(status: "success")
-  end
-
-  def cancel_url
-    build_donation_url(status: "cancelled")
-  end
-
-  def build_donation_url(status:)
-    streamer = CuratedStreamer.find_by(id: donation_params[:curated_streamer_id])
-    donations_url(status: status, streamer: streamer&.twitch_username)
-  end
-
-  def save_donator_if_needed
-    if current_donator.new_record?
-      current_donator.save && session[:donator_id] = current_donator.id
-    end
+  def create_stripe_session(donation)
+    Stripe::Checkout::Session.create(
+      payment_method_types: ["card"],
+      line_items: [{
+        price_data: {
+          currency: donation.amount.currency.iso_code,
+          product_data: {
+            name: "JingleJam donation",
+          },
+          unit_amount: donation.amount.cents,
+        },
+        quantity: 1,
+      }],
+      mode: "payment",
+      success_url: donations_url(streamer: donation.curated_streamer&.twitch_username, status: "success"),
+      cancel_url: donations_url(streamer: donation.curated_streamer&.twitch_username, status: "cancelled"),
+      customer: current_donator.stripe_customer_id,
+    )
   end
 end

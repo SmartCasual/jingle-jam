@@ -1,6 +1,8 @@
 class DonationsController < ApplicationController
   before_action :set_flash, only: :index
 
+  helper DonationHelpers
+
   def new
     redirect_to donations_path
   end
