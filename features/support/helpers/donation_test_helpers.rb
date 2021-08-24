@@ -1,4 +1,4 @@
-module DonationHelpers
+module DonationTestHelpers
   def make_donation(amount, split: {}, message: nil, navigate: false, submit: true)
     if navigate
       go_to_homepage
@@ -24,4 +24,4 @@ module DonationHelpers
   end
 end
 
-World(DonationHelpers)
+World(DonationTestHelpers)
