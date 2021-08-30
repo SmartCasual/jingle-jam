@@ -48,7 +48,7 @@ Then("the admin should not be able to read donation information") do
   go_to_admin_homepage
   expect(page).not_to have_text("Donations")
   visit admin_donations_path
-  expect(page).to have_current_path("/admin")
+  expect(page).to have_current_path(admin_root_path)
   expect(page).to have_text("You are not authorized to perform this action.")
 end
 
@@ -66,7 +66,7 @@ Then("the admin should not be able to manage admin accounts") do
   expect(page).not_to have_text("Edit")
 
   visit admin_admin_user_path(@current[:admin_user])
-  expect(page).to have_current_path("/admin")
+  expect(page).to have_current_path(admin_root_path)
   expect(page).to have_text("You are not authorized to perform this action.")
 end
 

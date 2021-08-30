@@ -1,10 +1,10 @@
 <table class="donation-list">
   <thead>
     <tr>
-      <th>Amount</th>
-      <th>Status</th>
-      <th>Message</th>
-      <th>Donated by</th>
+      <th><%= t("donations.list.table.headers.amount") %></th>
+      <th><%= t("donations.list.table.headers.status") %></th>
+      <th><%= t("donations.list.table.headers.message") %></th>
+      <th><%= t("donations.list.table.headers.donated_by") %></th>
     </tr>
   </thead>
   <tbody>
@@ -18,7 +18,7 @@
         </td>
         <td><%= donation.state.humanize %></td>
         <td><%= donation.message %></td>
-        <td><%= donation.donated_by&.name || (donation.donator == current_donator ? "You" : donation.donator.display_name) %></td>
+        <td><%= donation.donated_by&.name || (donation.donator == current_donator ? t("common.abstract.you") : donation.donator.display_name) %></td>
       </tr>
     <% end %>
   </tbody>

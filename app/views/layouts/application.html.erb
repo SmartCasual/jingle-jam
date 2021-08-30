@@ -39,14 +39,14 @@
           <%= link_to_unless_current image_tag("Jingle_Jam_Logo_White_Alt.png", class: "logo", alt: "The Jingle Jam"), root_path %>
         </div>
         <ul>
-          <li><%= link_to_unless_current "Your donations", donations_path %></li>
-          <li><%= link_to_unless_current "Your game keys", keys_path %></li>
+          <li><%= link_to_unless_current t("navigation.donations"), donations_path %></li>
+          <li><%= link_to_unless_current t("navigation.game_keys"), keys_path %></li>
         </ul>
         <div class="donator">
           <% if current_donator&.id %>
             <ul>
               <li><%= link_to current_donator.display_name, donator_path(current_donator) %></li>
-              <li><%= button_to "Log out", logout_path %></li>
+              <li><%= button_to t("common.actions.log_out"), logout_path %></li>
             </ul>
           <% end %>
         </div>

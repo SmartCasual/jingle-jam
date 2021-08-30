@@ -1,19 +1,18 @@
-<h1>Your donations</h1>
+<h1><%= t("donations.header") %></h1>
 
 <% if @donations.any? %>
   <p>
-    Here's a permanent link to your game keys.
+    <%= t("donations.link_to_game_keys") %>
     <%= link_to @magic_url, @magic_url %>
   </p>
 
   <% if current_donator.email_address.present? %>
     <p>
-      We've also sent the link in an email.
-      Make sure you've received it before closing this page.
+      <%= t("donations.link_to_game_keys_email_sent") %>
     </p>
   <% end %>
 
-  <h2>Current donations</h2>
+  <h2><%= t("donations.list.header") %></h2>
   <%= render "list", donations: @donations %>
 <% end %>
 
