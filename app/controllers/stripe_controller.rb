@@ -72,6 +72,7 @@ private
         quantity: 1,
       }],
       mode: "payment",
+      submit_type: "donate",
       success_url: donations_url(streamer: donation.curated_streamer&.twitch_username, status: "success"),
       cancel_url: donations_url(streamer: donation.curated_streamer&.twitch_username, status: "cancelled"),
       customer: current_donator.stripe_customer_id,
