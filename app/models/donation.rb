@@ -23,7 +23,7 @@ class Donation < ApplicationRecord
   belongs_to :donated_by, inverse_of: :donations, optional: true, class_name: "Donator"
   belongs_to :curated_streamer, inverse_of: :donations, optional: true
 
-  has_many :payments, inverse_of: :donations, dependent: :nullify
+  has_many :payments, inverse_of: :donation, dependent: :nullify
 
   has_many :charity_splits, inverse_of: :donation, dependent: :destroy
   accepts_nested_attributes_for :charity_splits

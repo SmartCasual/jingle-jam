@@ -27,6 +27,7 @@ World(WithEnv)
 
 Capybara.configure do |config|
   config.server = :puma, { Silent: true }
+  config.server_port = 30_001
 end
 
 ActionController::Base.allow_rescue = false

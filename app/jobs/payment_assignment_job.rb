@@ -9,8 +9,8 @@ class PaymentAssignmentJob < ApplicationJob
     payment.update(donation: donation)
     donation.confirm_payment!
 
-    BundleCheckJob.perform_later(donator.id)
-    NotificationsMailer.donation_received(donator).deliver_later
+    BundleCheckJob.perform_later(donation.donator_id)
+    NotificationsMailer.donation_received(donation.donator).deliver_later
     # TODO: Notify webhooks
   end
 end
