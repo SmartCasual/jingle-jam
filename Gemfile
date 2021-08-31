@@ -76,6 +76,7 @@ group :test do
   gem "launchy"
   gem "rspec-rails"
   gem "selenium-webdriver"
+  gem "vcr"
   gem "webdrivers", require: false
   gem "webmock"
 end

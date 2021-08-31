@@ -10,7 +10,7 @@
 
 <h2><%= t("donations.form.header") %></h2>
 
-<%= form_for Donation.new(amount: "25.00", curated_streamer: (local_assigns.has_key?(:streamer) && streamer)), url: stripe_prep_checkout_path, html: { id: "donation-form", :'data-stripe-public-key' => ENV["STRIPE_PUBLIC_KEY"], :'data-test-mode' => Rails.env.test? } do |form| %>
+<%= form_for new_donation("25.00", local_assigns[:streamer]), url: stripe_prep_checkout_path, html: { id: "donation-form", :'data-stripe-public-key' => ENV["STRIPE_PUBLIC_KEY"], :'data-test-mode' => Rails.env.test? } do |form| %>
   <p>
     <%= form.label :amount_currency, t("donations.form.currency") %>
     <%= form.select :amount_currency, options_for_select(Currency.present_all, Currency::DEFAULT_CURRENCY.downcase) %>

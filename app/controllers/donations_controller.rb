@@ -1,6 +1,8 @@
 class DonationsController < ApplicationController
   before_action :set_flash, only: :index
 
+  helper DonationHelpers
+
   def new
     redirect_to donations_path
   end
@@ -18,7 +20,7 @@ private
   def get_donations
     return unless known_user?
 
-    current_donator.donations || Donation.all
+    current_donator.donations.not_pending || Donation.all
   end
 
   def set_flash

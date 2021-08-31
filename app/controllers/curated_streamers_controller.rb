@@ -2,6 +2,8 @@ class CuratedStreamersController < ApplicationController
   before_action :load_streamer
   before_action :check_admin, only: [:admin]
 
+  helper DonationHelpers
+
   def show; end
 
   def admin; end

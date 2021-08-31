@@ -4,24 +4,26 @@
 #
 # ### Columns
 #
-# Name                              | Type               | Attributes
-# --------------------------------- | ------------------ | ---------------------------
-# **`id`**                          | `bigint`           | `not null, primary key`
-# **`aasm_state`**                  | `string`           | `default("pending"), not null`
-# **`amount_currency`**             | `string`           | `default("GBP"), not null`
-# **`amount_decimals`**             | `integer`          | `default(0), not null`
-# **`message`**                     | `string`           |
-# **`created_at`**                  | `datetime`         | `not null`
-# **`updated_at`**                  | `datetime`         | `not null`
-# **`curated_streamer_id`**         | `bigint`           |
-# **`donated_by_id`**               | `bigint`           |
-# **`donator_id`**                  | `bigint`           | `not null`
-# **`stripe_checkout_session_id`**  | `string`           |
+# Name                            | Type               | Attributes
+# ------------------------------- | ------------------ | ---------------------------
+# **`id`**                        | `bigint`           | `not null, primary key`
+# **`aasm_state`**                | `string`           | `default("pending"), not null`
+# **`amount_currency`**           | `string`           | `default("GBP"), not null`
+# **`amount_decimals`**           | `integer`          | `default(0), not null`
+# **`message`**                   | `string`           |
+# **`created_at`**                | `datetime`         | `not null`
+# **`updated_at`**                | `datetime`         | `not null`
+# **`curated_streamer_id`**       | `bigint`           |
+# **`donated_by_id`**             | `bigint`           |
+# **`donator_id`**                | `bigint`           | `not null`
+# **`stripe_payment_intent_id`**  | `string`           |
 #
 class Donation < ApplicationRecord
   belongs_to :donator, inverse_of: :donations
   belongs_to :donated_by, inverse_of: :donations, optional: true, class_name: "Donator"
   belongs_to :curated_streamer, inverse_of: :donations, optional: true
+
+  has_many :payments, inverse_of: :donation, dependent: :nullify
 
   has_many :charity_splits, inverse_of: :donation, dependent: :destroy
   accepts_nested_attributes_for :charity_splits
@@ -33,6 +35,8 @@ class Donation < ApplicationRecord
   end
 
   monetize :amount
+
+  validates :amount, presence: true, donation_amount: true
 
   include AASM
 
@@ -55,15 +59,7 @@ class Donation < ApplicationRecord
     end
   end
 
-  def initialize(*_)
-    super
-
-    if charity_splits.none?
-      Charity.all.find_each do |charity|
-        charity_splits.build(charity: charity)
-      end
-    end
-  end
+  scope :not_pending, -> { where.not(aasm_state: "pending") }
 
   def charity_name
     charity&.name

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_30_172231) do
+ActiveRecord::Schema.define(version: 2021_08_14_122232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,8 +121,8 @@ ActiveRecord::Schema.define(version: 2021_06_30_172231) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "aasm_state", default: "pending", null: false
-    t.string "stripe_checkout_session_id"
     t.bigint "curated_streamer_id"
+    t.string "stripe_payment_intent_id"
     t.index ["curated_streamer_id"], name: "index_donations_on_curated_streamer_id"
     t.index ["donated_by_id"], name: "index_donations_on_donated_by_id"
     t.index ["donator_id"], name: "index_donations_on_donator_id"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_172231) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "email_address"
     t.string "chosen_name"
+    t.string "stripe_customer_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -155,6 +156,16 @@ ActiveRecord::Schema.define(version: 2021_06_30_172231) do
     t.index ["bundle_id"], name: "index_keys_on_bundle_id"
     t.index ["code_bidx"], name: "index_keys_on_code_bidx", unique: true
     t.index ["game_id"], name: "index_keys_on_game_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.string "amount_currency", default: "GBP", null: false
+    t.integer "amount_decimals", default: 0, null: false
+    t.bigint "donation_id"
+    t.string "stripe_payment_intent_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["donation_id"], name: "index_payments_on_donation_id"
   end
 
 end

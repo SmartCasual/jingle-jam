@@ -5,13 +5,14 @@ export function addStripeToForm(form) {
 
     disabledFields.forEach(field => field.disabled = false);
 
-    if (form.dataset.testMode == "true") {
-      return
+    event.preventDefault();
+
+    let csrfToken = null;
+    const csrfElement = document.querySelector("[name='csrf-token']")
+    if (csrfElement) {
+      csrfToken = csrfElement.content;
     }
 
-    event.preventDefault()
-
-    const csrfToken = document.querySelector("[name='csrf-token']").content
     const stripe = Stripe(form.dataset.stripePublicKey);
 
     fetch(targetForm.action, {
@@ -25,7 +26,12 @@ export function addStripeToForm(form) {
       return response.json();
     })
     .then(function(session) {
-      return stripe.redirectToCheckout({ sessionId: session.id });
+      if (form.dataset.testMode == "true") {
+        window.location = "/donations";
+        return true;
+      } else {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      }
     })
     .then(function(result) {
       if (result.error) {
