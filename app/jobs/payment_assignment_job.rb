@@ -1,4 +1,3 @@
-# TODO: Unit test this
 class PaymentAssignmentJob < ApplicationJob
   queue_as :default
 
