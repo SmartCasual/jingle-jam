@@ -212,3 +212,6 @@ Style/SoleNestedConditional:
   Enabled: false
 Naming/VariableNumber:
   EnforcedStyle: snake_case
+Metrics/ModuleLength:
+  Exclude:
+    - test/**/*
