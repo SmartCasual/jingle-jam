@@ -1,5 +1,6 @@
 Feature: Curated streamers
 
+@stripe
 Scenario: New donator donates on a curated streamer page
   Given a curated streamer
   When a donator goes to the curated streamer's page

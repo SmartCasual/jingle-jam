@@ -1,3 +1,4 @@
+@stripe
 Feature: Bundles: tiered
 
 Background:

@@ -1,9 +1,11 @@
 Feature: Charities: donation split
 
+@stripe
 Scenario: Donator splits their donation explicitly
   When a donator splits their donation unevenly among the charities
   Then the donation split should appear on their donations list
 
+@stripe
 Scenario: Donator's split doesn't add up
   When a donator splits their donation in a way that doesn't add up to their total donation
   Then the donator should be asked to correct their split
