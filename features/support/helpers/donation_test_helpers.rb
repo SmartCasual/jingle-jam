@@ -33,7 +33,7 @@ module DonationTestHelpers
     end
   end
 
-  def wait_for(target, method, expectation, timeout: 1, step: 0.1)
+  def wait_for(target, method, expectation, timeout: 10, step: 0.1)
     time_waited = 0
 
     while target.public_send(method) != expectation
