@@ -31,7 +31,7 @@ module RequestTestHelpers
     )
     expect(status).to eq(expect)
 
-    return session.response
+    session.response
   end
 
   def stripe_webhook_payload(event_type:, object: "{}", timestamp: Time.zone.now.to_i)
