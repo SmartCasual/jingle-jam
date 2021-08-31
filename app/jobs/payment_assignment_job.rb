@@ -5,11 +5,14 @@ class PaymentAssignmentJob < ApplicationJob
     payment = Payment.find(payment_id)
     donation = Donation.find_by!(stripe_payment_intent_id: payment.stripe_payment_intent_id)
 
-    payment.update(donation: donation)
-    donation.confirm_payment!
+    payment.update(donation: donation) unless payment.donation == donation
 
-    BundleCheckJob.perform_later(donation.donator_id)
-    NotificationsMailer.donation_received(donation.donator).deliver_later
-    # TODO: Notify webhooks
+    if donation.pending?
+      donation.confirm_payment!
+
+      BundleCheckJob.perform_later(donation.donator_id)
+      NotificationsMailer.donation_received(donation.donator).deliver_later
+      # TODO: Notify webhooks
+    end
   end
 end
