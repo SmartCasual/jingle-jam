@@ -1,10 +1,10 @@
-<h1>Welcome to Jingle Jam!</h1>
+<h1><%= t("homepage.header") %></h1>
 
-<h2>Twitch</h2>
+<h2><%= t("common.twitch") %></h2>
 
 <%= render "streaming/twitch", channel: "yogscast" %>
 
-<h2>Bundles</h2>
+<h2><%= t("common.headers.bundles") %></h2>
 
 <% if @bundle_definitions.any? %>
   <ul>
@@ -25,11 +25,11 @@
 <% end %>
 
 <p>
-  <%= link_to "Donate here!", donations_path, class: "cta" %>
+  <%= link_to t("common.actions.donate_here"), donations_path, class: "cta" %>
 </p>
 
 <% if @charities.any? %>
-  <h2>Charities</h2>
+  <h2><%= t("common.headers.charities") %></h2>
   <ul>
     <% @charities.each do |charity| %>
       <li><%= link_to charity.name, charity_path(charity) %></li>

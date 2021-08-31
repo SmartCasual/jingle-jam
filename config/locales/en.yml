@@ -30,4 +30,71 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  # Generic translations available for use throughout the site
+  common:
+    twitch: "Twitch"
+    headers:
+      bundles: "Bundles"
+      charities: "Charities"
+    actions:
+      donate_here: "Donate here!"
+      log_out: "Log out"
+    abstract:
+      you: "You"
+
+  # Site navigation
+  navigation:
+    donations: "Your donations"
+    game_keys: "Your game keys"
+
+  # Homepage
+  homepage:
+    header: "Welcome to Jingle Jam!"
+
+  # All donation pages
+  donations:
+    header: "Your donations"
+    link_to_game_keys: "Here's a permanent link to your game keys."
+    link_to_game_keys_email_sent: "We've also sent the link in an email. Make sure you've received it before closing this page."
+    viewer_donations:
+      header: "Viewer donations"
+    total:
+      header: "Donation total"
+    form:
+      header: "Make a donation"
+      currency: "Currency"
+      amount: "Amount"
+      message: "Message (optional)"
+      action: "Donate"
+      lock: "Lock slider"
+      error:
+        split_calculation: "Your donation split doesn't add up to your total donation amount."
+        correct_and_try_again: "Please correct this and try again."
+    list:
+      header: "Current donations"
+      table:
+        headers:
+          amount: "Amount"
+          status: "Status"
+          message: "Message"
+          donated_by: "Donated by"
+    admin:
+      streamer:
+        header: "%{streamer} admin"
+
+  # Game key pages
+  game_keys:
+    header: "Your game keys"
+    table:
+      headers:
+        game: "Game"
+        key: "Key"
+
+  # Emails (used for both html and plain text)
+  email:
+    bundle_pending:
+      header: "Thanks for your donation!"
+      instructions: "You'll receive a link to your game keys shortly."
+    bundle_sent:
+      header: "Thanks for your donation!"
+      instructions: "You can find your game keys here:"

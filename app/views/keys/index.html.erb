@@ -1,11 +1,11 @@
-<h1>Your game keys</h1>
+<h1><%= t("game_keys.header") %></h1>
 
 <% if current_donator.keys.any? %>
   <table>
     <thead>
       <tr>
-        <th>Game</th>
-        <th>Key</th>
+        <th><%= t("game_keys.table.headers.game") %></th>
+        <th><%= t("game_keys.table.headers.key") %></th>
       </tr>
     </thead>
     <tbody>

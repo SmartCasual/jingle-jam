@@ -8,16 +8,16 @@
   </script>
 <% end %>
 
-<h2>Make a donation</h2>
+<h2><%= t("donations.form.header") %></h2>
 
 <%= form_for Donation.new(amount: "25.00", curated_streamer: (local_assigns.has_key?(:streamer) && streamer)), url: stripe_prep_checkout_path, html: { id: "donation-form", :'data-stripe-public-key' => ENV["STRIPE_PUBLIC_KEY"], :'data-test-mode' => Rails.env.test? } do |form| %>
   <p>
-    <%= form.label :amount_currency, "Currency" %>
+    <%= form.label :amount_currency, t("donations.form.currency") %>
     <%= form.select :amount_currency, options_for_select(Currency.present_all, Currency::DEFAULT_CURRENCY.downcase) %>
   </p>
 
   <p>
-    <%= form.label :amount %>
+    <%= form.label :amount, t("donations.form.amount") %>
     <%= form.text_field :amount, html: { class: "amount" } %>
   </p>
 
@@ -30,7 +30,7 @@
           <%= text_field_tag "donation[charity_splits_attributes][#{fields.index}][manual]", nil, class: "manual amount" %>
 
           <%= check_box_tag "donation[charity_splits_attributes][#{fields.index}][lock]", "1", false, class: "lock" %>
-          <%= label_tag "donation[charity_splits_attributes][#{fields.index}][lock]", "Lock slider" %>
+          <%= label_tag "donation[charity_splits_attributes][#{fields.index}][lock]", t("donations.form.lock") %>
         </p>
         <%= fields.hidden_field :charity_id %>
       </li>
@@ -38,16 +38,16 @@
   </ul>
 
   <p>
-    <%= form.label :message, "Message (optional)" %>
+    <%= form.label :message, t("donations.form.message") %>
     <%= form.text_field :message %>
   </p>
 
   <%= form.hidden_field :curated_streamer_id %>
 
   <div class="sum-warning" hidden>
-    <p>Your donation split doesn't add up to your total donation amount.</p>
-    <p>Please correct this and try again.</p>
+    <p><%= t("donations.form.error.split_calculation") %></p>
+    <p><%= t("donations.form.error.correct_and_try_again") %></p>
   </div>
 
-  <button id="stripe-donate">Donate</button>
+  <button id="stripe-donate"><%= t("donations.form.action") %></button>
 <% end %>

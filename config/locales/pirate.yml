@@ -1,0 +1,69 @@
+pirate:
+  # Generic translations available for use throughout the site
+  common:
+    twitch: "[ARRRR!] Twitch"
+    headers:
+      bundles: "[ARRRR!] Bundles"
+      charities: "[ARRRR!] Charities"
+    actions:
+      donate_here: "[ARRRR!] Donate here!"
+      log_out: "[ARRRR!] Log out"
+    abstract:
+      you: "[ARRRR!] You"
+
+  # Site navigation
+  navigation:
+    donations: "[ARRRR!] Your donations"
+    game_keys: "[ARRRR!] Your game keys"
+
+  # Homepage
+  homepage:
+    header: "[ARRRR!] Welcome to Jingle Jam!"
+
+  # All donation pages
+  donations:
+    header: "[ARRRR!] Your donations"
+    link_to_game_keys: "[ARRRR!] Here's a permanent link to your game keys."
+    link_to_game_keys_email_sent: "[ARRRR!] We've also sent the link in an email. Make sure you've received it before closing this page."
+    viewer_donations:
+      header: "[ARRRR!] Viewer donations"
+    total:
+      header: "[ARRRR!] Donation total"
+    form:
+      header: "[ARRRR!] Make a donation"
+      currency: "[ARRRR!] Currency"
+      amount: "[ARRRR!] Amount"
+      message: "[ARRRR!] Message (optional)"
+      action: "[ARRRR!] Donate"
+      lock: "[ARRRR!] Lock slider"
+      error:
+        split_calculation: "[ARRRR!] Your donation split doesn't add up to your total donation amount."
+        correct_and_try_again: "[ARRRR!] Please correct this and try again."
+    list:
+      header: "[ARRRR!] Current donations"
+      table:
+        headers:
+          amount: "[ARRRR!] Amount"
+          status: "[ARRRR!] Status"
+          message: "[ARRRR!] Message"
+          donated_by: "[ARRRR!] Donated by"
+    admin:
+      streamer:
+        header: "[ARRRR!] %{streamer} admin"
+
+  # Game key pages
+  game_keys:
+    header: "[ARRRR!] Your game keys"
+    table:
+      headers:
+        game: "[ARRRR!] Game"
+        key: "[ARRRR!] Key"
+
+  # Emails (used for both html and plain text)
+  email:
+    bundle_pending:
+      header: "[ARRRR!] Thanks for your donation!"
+      instructions: "[ARRRR!] You'll receive a link to your game keys shortly."
+    bundle_sent:
+      header: "[ARRRR!] Thanks for your donation!"
+      instructions: "[ARRRR!] You can find your game keys here:"

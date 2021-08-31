@@ -12,14 +12,16 @@ Rails.application.routes.draw do
     post "/2sv/verify", to: "otp#verify", as: "otp_verify"
   end
 
-  resources :donations, except: %i[edit update delete destroy]
-  resources :keys, only: [:index]
-  resources :games, only: [:show]
-  resources :charities, only: [:show]
-  resources :donators, except: %i[index delete destroy]
+  scope "(:locale)", defaults: { locale: "en" }, locale: /#{I18n.available_locales.join("|")}/ do
+    resources :donations, except: %i[edit update delete destroy]
+    resources :keys, only: [:index]
+    resources :charities, only: [:show]
+    resources :donators, except: %i[index delete destroy]
+    resources :games, only: [:show]
 
-  get "/streams/:twitch_username", to: "curated_streamers#show", as: "curated_streamer"
-  get "/streams/:twitch_username/admin", to: "curated_streamers#admin", as: "curated_streamer_admin"
+    get "/streams/:twitch_username", to: "curated_streamers#show", as: "curated_streamer"
+    get "/streams/:twitch_username/admin", to: "curated_streamers#admin", as: "curated_streamer_admin"
+  end
 
   post "/stripe/prep-checkout", to: "stripe#prep_checkout_session"
   post "/stripe/webhook", to: "stripe#webhook"
@@ -27,5 +29,6 @@ Rails.application.routes.draw do
   get "/magic-redirect/:donator_id/:hmac", to: "sessions#magic_redirect", as: "magic_redirect"
   post "/logout", to: "sessions#logout"
 
+  get "/:locale" => "home#home"
   root to: "home#home"
 end

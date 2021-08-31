@@ -4,5 +4,5 @@
 
 <%= render "donations/donation_form", streamer: @streamer %>
 
-<h2>Viewer donations</h2>
+<h2><%= t("donations.viewer_donations.header") %></h2>
 <%= render "donations/list", donations: @streamer.donations %>
