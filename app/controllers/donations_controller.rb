@@ -20,7 +20,7 @@ private
   def get_donations
     return unless known_user?
 
-    current_donator.donations || Donation.all
+    current_donator.donations.not_pending || Donation.all
   end
 
   def set_flash

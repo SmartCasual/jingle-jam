@@ -59,6 +59,8 @@ class Donation < ApplicationRecord
     end
   end
 
+  scope :not_pending, -> { where.not(aasm_state: "pending") }
+
   def charity_name
     charity&.name
   end
