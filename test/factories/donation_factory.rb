@@ -1,3 +1,5 @@
+require_relative "../support/aasm_factories"
+
 FactoryBot.define do
   factory :donation do
     donator
@@ -7,6 +9,8 @@ FactoryBot.define do
     transient do
       charity_split { {} }
     end
+
+    AASMFactories.init(self, Donation)
 
     after(:build) do |donation, evaluator|
       evaluator.charity_split.each do |charity, split_amount|
