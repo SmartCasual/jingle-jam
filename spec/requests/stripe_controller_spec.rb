@@ -62,7 +62,7 @@ RSpec.describe StripeController, type: :request do
     end
   end
 
-  describe "#webhook", queue_type: :test do
+  describe "#webhook" do
     let(:stripe_payment_intent_id) { "pi_#{SecureRandom.uuid}" }
 
     let(:timestamp) { Time.zone.now.to_i }
@@ -79,6 +79,8 @@ RSpec.describe StripeController, type: :request do
     let(:object) do
       stripe_payment_intent_object(
         payment_intent_id: stripe_payment_intent_id,
+        amount: "1000",
+        currency: "gbp",
       )
     end
 
@@ -90,23 +92,18 @@ RSpec.describe StripeController, type: :request do
       end
     end
 
-    context "when a payment already exists with that Stripe ID" do
-      let!(:existing_payment) { FactoryBot.create(:payment, stripe_payment_intent_id: stripe_payment_intent_id) }
-
-      it "runs the assignment job on the existing payment" do
-        simulate_stripe_webhook(payload: payload, timestamp: timestamp)
-        expect(PaymentAssignmentJob).to have_been_enqueued.with(existing_payment.id)
-      end
+    before do
+      allow(Payment).to receive(:create_and_assign)
     end
 
-    context "when a payment already exists with a different Stripe ID" do
-      let!(:existing_payment) { FactoryBot.create(:payment, stripe_payment_intent_id: "pi_#{SecureRandom.uuid}") }
-
-      it "runs the assignment job on a new payment" do
-        simulate_stripe_webhook(payload: payload, timestamp: timestamp)
-        expect(PaymentAssignmentJob).to have_been_enqueued
-        expect(PaymentAssignmentJob).not_to have_been_enqueued.with(existing_payment.id)
-      end
+    it "creates and/or assigns a payment" do
+      simulate_stripe_webhook(payload: payload, timestamp: timestamp)
+      expect(Payment).to have_received(:create_and_assign)
+        .with(
+          amount: 1000,
+          currency: "gbp",
+          stripe_payment_intent_id: stripe_payment_intent_id,
+        )
     end
 
     context "with another event type" do
@@ -118,7 +115,7 @@ RSpec.describe StripeController, type: :request do
           simulate_stripe_webhook(payload: payload, timestamp: timestamp, expect: 200)
         }.not_to change(Payment, :count)
 
-        expect(PaymentAssignmentJob).not_to have_been_enqueued
+        expect(Payment).not_to have_received(:create_and_assign)
       end
     end
 
@@ -128,7 +125,7 @@ RSpec.describe StripeController, type: :request do
           simulate_stripe_webhook(payload: payload, timestamp: timestamp, signature: "incorrect", expect: 401)
         }.not_to change(Payment, :count)
 
-        expect(PaymentAssignmentJob).not_to have_been_enqueued
+        expect(Payment).not_to have_received(:create_and_assign)
       end
     end
   end

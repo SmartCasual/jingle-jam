@@ -16,4 +16,18 @@
 #
 class Payment < ApplicationRecord
   belongs_to :donation, optional: true, inverse_of: :payments
+
+  class << self
+    def create_and_assign(amount:, currency:, stripe_payment_intent_id:)
+      unless (payment = Payment.find_by(stripe_payment_intent_id: stripe_payment_intent_id))
+        payment = Payment.create!(
+          amount_decimals: amount,
+          amount_currency: currency,
+          stripe_payment_intent_id: stripe_payment_intent_id,
+        )
+      end
+
+      PaymentAssignmentJob.perform_later(payment.id) if payment.donation.blank?
+    end
+  end
 end

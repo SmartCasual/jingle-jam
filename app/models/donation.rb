@@ -60,6 +60,9 @@ class Donation < ApplicationRecord
   end
 
   scope :not_pending, -> { where.not(aasm_state: "pending") }
+  scope :created_before, -> (timestamp) {
+    where("created_at < ?", timestamp)
+  }
 
   def charity_name
     charity&.name

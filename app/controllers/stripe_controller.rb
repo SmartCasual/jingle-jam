@@ -27,15 +27,11 @@ class StripeController < ApplicationController
 
     case event[:type]
     when "payment_intent.succeeded"
-      unless (payment = Payment.find_by(stripe_payment_intent_id: event_data[:id]))
-        payment = Payment.create!(
-          amount_decimals: event_data[:amount],
-          amount_currency: event_data[:currency],
-          stripe_payment_intent_id: event_data[:id],
-        )
-      end
-
-      PaymentAssignmentJob.perform_later(payment.id)
+      Payment.create_and_assign(
+        amount: event_data[:amount],
+        currency: event_data[:currency],
+        stripe_payment_intent_id: event_data[:id],
+      )
     end
 
     head :ok
