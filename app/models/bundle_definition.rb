@@ -25,7 +25,18 @@ class BundleDefinition < ApplicationRecord
 
   after_commit :update_assignments, on: [:update]
 
+  class << self
+    def without_assignments
+      previous = @without_assignments
+      @without_assignments = true
+      yield
+      @without_assignments = previous
+    end
+  end
+
   def update_assignments
+    return if @without_assignments
+
     bundles.each do |bundle|
       BundleKeyAssignmentJob.perform_later(bundle.id)
     end

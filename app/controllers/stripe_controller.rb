@@ -38,7 +38,8 @@ class StripeController < ApplicationController
   rescue JSON::ParserError
     head :unprocessable_entity
   rescue Stripe::SignatureVerificationError
-    head :unauthorized
+    head :unauthorized,
+      "WWW-Authenticate" => 'Stripe-Signature realm="Stripe webhooks"'
   end
 
 private

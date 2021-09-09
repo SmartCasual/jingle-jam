@@ -1,0 +1,67 @@
+#!/usr/bin/env ruby
+
+$base_url = ARGV.first
+
+require_relative "../config/environment"
+require_relative "../test/support/request_test_helpers"
+
+include RequestTestHelpers
+
+def send_stripe_webhook(payload:, timestamp:)
+  payload = JSON.dump(JSON.parse(payload))
+  Mechanize.new.post("#{$base_url}/stripe/webhook", payload, {
+    "Accept" => "application/json",
+    "Content-Type" => "application/json",
+    "Stripe-Signature" => valid_signature(timestamp, payload),
+  })
+end
+
+rows = {}
+ActiveRecord::Base.transaction do
+  puts "Creating donation records"
+
+  CSV.foreach(Rails.root + "data/2020-first-hour.csv", headers: true) do |row|
+    amount = Monetize.parse(row["Amount"])
+    next if amount < DonationAmountValidator::MINIMUM_DONATION
+
+    donator = Donator.create!(chosen_name: row["Name"])
+
+    stripe_payment_intent_id = "pi_#{SecureRandom.uuid}"
+
+    donator.donations.create!(
+      amount: amount,
+      message: row["Comment"],
+      stripe_payment_intent_id: stripe_payment_intent_id,
+    )
+
+    rows[stripe_payment_intent_id] = row
+
+    print "."
+  rescue => exception
+    p row
+    raise exception
+  end
+end
+
+puts " done."
+
+puts "Simulating Stripe webhooks"
+puts Benchmark.measure {
+  rows.each do |stripe_payment_intent_id, row|
+    amount = Monetize.parse(row["Amount"])
+    next if amount < DonationAmountValidator::MINIMUM_DONATION
+
+    timestamp = Time.zone.now.to_i
+    payload = stripe_webhook_payload(
+      event_type: "payment_intent.succeeded",
+      timestamp: timestamp,
+      object: stripe_payment_intent_object(
+        amount: amount.fractional.to_s,
+        currency: amount.currency.iso_code,
+        payment_intent_id: stripe_payment_intent_id,
+      ),
+    )
+
+    send_stripe_webhook(payload: payload, timestamp: timestamp)
+  end
+}
