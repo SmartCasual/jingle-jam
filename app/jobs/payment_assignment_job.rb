@@ -3,7 +3,13 @@ class PaymentAssignmentJob < ApplicationJob
 
   def perform(payment_id)
     payment = Payment.find(payment_id)
-    donation = Donation.find_by!(stripe_payment_intent_id: payment.stripe_payment_intent_id)
+    donation = Donation.find_by(stripe_payment_intent_id: payment.stripe_payment_intent_id)
+
+    if donation.nil?
+      # Notify error tracking
+      Rails.logger.info "Missing donation for `#{payment.stripe_payment_intent_id}`"
+      return
+    end
 
     payment.update(donation: donation) unless payment.donation == donation
 
