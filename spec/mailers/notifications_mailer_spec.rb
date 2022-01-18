@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe NotificationsMailer, type: :mailer do
   let(:from_address) { "jingle-jam@example.com" }
   let(:donator_email_address) { "donator@example.com" }
-  let(:donator) { FactoryBot.create(:donator, email_address: donator_email_address) }
+  let(:donator) { create(:donator, email_address: donator_email_address) }
 
   around do |example|
     with_env("FROM_EMAIL_ADDRESS" => from_address) do

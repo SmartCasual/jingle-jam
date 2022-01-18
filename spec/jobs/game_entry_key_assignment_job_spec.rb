@@ -11,17 +11,17 @@ RSpec.describe GameEntryKeyAssignmentJob do
   let(:key_manager) { instance_double("KeyManager") }
   let(:tier_checker) { instance_double("TierChecker") }
 
-  let(:donator) { FactoryBot.create(:donator, :with_email_address) }
+  let(:donator) { create(:donator, :with_email_address) }
 
-  let!(:bundle) { FactoryBot.create(:bundle, donator: donator) }
+  let!(:bundle) { create(:bundle, donator: donator) }
   let(:bundle_id) { bundle.id }
 
-  let!(:game_entry) { FactoryBot.create(:bundle_definition_game_entry) }
+  let!(:game_entry) { create(:bundle_definition_game_entry) }
   let(:game_entry_id) { game_entry.id }
 
   let(:game) { game_entry.game }
 
-  let!(:admin_users) { FactoryBot.create_list(:admin_user, 2) }
+  let!(:admin_users) { create_list(:admin_user, 2) }
 
   def last_sent_email
     expect(ActionMailer::Base.deliveries).not_to be_empty
@@ -41,7 +41,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
   end
 
   context "when it gets a lock on an unassigned key" do
-    let(:key) { FactoryBot.create(:key, game: game) }
+    let(:key) { create(:key, game: game) }
 
     before do
       allow(key_manager).to receive(:lock_unassigned_key)

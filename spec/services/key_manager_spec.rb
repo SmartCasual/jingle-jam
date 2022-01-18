@@ -3,13 +3,13 @@ require "rails_helper"
 RSpec.describe KeyManager do
   subject(:key_manager) { described_class.new }
 
-  let(:game) { FactoryBot.create(:game) }
-  let(:bundle) { FactoryBot.create(:bundle) }
+  let(:game) { create(:game) }
+  let(:bundle) { create(:bundle) }
 
   describe "#key_assigned?(game, bundle:)" do
     context "when the bundle has a key for the game" do
       before do
-        FactoryBot.create(:key, game: game, bundle: bundle)
+        create(:key, game: game, bundle: bundle)
       end
 
       it "returns true" do
@@ -19,7 +19,7 @@ RSpec.describe KeyManager do
 
     context "when the bundle does not have a key for the game" do
       before do
-        FactoryBot.create(:key, game: game, bundle: nil)
+        create(:key, game: game, bundle: nil)
       end
 
       it "returns true" do
@@ -35,8 +35,8 @@ RSpec.describe KeyManager do
 
     context "when there's no unassigned keys for the game" do
       before do
-        FactoryBot.create(:key, game: game, bundle: bundle)
-        FactoryBot.create(:key)
+        create(:key, game: game, bundle: bundle)
+        create(:key)
       end
 
       it "opens a transaction" do
@@ -52,7 +52,7 @@ RSpec.describe KeyManager do
     end
 
     context "when there are unassigned keys for the game" do
-      let!(:unassigned_key) { FactoryBot.create(:key, game: game, bundle: nil) }
+      let!(:unassigned_key) { create(:key, game: game, bundle: nil) }
 
       it "opens a transaction" do
         key_manager.lock_unassigned_key(game)

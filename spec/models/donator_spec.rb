@@ -1,19 +1,19 @@
 require "rails_helper"
 
 RSpec.describe Donator do
-  subject(:donator) { FactoryBot.create(:donator) }
+  subject(:donator) { create(:donator) }
 
   describe "#total_donations" do
     before do
-      FactoryBot.create(:donation,
+      create(:donation,
         donator: donator,
         amount: Money.new(1000, "USD"),
       )
-      FactoryBot.create(:donation,
+      create(:donation,
         donator: donator,
         amount: Money.new(1000, "GBP"),
       )
-      FactoryBot.create(:donation,
+      create(:donation,
         donator: donator,
         amount: Money.new(1000, "EUR"),
       )

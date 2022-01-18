@@ -11,17 +11,17 @@ RSpec.describe PublicAbility do
   context "with an anonymous user" do
     let(:user) { nil }
 
-    let(:bundle_definition) { FactoryBot.build(:bundle_definition) }
-    let(:charity) { FactoryBot.build(:charity) }
-    let(:game) { FactoryBot.build(:game) }
-    let(:game_entry) { FactoryBot.build(:bundle_definition_game_entry) }
+    let(:bundle_definition) { build(:bundle_definition) }
+    let(:charity) { build(:charity) }
+    let(:game) { build(:game) }
+    let(:game_entry) { build(:bundle_definition_game_entry) }
 
-    let(:bundle) { FactoryBot.create(:bundle) }
-    let(:donation) { FactoryBot.create(:donation) }
-    let(:donator) { FactoryBot.create(:donator) }
-    let(:key) { FactoryBot.create(:key) }
+    let(:bundle) { create(:bundle) }
+    let(:donation) { create(:donation) }
+    let(:donator) { create(:donator) }
+    let(:key) { create(:key) }
 
-    let(:admin_user) { FactoryBot.create(:admin_user) }
+    let(:admin_user) { create(:admin_user) }
 
     include_examples "allows reading public information"
     include_examples "disallows modifying public information"
@@ -30,27 +30,27 @@ RSpec.describe PublicAbility do
   end
 
   context "with a known donator" do
-    let(:user) { FactoryBot.create(:donator) }
+    let(:user) { create(:donator) }
 
-    let(:bundle_definition) { FactoryBot.build(:bundle_definition) }
-    let(:charity) { FactoryBot.build(:charity) }
-    let(:game) { FactoryBot.build(:game) }
-    let(:game_entry) { FactoryBot.build(:bundle_definition_game_entry) }
+    let(:bundle_definition) { build(:bundle_definition) }
+    let(:charity) { build(:charity) }
+    let(:game) { build(:game) }
+    let(:game_entry) { build(:bundle_definition_game_entry) }
 
-    let(:own_bundle) { FactoryBot.create(:bundle, donator: user) }
-    let(:other_bundle) { FactoryBot.create(:bundle, donator: other_donator) }
+    let(:own_bundle) { create(:bundle, donator: user) }
+    let(:other_bundle) { create(:bundle, donator: other_donator) }
 
-    let(:own_donation) { FactoryBot.create(:donation, donator: user) }
-    let(:other_donation) { FactoryBot.create(:donation, donator: other_donator) }
+    let(:own_donation) { create(:donation, donator: user) }
+    let(:other_donation) { create(:donation, donator: other_donator) }
 
     let(:own_donator) { user }
-    let(:other_donator) { FactoryBot.create(:donator) }
+    let(:other_donator) { create(:donator) }
 
-    let(:own_key) { FactoryBot.create(:key, bundle: own_bundle) }
-    let(:other_key) { FactoryBot.create(:key, bundle: other_bundle) }
-    let(:unassigned_key) { FactoryBot.create(:key, bundle: nil) }
+    let(:own_key) { create(:key, bundle: own_bundle) }
+    let(:other_key) { create(:key, bundle: other_bundle) }
+    let(:unassigned_key) { create(:key, bundle: nil) }
 
-    let(:admin_user) { FactoryBot.create(:admin_user) }
+    let(:admin_user) { create(:admin_user) }
 
     include_examples "allows reading public information"
     include_examples "disallows modifying public information"

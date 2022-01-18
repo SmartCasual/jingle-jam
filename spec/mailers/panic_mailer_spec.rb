@@ -11,7 +11,7 @@ RSpec.describe PanicMailer, type: :mailer do
 
   describe "missing_key" do
     let(:mail) { described_class.missing_key(nil, nil) }
-    let!(:admins) { FactoryBot.create_list(:admin_user, 2) }
+    let!(:admins) { create_list(:admin_user, 2) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Missing key")

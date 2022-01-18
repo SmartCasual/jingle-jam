@@ -37,7 +37,7 @@ RSpec.describe StripeController, type: :request do
 
       context "if the current donator has a known stripe customer ID" do
         let(:stripe_customer_id) { "cs_#{SecureRandom.uuid}" }
-        let(:donator) { FactoryBot.create(:donator, stripe_customer_id: stripe_customer_id) }
+        let(:donator) { create(:donator, stripe_customer_id: stripe_customer_id) }
 
         it "reuses that customer ID" do
           get("/magic-redirect/#{donator.id}/#{donator.hmac}")

@@ -6,18 +6,18 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
   let(:stripe_payment_intent_id) { "pi_#{SecureRandom.uuid}" }
 
   let(:payment) do
-    FactoryBot.create(:payment,
+    create(:payment,
       stripe_payment_intent_id: stripe_payment_intent_id,
     )
   end
   let!(:donation) do
-    FactoryBot.create(:donation,
+    create(:donation,
       stripe_payment_intent_id: stripe_payment_intent_id,
       donator: donator,
     )
   end
 
-  let(:donator) { FactoryBot.create(:donator) }
+  let(:donator) { create(:donator) }
 
   let(:payment_id) { payment.id }
 
