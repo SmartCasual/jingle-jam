@@ -1,15 +1,35 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+# rubocop:disable Rails/Output
 if Rails.env.development?
+  puts "Creating admin user admin@example.com"
   AdminUser.create!(
     name: "admin",
     email: "admin@example.com",
     password: "password",
     password_confirmation: "password",
   )
+
+  BundleDefinition.without_assignments do
+    puts "Creating bundle definition"
+    bundef = BundleDefinition.create!(
+      price_decimals: 25_00,
+      name: "Test bundle",
+    )
+
+    bundef.bundle_definition_game_entries.create!(
+      game: Game.new(name: "The Witness"),
+    )
+
+    bundef.bundle_definition_game_entries.create!(
+      game: Game.new(name: "Doom"),
+      price_decimals: 10_00,
+    )
+
+    puts "Adding 10,000 keys per game"
+    Game.all.each do |game|
+      10_000.times do
+        game.keys.create(code: SecureRandom.uuid)
+      end
+    end
+  end
 end
+# rubocop:enable Rails/Output

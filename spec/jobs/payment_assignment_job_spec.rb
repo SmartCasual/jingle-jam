@@ -59,10 +59,9 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
       Donation.destroy_all
     end
 
-    it "errors and does nothing" do
-      expect {
-        job.perform(payment_id)
-      }.to raise_error(ActiveRecord::RecordNotFound)
+    it "reports the error and does nothing" do
+      job.perform(payment_id)
+      # TODO: Check for error tracking report
 
       expect(BundleCheckJob).not_to have_been_enqueued
       expect(ActionMailer::MailDeliveryJob).not_to have_been_enqueued
