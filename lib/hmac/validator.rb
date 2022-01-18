@@ -1,6 +1,6 @@
 class HMAC::Validator
-  def initialize(*args)
-    @generator = HMAC::Generator.new(*args)
+  def initialize(...)
+    @generator = HMAC::Generator.new(...)
   end
 
   def validate(hmac, against_id:)

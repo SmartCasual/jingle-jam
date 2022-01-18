@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.3"
+ruby "3.1.0"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem "rails", "~> 6.1.3"
@@ -39,6 +39,7 @@ gem "kms_encrypted" # KMS support for `lockbox`
 gem "lockbox" # Game key encryption
 gem "monetize"
 gem "money-rails", "~>1.12"
+gem "net-smtp", require: false
 gem "rollbar"
 gem "rotp"
 gem "rqrcode"
