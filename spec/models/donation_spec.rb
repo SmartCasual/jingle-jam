@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Donation do
-  subject(:donation) { FactoryBot.build(:donation, **attributes) }
+  subject(:donation) { build(:donation, **attributes) }
 
   let(:attributes) do
     {

@@ -9,17 +9,17 @@ require_relative "shared_examples/public_info"
 RSpec.describe AdminAbility do
   subject(:ability) { described_class.new(user) }
 
-  let(:bundle_definition) { FactoryBot.build(:bundle_definition) }
-  let(:charity) { FactoryBot.build(:charity) }
-  let(:game) { FactoryBot.build(:game) }
-  let(:game_entry) { FactoryBot.build(:bundle_definition_game_entry) }
+  let(:bundle_definition) { build(:bundle_definition) }
+  let(:charity) { build(:charity) }
+  let(:game) { build(:game) }
+  let(:game_entry) { build(:bundle_definition_game_entry) }
 
-  let(:bundle) { FactoryBot.create(:bundle) }
-  let(:donation) { FactoryBot.create(:donation) }
-  let(:donator) { FactoryBot.create(:donator) }
-  let(:key) { FactoryBot.create(:key) }
+  let(:bundle) { create(:bundle) }
+  let(:donation) { create(:donation) }
+  let(:donator) { create(:donator) }
+  let(:key) { create(:key) }
 
-  let(:admin_user) { FactoryBot.create(:admin_user) }
+  let(:admin_user) { create(:admin_user) }
 
   context "with an unknown user" do
     let(:user) { nil }
@@ -31,7 +31,7 @@ RSpec.describe AdminAbility do
   end
 
   context "with a known admin" do
-    let(:user) { FactoryBot.create(:admin_user) }
+    let(:user) { create(:admin_user) }
 
     include_examples "allows reading public information"
     include_examples "disallows modifying public information"

@@ -4,19 +4,19 @@ RSpec.describe TierChecker do
   subject(:tier_checker) { described_class.new }
 
   describe "#donation_level_met?(tier, donator:)" do
-    let(:donator) { FactoryBot.create(:donator) }
+    let(:donator) { create(:donator) }
 
     let(:bundle_price) { Money.new(2000) }
     let(:tier_price) { Money.new(500) }
 
     context "with a full bundle" do
       let!(:tier) do
-        FactoryBot.create(:bundle_definition, price: bundle_price)
+        create(:bundle_definition, price: bundle_price)
       end
 
       context "with a below-price donation" do
         before do
-          FactoryBot.create(:donation,
+          create(:donation,
             donator: donator,
             amount: bundle_price - Money.new(1),
           )
@@ -29,7 +29,7 @@ RSpec.describe TierChecker do
 
       context "with an at-price donation" do
         before do
-          FactoryBot.create(:donation,
+          create(:donation,
             donator: donator,
             amount: bundle_price,
           )
@@ -42,7 +42,7 @@ RSpec.describe TierChecker do
 
       context "with an above-price donation" do
         before do
-          FactoryBot.create(:donation,
+          create(:donation,
             donator: donator,
             amount: bundle_price + Money.new(1),
           )
@@ -56,13 +56,13 @@ RSpec.describe TierChecker do
 
     context "with a bundle tier with a price" do
       let!(:tier) do
-        bundle_definition = FactoryBot.create(:bundle_definition, price: bundle_price)
-        FactoryBot.create(:bundle_definition_game_entry, price: tier_price, bundle_definition: bundle_definition)
+        bundle_definition = create(:bundle_definition, price: bundle_price)
+        create(:bundle_definition_game_entry, price: tier_price, bundle_definition: bundle_definition)
       end
 
       context "with a below-tier donation" do
         before do
-          FactoryBot.create(:donation,
+          create(:donation,
             donator: donator,
             amount: tier_price - Money.new(1),
           )
@@ -75,7 +75,7 @@ RSpec.describe TierChecker do
 
       context "with an at-tier donation" do
         before do
-          FactoryBot.create(:donation,
+          create(:donation,
             donator: donator,
             amount: tier_price,
           )
@@ -88,7 +88,7 @@ RSpec.describe TierChecker do
 
       context "with an above-tier donation" do
         before do
-          FactoryBot.create(:donation,
+          create(:donation,
             donator: donator,
             amount: tier_price + Money.new(1),
           )
@@ -102,13 +102,13 @@ RSpec.describe TierChecker do
 
     context "with a bundle tier without a price" do
       let!(:tier) do
-        bundle_definition = FactoryBot.create(:bundle_definition, price: bundle_price)
-        FactoryBot.create(:bundle_definition_game_entry, price: nil, bundle_definition: bundle_definition)
+        bundle_definition = create(:bundle_definition, price: bundle_price)
+        create(:bundle_definition_game_entry, price: nil, bundle_definition: bundle_definition)
       end
 
       context "with a below-bundle donation" do
         before do
-          FactoryBot.create(:donation,
+          create(:donation,
             donator: donator,
             amount: bundle_price - Money.new(1),
           )
@@ -121,7 +121,7 @@ RSpec.describe TierChecker do
 
       context "with an at-bundle donation" do
         before do
-          FactoryBot.create(:donation,
+          create(:donation,
             donator: donator,
             amount: bundle_price,
           )
@@ -134,7 +134,7 @@ RSpec.describe TierChecker do
 
       context "with an above-bundle donation" do
         before do
-          FactoryBot.create(:donation,
+          create(:donation,
             donator: donator,
             amount: bundle_price + Money.new(1),
           )

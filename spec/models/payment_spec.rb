@@ -5,7 +5,7 @@ RSpec.describe Payment do
     let(:stripe_payment_intent_id) { SecureRandom.uuid }
 
     context "when a payment already exists with that Stripe ID" do
-      let!(:existing_payment) { FactoryBot.create(:payment, stripe_payment_intent_id: stripe_payment_intent_id) }
+      let!(:existing_payment) { create(:payment, stripe_payment_intent_id: stripe_payment_intent_id) }
 
       it "runs the assignment job on the existing payment" do
         described_class.create_and_assign(
@@ -18,7 +18,7 @@ RSpec.describe Payment do
     end
 
     context "when a payment already exists with a different Stripe ID" do
-      let!(:existing_payment) { FactoryBot.create(:payment, stripe_payment_intent_id: "pi_#{SecureRandom.uuid}") }
+      let!(:existing_payment) { create(:payment, stripe_payment_intent_id: "pi_#{SecureRandom.uuid}") }
 
       it "runs the assignment job on a new payment" do
         described_class.create_and_assign(

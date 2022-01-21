@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Key do
   describe "#code" do
-    subject(:game_key) { FactoryBot.create(:key, code: plaintext) }
+    subject(:game_key) { create(:key, code: plaintext) }
 
     let(:plaintext) { SecureRandom.uuid }
 

@@ -4,7 +4,7 @@ RSpec.describe BundleCheckJob do
   subject(:job) { described_class.new }
 
   context "with a donator" do
-    let(:donator) { FactoryBot.create(:donator) }
+    let(:donator) { create(:donator) }
     let(:donator_id) { donator.id }
 
     before do
@@ -26,7 +26,7 @@ RSpec.describe BundleCheckJob do
   end
 
   context "without a donator" do
-    let(:donator) { FactoryBot.create(:donator) }
+    let(:donator) { create(:donator) }
     let(:donator_id) { 7001 }
 
     it "clears the job" do

@@ -4,7 +4,7 @@ RSpec.describe BundleKeyAssignmentJob do
   subject(:job) { described_class.new }
 
   context "with a bundle" do
-    let(:bundle) { FactoryBot.create(:bundle) }
+    let(:bundle) { create(:bundle) }
     let(:bundle_id) { bundle.id }
 
     before do
@@ -26,7 +26,7 @@ RSpec.describe BundleKeyAssignmentJob do
   end
 
   context "without a bundle" do
-    let(:bundle) { FactoryBot.create(:bundle) }
+    let(:bundle) { create(:bundle) }
     let(:bundle_id) { 7001 }
 
     it "clears the job" do
