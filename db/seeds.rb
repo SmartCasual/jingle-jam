@@ -31,5 +31,10 @@ if Rails.env.development?
       end
     end
   end
+
+  puts "Creating charities"
+  Charity.create(name: "Help the Penguins")
+  Charity.create(name: "Justice for Dugongs")
+  Charity.create(name: "Free All Bats")
 end
 # rubocop:enable Rails/Output
