@@ -1,46 +1,49 @@
-GEM
-  remote: https://rubygems.org/
+GIT
+  remote: https://github.com/activeadmin/arbre.git
+  revision: e4970e683c81c99432b73f0ceb5dff7d3fe50413
   specs:
-    aasm (5.2.0)
-      concurrent-ruby (~> 1.0)
-    actioncable (6.1.4.4)
-      actionpack (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
-      nio4r (~> 2.0)
-      websocket-driver (>= 0.6.1)
-    actionmailbox (6.1.4.4)
-      actionpack (= 6.1.4.4)
-      activejob (= 6.1.4.4)
-      activerecord (= 6.1.4.4)
-      activestorage (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
-      mail (>= 2.7.1)
-    actionmailer (6.1.4.4)
-      actionpack (= 6.1.4.4)
-      actionview (= 6.1.4.4)
-      activejob (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
-      mail (~> 2.5, >= 2.5.4)
-      rails-dom-testing (~> 2.0)
-    actionpack (6.1.4.4)
-      actionview (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
-      rack (~> 2.0, >= 2.0.9)
-      rack-test (>= 0.6.3)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actiontext (6.1.4.4)
-      actionpack (= 6.1.4.4)
-      activerecord (= 6.1.4.4)
-      activestorage (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
-      nokogiri (>= 1.8.5)
-    actionview (6.1.4.4)
-      activesupport (= 6.1.4.4)
-      builder (~> 3.1)
-      erubi (~> 1.4)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    arbre (1.4.0)
+      activesupport (>= 3.0.0, < 7.1)
+      ruby2_keywords (>= 0.0.2, < 1.0)
+
+GIT
+  remote: https://github.com/activeadmin/inherited_resources.git
+  revision: df8dbe36148329351643d4a00d5e9e105b133552
+  specs:
+    inherited_resources (1.13.1)
+      actionpack (>= 5.2, < 7.1)
+      has_scope (~> 0.6)
+      railties (>= 5.2, < 7.1)
+      responders (>= 2, < 4)
+
+GIT
+  remote: https://github.com/cucumber/cucumber-rails.git
+  revision: 4919c18b89dcb476a908b667a3ee85ccafe7d249
+  ref: 4919c18b89dcb476a908b667a3ee85ccafe7d249
+  specs:
+    cucumber-rails (2.4.0)
+      capybara (>= 2.18, < 4)
+      cucumber (>= 3.2, < 8)
+      mime-types (~> 3.3)
+      nokogiri (~> 1.10)
+      railties (>= 5.0, < 8)
+      rexml (~> 3.0)
+      webrick (~> 1.7)
+
+GIT
+  remote: https://github.com/dabit/annotate_models.git
+  revision: f38741d005052045e4d4c2c26b009d3ade0864f3
+  branch: rails-7
+  specs:
+    annotate (3.1.1)
+      activerecord (>= 3.2, < 7.1)
+      rake (>= 10.4, < 14.0)
+
+GIT
+  remote: https://github.com/tagliala/activeadmin.git
+  revision: 3ff80bb9e3896714af9fcbc6005568f8693860a4
+  branch: feature/railties-7
+  specs:
     activeadmin (2.9.0)
       arbre (~> 1.2, >= 1.2.1)
       formtastic (>= 3.1, < 5.0)
@@ -48,47 +51,97 @@ GEM
       inherited_resources (~> 1.7)
       jquery-rails (~> 4.2)
       kaminari (~> 1.0, >= 1.2.1)
-      railties (>= 5.2, < 6.2)
+      railties (>= 5.2, < 7.1)
       ransack (~> 2.1, >= 2.1.1)
-    activejob (6.1.4.4)
-      activesupport (= 6.1.4.4)
+
+GIT
+  remote: https://github.com/vcr/vcr.git
+  revision: 8ced6c96e01737a418cd270e0382a8c2c6d85f7f
+  specs:
+    vcr (6.0.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    aasm (5.2.0)
+      concurrent-ruby (~> 1.0)
+    actioncable (7.0.1)
+      actionpack (= 7.0.1)
+      activesupport (= 7.0.1)
+      nio4r (~> 2.0)
+      websocket-driver (>= 0.6.1)
+    actionmailbox (7.0.1)
+      actionpack (= 7.0.1)
+      activejob (= 7.0.1)
+      activerecord (= 7.0.1)
+      activestorage (= 7.0.1)
+      activesupport (= 7.0.1)
+      mail (>= 2.7.1)
+      net-imap
+      net-pop
+      net-smtp
+    actionmailer (7.0.1)
+      actionpack (= 7.0.1)
+      actionview (= 7.0.1)
+      activejob (= 7.0.1)
+      activesupport (= 7.0.1)
+      mail (~> 2.5, >= 2.5.4)
+      net-imap
+      net-pop
+      net-smtp
+      rails-dom-testing (~> 2.0)
+    actionpack (7.0.1)
+      actionview (= 7.0.1)
+      activesupport (= 7.0.1)
+      rack (~> 2.0, >= 2.2.0)
+      rack-test (>= 0.6.3)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.2.0)
+    actiontext (7.0.1)
+      actionpack (= 7.0.1)
+      activerecord (= 7.0.1)
+      activestorage (= 7.0.1)
+      activesupport (= 7.0.1)
+      globalid (>= 0.6.0)
+      nokogiri (>= 1.8.5)
+    actionview (7.0.1)
+      activesupport (= 7.0.1)
+      builder (~> 3.1)
+      erubi (~> 1.4)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    activejob (7.0.1)
+      activesupport (= 7.0.1)
       globalid (>= 0.3.6)
-    activemodel (6.1.4.4)
-      activesupport (= 6.1.4.4)
-    activerecord (6.1.4.4)
-      activemodel (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
-    activestorage (6.1.4.4)
-      actionpack (= 6.1.4.4)
-      activejob (= 6.1.4.4)
-      activerecord (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
-      marcel (~> 1.0.0)
+    activemodel (7.0.1)
+      activesupport (= 7.0.1)
+    activerecord (7.0.1)
+      activemodel (= 7.0.1)
+      activesupport (= 7.0.1)
+    activestorage (7.0.1)
+      actionpack (= 7.0.1)
+      activejob (= 7.0.1)
+      activerecord (= 7.0.1)
+      activesupport (= 7.0.1)
+      marcel (~> 1.0)
       mini_mime (>= 1.1.0)
-    activesupport (6.1.4.4)
+    activesupport (7.0.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-      zeitwerk (~> 2.3)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     after_commit_everywhere (1.1.0)
       activerecord (>= 4.2)
       activesupport
-    annotate (3.1.1)
-      activerecord (>= 3.2, < 7.0)
-      rake (>= 10.4, < 14.0)
-    arbre (1.4.0)
-      activesupport (>= 3.0.0, < 6.2)
-      ruby2_keywords (>= 0.0.2, < 1.0)
     argon2-kdf (0.1.7)
     ast (2.4.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.549.0)
     aws-record (2.7.0)
       aws-sdk-dynamodb (~> 1.18)
-    aws-sdk-core (3.125.4)
+    aws-sdk-core (3.125.5)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -170,14 +223,6 @@ GEM
     cucumber-html-formatter (17.0.0)
       cucumber-messages (~> 17.1, >= 17.1.0)
     cucumber-messages (17.1.1)
-    cucumber-rails (2.4.0)
-      capybara (>= 2.18, < 4)
-      cucumber (>= 3.2, < 8)
-      mime-types (~> 3.3)
-      nokogiri (~> 1.10)
-      railties (>= 5.0, < 7)
-      rexml (~> 3.0)
-      webrick (~> 1.7)
     cucumber-tag-expressions (4.1.0)
     cucumber-wire (6.2.1)
       cucumber-core (~> 10.1, >= 10.1.0)
@@ -217,11 +262,6 @@ GEM
       domain_name (~> 0.5)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
-    inherited_resources (1.13.0)
-      actionpack (>= 5.2, < 6.2)
-      has_scope (~> 0.6)
-      railties (>= 5.2, < 6.2)
-      responders (>= 2, < 4)
     io-wait (0.2.1)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
@@ -284,11 +324,19 @@ GEM
       monetize (~> 1.9)
       money (~> 6.13)
       railties (>= 3.0)
-    msgpack (1.4.2)
+    msgpack (1.4.3)
     multi_test (0.1.2)
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
+    net-imap (0.2.3)
+      digest
+      net-protocol
+      strscan
+    net-pop (0.1.1)
+      digest
+      net-protocol
+      timeout
     net-protocol (0.1.2)
       io-wait
       timeout
@@ -319,32 +367,32 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rails (6.1.4.4)
-      actioncable (= 6.1.4.4)
-      actionmailbox (= 6.1.4.4)
-      actionmailer (= 6.1.4.4)
-      actionpack (= 6.1.4.4)
-      actiontext (= 6.1.4.4)
-      actionview (= 6.1.4.4)
-      activejob (= 6.1.4.4)
-      activemodel (= 6.1.4.4)
-      activerecord (= 6.1.4.4)
-      activestorage (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
+    rails (7.0.1)
+      actioncable (= 7.0.1)
+      actionmailbox (= 7.0.1)
+      actionmailer (= 7.0.1)
+      actionpack (= 7.0.1)
+      actiontext (= 7.0.1)
+      actionview (= 7.0.1)
+      activejob (= 7.0.1)
+      activemodel (= 7.0.1)
+      activerecord (= 7.0.1)
+      activestorage (= 7.0.1)
+      activesupport (= 7.0.1)
       bundler (>= 1.15.0)
-      railties (= 6.1.4.4)
-      sprockets-rails (>= 2.0.0)
+      railties (= 7.0.1)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    railties (6.1.4.4)
-      actionpack (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
+    railties (7.0.1)
+      actionpack (= 7.0.1)
+      activesupport (= 7.0.1)
       method_source
-      rake (>= 0.13)
+      rake (>= 12.2)
       thor (~> 1.0)
+      zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
     ransack (2.5.0)
@@ -421,7 +469,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
-    sidekiq (6.3.1)
+    sidekiq (6.4.0)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -433,7 +481,8 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    stripe (5.42.0)
+    stripe (5.43.0)
+    strscan (3.0.1)
     sys-uname (1.2.2)
       ffi (~> 1.1)
     thor (1.2.1)
@@ -445,7 +494,6 @@ GEM
       unf_ext
     unf_ext (0.0.8)
     unicode-display_width (2.1.0)
-    vcr (6.0.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     watir (7.1.0)
@@ -485,53 +533,55 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  aasm
-  activeadmin
-  after_commit_everywhere (~> 1.0)
-  annotate
-  aws-sdk-kms
-  aws-sdk-rails
-  blind_index
-  bootsnap (>= 1.4.4)
-  byebug
-  cancancan
-  climate_control
-  cucumber-rails
-  database_cleaner
-  demopass (>= 0.2.0)
-  devise
-  factory_bot
+  aasm (~> 5.2)
+  activeadmin!
+  after_commit_everywhere (~> 1.1)
+  annotate!
+  arbre!
+  aws-sdk-kms (~> 1.53)
+  aws-sdk-rails (~> 3.6)
+  blind_index (~> 2.3)
+  bootsnap (~> 1.10)
+  byebug (~> 11.1)
+  cancancan (~> 3.2)
+  climate_control (~> 1.0)
+  cucumber-rails (~> 2.4)!
+  database_cleaner (~> 2.0)
+  demopass (~> 0.2)
+  devise (~> 4.8)
+  factory_bot (~> 6.2)
+  inherited_resources!
   jbuilder (~> 2.7)
-  kms_encrypted
-  launchy
+  kms_encrypted (~> 1.4)
+  launchy (~> 2.5)
   listen (~> 3.3)
-  lockbox
-  mechanize
-  monetize
-  money-rails (~> 1.12)
-  net-smtp
+  lockbox (~> 0.6)
+  mechanize (~> 2.8)
+  monetize (~> 1.12)
+  money-rails (~> 1.15)
+  net-smtp (~> 0.3)
   pg (~> 1.1)
   puma (~> 5.5)
   rack-mini-profiler (~> 2.0)
-  rails (~> 6.1.3)
-  rollbar
-  rotp
-  rqrcode
-  rspec-rails
-  rubocop
-  rubocop-rails
-  rubocop-rake
-  rubocop-rspec
+  rails (~> 7.0)
+  rollbar (~> 3.3)
+  rotp (~> 6.2)
+  rqrcode (~> 2.1)
+  rspec-rails (~> 5.0)
+  rubocop (~> 1.25)
+  rubocop-rails (~> 2.13)
+  rubocop-rake (~> 0.6)
+  rubocop-rspec (~> 2.7)
   sass-rails (>= 6)
-  selenium-webdriver
-  sidekiq
-  spring
-  stripe
-  vcr
-  watir
+  selenium-webdriver (~> 4.1)
+  sidekiq (~> 6.4)
+  spring (~> 4.0)
+  stripe (~> 5.43)
+  vcr!
+  watir (~> 7.1)
   web-console (>= 4.1.0)
-  webdrivers
-  webmock
+  webdrivers (~> 5.0)
+  webmock (~> 3.14)
   webpacker (~> 5.0)
 
 RUBY VERSION

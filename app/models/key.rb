@@ -18,7 +18,7 @@
 class Key < ApplicationRecord
   has_kms_key
 
-  encrypts :code, key: :kms_key
+  lockbox_encrypts :code, key: :kms_key
   blind_index :code
 
   belongs_to :game, inverse_of: :keys
