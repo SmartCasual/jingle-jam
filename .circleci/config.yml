@@ -1,14 +1,14 @@
 version: 2.1
 
 orbs:
-  ruby: circleci/ruby@1.0
-  node: circleci/node@2
-  browser-tools: circleci/browser-tools@1.1
+  ruby: circleci/ruby@1.4
+  node: circleci/node@5.0
+  browser-tools: circleci/browser-tools@1.2
 
 jobs:
   test:  # our next job, called "test"
     docker:
-      - image: cimg/ruby:2.7.3-browsers # this is our primary docker image, where step commands run.
+      - image: cimg/ruby:3.1.0-browsers # this is our primary docker image, where step commands run.
       - image: circleci/postgres:9.5-alpine
         environment: # add POSTGRES environment variables.
           POSTGRES_USER: circleci
@@ -40,7 +40,7 @@ jobs:
       - ruby/install-deps
       - node/install-packages:
           pkg-manager: yarn
-          cache-key: "yarn.lock"
+          with-cache: true
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
       - run:
