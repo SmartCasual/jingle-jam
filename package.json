@@ -1,21 +1,19 @@
+
 {
   "name": "jingle-jam",
   "private": true,
   "dependencies": {
-    "@activeadmin/activeadmin": "^2.9.0",
-    "@rails/actioncable": "^6.0.0",
-    "@rails/activestorage": "^6.0.0",
-    "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "5.4.0",
-    "currency.js": "^2.0.3",
-    "postcss": "^8.2.10",
-    "yarn": "^1.22.10"
-  },
-  "resolutions": {
-    "webpack-dev-server/ws": "7.4.6"
+    "@activeadmin/activeadmin": "^2.0.0",
+    "@rails/actioncable": "^7.0.0",
+    "@rails/activestorage": "^7.0.0",
+    "@rails/ujs": "^7.0.0",
+    "@rails/webpacker": "^5.0.0",
+    "currency.js": "^2.0.0",
+    "postcss": "^8.0.0",
+    "yarn": "^1.0.0"
   },
   "version": "0.1.0",
   "devDependencies": {
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.0.0"
   }
 }
