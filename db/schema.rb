@@ -33,12 +33,12 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at", precision: 6
+    t.datetime "remember_created_at", precision: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "otp_secret"
-    t.datetime "last_otp_at"
+    t.datetime "last_otp_at", precision: 6
     t.boolean "data_entry", default: false, null: false
     t.boolean "support", default: false, null: false
     t.boolean "manages_users", default: false, null: false

@@ -334,4 +334,6 @@ Rails.application.config.after_initialize do
     #
     config.use_webpacker = true
   end
+
+  Admin::SessionsController.skip_before_action(:enforce_2sv)
 end
