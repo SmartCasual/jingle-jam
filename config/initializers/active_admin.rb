@@ -332,7 +332,7 @@ Rails.application.config.after_initialize do
     # By default, Active Admin uses Sprocket's asset pipeline.
     # You can switch to using Webpacker here.
     #
-    config.use_webpacker = true
+    # config.use_webpacker = true
   end
 
   Admin::SessionsController.skip_before_action(:enforce_2sv)
