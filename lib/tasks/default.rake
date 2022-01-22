@@ -1,3 +1,6 @@
+task default: []
+Rake::Task[:default].clear
+
 begin
   require "rspec/core/rake_task"
   require "rubocop/rake_task"
@@ -29,4 +32,4 @@ task :build do
   # no-op
 end
 
-task default: :build_and_test
+task default: :build_and_test # rubocop:disable Rake/DuplicateTask
