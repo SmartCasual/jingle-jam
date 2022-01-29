@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/activeadmin/arbre.git
-  revision: e4970e683c81c99432b73f0ceb5dff7d3fe50413
+  revision: dcea09da31322f2bc9bdfc32eb14ec0aaf34ae92
   specs:
     arbre (1.4.0)
       activesupport (>= 3.0.0, < 7.1)
@@ -8,12 +8,12 @@ GIT
 
 GIT
   remote: https://github.com/activeadmin/inherited_resources.git
-  revision: df8dbe36148329351643d4a00d5e9e105b133552
+  revision: 19bb0b2f37c8b69d3a92ac1166f0601da52f3c23
   specs:
     inherited_resources (1.13.1)
-      actionpack (>= 5.2, < 7.1)
+      actionpack (>= 6.0, < 7.1)
       has_scope (~> 0.6)
-      railties (>= 5.2, < 7.1)
+      railties (>= 6.0, < 7.1)
       responders (>= 2, < 4)
 
 GIT
@@ -41,7 +41,7 @@ GIT
 
 GIT
   remote: https://github.com/tagliala/activeadmin.git
-  revision: 3ff80bb9e3896714af9fcbc6005568f8693860a4
+  revision: 5d78c742782c66b215c0fb724035348d079b4ef7
   branch: feature/railties-7
   specs:
     activeadmin (2.9.0)
@@ -51,7 +51,7 @@ GIT
       inherited_resources (~> 1.7)
       jquery-rails (~> 4.2)
       kaminari (~> 1.0, >= 1.2.1)
-      railties (>= 5.2, < 7.1)
+      railties (>= 6.0, < 7.1)
       ransack (~> 2.1, >= 2.1.1)
 
 GIT
@@ -260,7 +260,7 @@ GEM
     hashdiff (1.0.1)
     http-cookie (1.0.4)
       domain_name (~> 0.5)
-    i18n (1.8.11)
+    i18n (1.9.1)
       concurrent-ruby (~> 1.0)
     io-wait (0.2.1)
     jbuilder (2.11.5)
@@ -524,7 +524,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.5.3)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   arm64-darwin-20
