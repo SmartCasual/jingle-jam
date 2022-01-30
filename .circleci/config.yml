@@ -9,11 +9,12 @@ jobs:
   test:  # our next job, called "test"
     docker:
       - image: cimg/ruby:3.1.0-browsers # this is our primary docker image, where step commands run.
-      - image: circleci/postgres:9.5-alpine
+      - image: circleci/postgres:13.5
         environment: # add POSTGRES environment variables.
           POSTGRES_USER: circleci
           POSTGRES_DB: jingle_jam_test
           POSTGRES_PASSWORD: ""
+          POSTGRES_HOST_AUTH_METHOD: trust
     # environment variables specific to Ruby/Rails, applied to the primary container.
     environment:
       BUNDLE_JOBS: "3"
