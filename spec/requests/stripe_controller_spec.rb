@@ -37,7 +37,7 @@ RSpec.describe StripeController, type: :request do
 
       context "if the current donator has a known stripe customer ID" do
         let(:stripe_customer_id) { "cs_#{SecureRandom.uuid}" }
-        let(:donator) { create(:donator, stripe_customer_id: stripe_customer_id) }
+        let(:donator) { create(:donator, stripe_customer_id:) }
 
         it "reuses that customer ID" do
           get("/magic-redirect/#{donator.id}/#{donator.hmac}")
@@ -45,7 +45,7 @@ RSpec.describe StripeController, type: :request do
           stripe_request = a_request(:post, "https://api.stripe.com/v1/checkout/sessions")
             .with(body: /customer=#{stripe_customer_id}/)
 
-          post("/stripe/prep-checkout", params: params)
+          post("/stripe/prep-checkout", params:)
           expect(stripe_request).to have_been_made
         end
       end
@@ -68,9 +68,9 @@ RSpec.describe StripeController, type: :request do
     let(:timestamp) { Time.zone.now.to_i }
     let(:payload) do
       stripe_webhook_payload(
-        timestamp: timestamp,
-        object: object,
-        event_type: event_type,
+        timestamp:,
+        object:,
+        event_type:,
       )
     end
 
@@ -97,12 +97,12 @@ RSpec.describe StripeController, type: :request do
     end
 
     it "creates and/or assigns a payment" do
-      simulate_stripe_webhook(payload: payload, timestamp: timestamp)
+      simulate_stripe_webhook(payload:, timestamp:)
       expect(Payment).to have_received(:create_and_assign)
         .with(
           amount: 1000,
           currency: "gbp",
-          stripe_payment_intent_id: stripe_payment_intent_id,
+          stripe_payment_intent_id:,
         )
     end
 
@@ -112,7 +112,7 @@ RSpec.describe StripeController, type: :request do
 
       it "does nothing but return a 200" do
         expect {
-          simulate_stripe_webhook(payload: payload, timestamp: timestamp, expect: 200)
+          simulate_stripe_webhook(payload:, timestamp:, expect: 200)
         }.not_to change(Payment, :count)
 
         expect(Payment).not_to have_received(:create_and_assign)
@@ -122,7 +122,7 @@ RSpec.describe StripeController, type: :request do
     context "with an incorrect signature" do
       it "returns a 401" do
         expect {
-          simulate_stripe_webhook(payload: payload, timestamp: timestamp, signature: "incorrect", expect: 401)
+          simulate_stripe_webhook(payload:, timestamp:, signature: "incorrect", expect: 401)
         }.not_to change(Payment, :count)
 
         expect(Payment).not_to have_received(:create_and_assign)

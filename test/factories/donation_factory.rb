@@ -15,8 +15,8 @@ FactoryBot.define do
     after(:build) do |donation, evaluator|
       evaluator.charity_split.each do |charity, split_amount|
         donation.charity_splits.build(
-          donation: donation,
-          charity: charity,
+          donation:,
+          charity:,
           amount: split_amount,
         )
       end

@@ -24,7 +24,7 @@ class ApplicationRecord < ActiveRecord::Base
       end
 
       define_method("human_#{attribute}") do |symbol: false|
-        send(attribute)&.format(no_cents_if_whole: true, symbol: symbol)
+        send(attribute)&.format(no_cents_if_whole: true, symbol:)
       end
     end
   end

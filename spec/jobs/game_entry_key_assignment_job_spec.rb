@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe GameEntryKeyAssignmentJob do
   subject(:job) do
     described_class.new(
-      key_manager: key_manager,
-      tier_checker: tier_checker,
+      key_manager:,
+      tier_checker:,
     )
   end
 
@@ -13,7 +13,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
 
   let(:donator) { create(:donator, :with_email_address) }
 
-  let!(:bundle) { create(:bundle, donator: donator) }
+  let!(:bundle) { create(:bundle, donator:) }
   let(:bundle_id) { bundle.id }
 
   let!(:game_entry) { create(:bundle_definition_game_entry) }
@@ -41,7 +41,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
   end
 
   context "when it gets a lock on an unassigned key" do
-    let(:key) { create(:key, game: game) }
+    let(:key) { create(:key, game:) }
 
     before do
       allow(key_manager).to receive(:lock_unassigned_key)

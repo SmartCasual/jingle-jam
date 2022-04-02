@@ -7,13 +7,13 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
 
   let(:payment) do
     create(:payment,
-      stripe_payment_intent_id: stripe_payment_intent_id,
+      stripe_payment_intent_id:,
     )
   end
   let!(:donation) do
     create(:donation,
-      stripe_payment_intent_id: stripe_payment_intent_id,
-      donator: donator,
+      stripe_payment_intent_id:,
+      donator:,
     )
   end
 
@@ -70,7 +70,7 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
 
   context "if the donation is already linked to the payment" do
     before do
-      payment.update(donation: donation)
+      payment.update(donation:)
     end
 
     it "remains linked to the payment" do

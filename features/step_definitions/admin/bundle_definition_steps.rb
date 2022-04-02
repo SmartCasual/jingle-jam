@@ -29,7 +29,7 @@ Given("a bundle definition") do
 end
 
 Given("these games:") do |table|
-  table.raw.each { |(name)| FactoryBot.create(:game, name: name) }
+  table.raw.each { |(name)| FactoryBot.create(:game, name:) }
 end
 
 When("an admin adds these games to the bundle definition:") do |table|

@@ -6,15 +6,15 @@ RSpec.describe Donator do
   describe "#total_donations" do
     before do
       create(:donation,
-        donator: donator,
+        donator:,
         amount: Money.new(1000, "USD"),
       )
       create(:donation,
-        donator: donator,
+        donator:,
         amount: Money.new(1000, "GBP"),
       )
       create(:donation,
-        donator: donator,
+        donator:,
         amount: Money.new(1000, "EUR"),
       )
     end
