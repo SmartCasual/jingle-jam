@@ -13,7 +13,7 @@ RSpec.describe KeyManager do
       end
 
       it "returns true" do
-        expect(key_manager.key_assigned?(game, bundle:)).to eq(true)
+        expect(key_manager.key_assigned?(game, bundle:)).to be(true)
       end
     end
 
@@ -23,7 +23,7 @@ RSpec.describe KeyManager do
       end
 
       it "returns true" do
-        expect(key_manager.key_assigned?(game, bundle:)).to eq(false)
+        expect(key_manager.key_assigned?(game, bundle:)).to be(false)
       end
     end
   end

@@ -40,7 +40,7 @@ RSpec.describe AdminAbility do
 
     ApplicationAbility.public_classes.each do |public_class|
       include_examples "allows adding comments on public information", public_class: public_class
-      include_examples "allows managing own comments on public information", public_class: public_class
+      include_examples "allows managing own comments on public information", public_class:
     end
 
     it "allows reading self" do

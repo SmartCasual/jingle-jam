@@ -33,7 +33,7 @@ RSpec.describe Key do
       end
 
       it "doesn't exist" do
-        expect(output.includes_column?("code")).to eq(false)
+        expect(output.includes_column?("code")).to be(false)
       end
     end
   end
