@@ -1,65 +1,3 @@
-GIT
-  remote: https://github.com/activeadmin/arbre.git
-  revision: dcea09da31322f2bc9bdfc32eb14ec0aaf34ae92
-  specs:
-    arbre (1.4.0)
-      activesupport (>= 3.0.0, < 7.1)
-      ruby2_keywords (>= 0.0.2, < 1.0)
-
-GIT
-  remote: https://github.com/activeadmin/inherited_resources.git
-  revision: 19bb0b2f37c8b69d3a92ac1166f0601da52f3c23
-  specs:
-    inherited_resources (1.13.1)
-      actionpack (>= 6.0, < 7.1)
-      has_scope (~> 0.6)
-      railties (>= 6.0, < 7.1)
-      responders (>= 2, < 4)
-
-GIT
-  remote: https://github.com/cucumber/cucumber-rails.git
-  revision: 4919c18b89dcb476a908b667a3ee85ccafe7d249
-  ref: 4919c18b89dcb476a908b667a3ee85ccafe7d249
-  specs:
-    cucumber-rails (2.4.0)
-      capybara (>= 2.18, < 4)
-      cucumber (>= 3.2, < 8)
-      mime-types (~> 3.3)
-      nokogiri (~> 1.10)
-      railties (>= 5.0, < 8)
-      rexml (~> 3.0)
-      webrick (~> 1.7)
-
-GIT
-  remote: https://github.com/dabit/annotate_models.git
-  revision: f38741d005052045e4d4c2c26b009d3ade0864f3
-  branch: rails-7
-  specs:
-    annotate (3.1.1)
-      activerecord (>= 3.2, < 7.1)
-      rake (>= 10.4, < 14.0)
-
-GIT
-  remote: https://github.com/tagliala/activeadmin.git
-  revision: 5d78c742782c66b215c0fb724035348d079b4ef7
-  branch: feature/railties-7
-  specs:
-    activeadmin (2.9.0)
-      arbre (~> 1.2, >= 1.2.1)
-      formtastic (>= 3.1, < 5.0)
-      formtastic_i18n (~> 0.4)
-      inherited_resources (~> 1.7)
-      jquery-rails (~> 4.2)
-      kaminari (~> 1.0, >= 1.2.1)
-      railties (>= 6.0, < 7.1)
-      ransack (~> 2.1, >= 2.1.1)
-
-GIT
-  remote: https://github.com/vcr/vcr.git
-  revision: 8ced6c96e01737a418cd270e0382a8c2c6d85f7f
-  specs:
-    vcr (6.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -110,6 +48,15 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    activeadmin (2.11.1)
+      arbre (~> 1.2, >= 1.2.1)
+      formtastic (>= 3.1, < 5.0)
+      formtastic_i18n (~> 0.4)
+      inherited_resources (~> 1.7)
+      jquery-rails (~> 4.2)
+      kaminari (~> 1.0, >= 1.2.1)
+      railties (>= 6.0, < 7.1)
+      ransack (~> 2.1, >= 2.1.1)
     activejob (7.0.1)
       activesupport (= 7.0.1)
       globalid (>= 0.3.6)
@@ -135,6 +82,12 @@ GEM
     after_commit_everywhere (1.1.0)
       activerecord (>= 4.2)
       activesupport
+    annotate (3.2.0)
+      activerecord (>= 3.2, < 8.0)
+      rake (>= 10.4, < 14.0)
+    arbre (1.5.0)
+      activesupport (>= 3.0.0, < 7.1)
+      ruby2_keywords (>= 0.0.2, < 1.0)
     argon2-kdf (0.1.7)
     ast (2.4.2)
     aws-eventstream (1.2.0)
@@ -223,6 +176,14 @@ GEM
     cucumber-html-formatter (17.0.0)
       cucumber-messages (~> 17.1, >= 17.1.0)
     cucumber-messages (17.1.1)
+    cucumber-rails (2.5.0)
+      capybara (>= 2.18, < 4)
+      cucumber (>= 3.2, < 8)
+      mime-types (~> 3.3)
+      nokogiri (~> 1.10)
+      railties (>= 5.0, < 8)
+      rexml (~> 3.0)
+      webrick (~> 1.7)
     cucumber-tag-expressions (4.1.0)
     cucumber-wire (6.2.1)
       cucumber-core (~> 10.1, >= 10.1.0)
@@ -262,6 +223,11 @@ GEM
       domain_name (~> 0.5)
     i18n (1.9.1)
       concurrent-ruby (~> 1.0)
+    inherited_resources (1.13.1)
+      actionpack (>= 5.2, < 7.1)
+      has_scope (~> 0.6)
+      railties (>= 5.2, < 7.1)
+      responders (>= 2, < 4)
     io-wait (0.2.1)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
@@ -395,9 +361,9 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
-    ransack (2.5.0)
-      activerecord (>= 5.2.4)
-      activesupport (>= 5.2.4)
+    ransack (2.6.0)
+      activerecord (>= 6.0.4)
+      activesupport (>= 6.0.4)
       i18n
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
@@ -494,6 +460,7 @@ GEM
       unf_ext
     unf_ext (0.0.8)
     unicode-display_width (2.1.0)
+    vcr (6.1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     watir (7.1.0)
@@ -534,10 +501,9 @@ PLATFORMS
 
 DEPENDENCIES
   aasm (~> 5.2)
-  activeadmin!
+  activeadmin (~> 2.11)
   after_commit_everywhere (~> 1.1)
-  annotate!
-  arbre!
+  annotate (~> 3.2)
   aws-sdk-kms (~> 1.53)
   aws-sdk-rails (~> 3.6)
   blind_index (~> 2.3)
@@ -545,12 +511,11 @@ DEPENDENCIES
   byebug (~> 11.1)
   cancancan (~> 3.2)
   climate_control (~> 1.0)
-  cucumber-rails (~> 2.4)!
+  cucumber-rails (~> 2.5)
   database_cleaner (~> 2.0)
   demopass (~> 0.2)
   devise (~> 4.8)
   factory_bot (~> 6.2)
-  inherited_resources!
   jbuilder (~> 2.7)
   kms_encrypted (~> 1.4)
   launchy (~> 2.5)
@@ -577,7 +542,7 @@ DEPENDENCIES
   sidekiq (~> 6.4)
   spring (~> 4.0)
   stripe (~> 5.43)
-  vcr!
+  vcr (~> 6.1)
   watir (~> 7.1)
   web-console (>= 4.1.0)
   webdrivers (~> 5.0)
