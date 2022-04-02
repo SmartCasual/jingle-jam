@@ -8,7 +8,7 @@ class KeyManager
     # https://www.postgresql.org/docs/9.5/sql-select.html#SQL-FOR-UPDATE-SHARE
     Key.transaction do
       yield Key.lock("FOR UPDATE SKIP LOCKED").find_by(
-        game: game,
+        game:,
         bundle: nil,
       )
     end

@@ -20,12 +20,12 @@ class GameEntryKeyAssignmentJob < ApplicationJob
     donator = bundle.donator
     return unless donator
 
-    return if @key_manager.key_assigned?(game, bundle: bundle)
-    return unless @tier_checker.donation_level_met?(game_entry, donator: donator)
+    return if @key_manager.key_assigned?(game, bundle:)
+    return unless @tier_checker.donation_level_met?(game_entry, donator:)
 
     @key_manager.lock_unassigned_key(game) do |key|
       if key
-        key.update(bundle: bundle)
+        key.update(bundle:)
         NotificationsMailer.bundle_assigned(donator).deliver_now
       else
         PanicMailer.missing_key(donator, game).deliver_now

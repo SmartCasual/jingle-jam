@@ -27,7 +27,7 @@ class Donator < ApplicationRecord
 
   def assign_keys
     BundleDefinition.find_each do |bundle_definition|
-      bundle = bundles.find_or_create_by!(bundle_definition: bundle_definition)
+      bundle = bundles.find_or_create_by!(bundle_definition:)
       BundleKeyAssignmentJob.perform_later(bundle.id)
     end
   end
@@ -37,7 +37,7 @@ class Donator < ApplicationRecord
   end
 
   def hmac
-    @hmac ||= HMAC::Generator.new(context: "sessions").generate(id: id)
+    @hmac ||= HMAC::Generator.new(context: "sessions").generate(id:)
   end
 
   def display_name

@@ -19,11 +19,11 @@ class Payment < ApplicationRecord
 
   class << self
     def create_and_assign(amount:, currency:, stripe_payment_intent_id:)
-      unless (payment = Payment.find_by(stripe_payment_intent_id: stripe_payment_intent_id))
+      unless (payment = Payment.find_by(stripe_payment_intent_id:))
         payment = Payment.create!(
           amount_decimals: amount,
           amount_currency: currency,
-          stripe_payment_intent_id: stripe_payment_intent_id,
+          stripe_payment_intent_id:,
         )
       end
 

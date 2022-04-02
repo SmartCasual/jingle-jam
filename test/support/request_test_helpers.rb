@@ -16,7 +16,7 @@ module RequestTestHelpers
       headers: {
         "HTTP_STRIPE_SIGNATURE" => (signature || valid_signature(timestamp, payload, stripe_webhook_secret_key)),
       },
-      expect: expect,
+      expect:,
       as: :json,
     )
   end
@@ -25,9 +25,9 @@ module RequestTestHelpers
     session = ActionDispatch::Integration::Session.new(Rails.application)
 
     status = session.post(path,
-      params: params,
+      params:,
       headers: { "ACCEPT" => "application/json" }.merge(headers),
-      as: as,
+      as:,
     )
     expect(status).to eq(expect)
 

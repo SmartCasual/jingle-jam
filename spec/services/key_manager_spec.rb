@@ -9,21 +9,21 @@ RSpec.describe KeyManager do
   describe "#key_assigned?(game, bundle:)" do
     context "when the bundle has a key for the game" do
       before do
-        create(:key, game: game, bundle: bundle)
+        create(:key, game:, bundle:)
       end
 
       it "returns true" do
-        expect(key_manager.key_assigned?(game, bundle: bundle)).to eq(true)
+        expect(key_manager.key_assigned?(game, bundle:)).to eq(true)
       end
     end
 
     context "when the bundle does not have a key for the game" do
       before do
-        create(:key, game: game, bundle: nil)
+        create(:key, game:, bundle: nil)
       end
 
       it "returns true" do
-        expect(key_manager.key_assigned?(game, bundle: bundle)).to eq(false)
+        expect(key_manager.key_assigned?(game, bundle:)).to eq(false)
       end
     end
   end
@@ -35,7 +35,7 @@ RSpec.describe KeyManager do
 
     context "when there's no unassigned keys for the game" do
       before do
-        create(:key, game: game, bundle: bundle)
+        create(:key, game:, bundle:)
         create(:key)
       end
 
@@ -52,7 +52,7 @@ RSpec.describe KeyManager do
     end
 
     context "when there are unassigned keys for the game" do
-      let!(:unassigned_key) { create(:key, game: game, bundle: nil) }
+      let!(:unassigned_key) { create(:key, game:, bundle: nil) }
 
       it "opens a transaction" do
         key_manager.lock_unassigned_key(game)

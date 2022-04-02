@@ -50,9 +50,9 @@ module DonationTestHelpers
     timestamp = Time.zone.now.to_i
 
     simulate_stripe_webhook(
-      timestamp: timestamp,
+      timestamp:,
       payload: stripe_webhook_payload(
-        timestamp: timestamp,
+        timestamp:,
         event_type: event,
         object: stripe_payment_intent_object(
           payment_intent_id: donation.stripe_payment_intent_id,

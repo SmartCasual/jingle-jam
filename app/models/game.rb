@@ -25,7 +25,7 @@ class Game < ApplicationRecord
   def bulk_key_entry=(codes)
     requested_codes = codes.split("\n")
     existing_codes = keys.map(&:code)
-    new_codes = (requested_codes - existing_codes).map { |code| Key.new(code: code) }
+    new_codes = (requested_codes - existing_codes).map { |code| Key.new(code:) }
 
     self.keys += new_codes
   end

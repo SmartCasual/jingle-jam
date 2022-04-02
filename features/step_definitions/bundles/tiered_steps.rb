@@ -11,10 +11,10 @@ end
 
 Then("a key should be assigned for {string}") do |game_name|
   game = Game.find_by!(name: game_name)
-  expect(Key.assigned.where(game: game)).to exist
+  expect(Key.assigned.where(game:)).to exist
 end
 
 Then("a key should not be assigned for {string}") do |game_name|
   game = Game.find_by!(name: game_name)
-  expect(Key.assigned.where(game: game)).not_to exist
+  expect(Key.assigned.where(game:)).not_to exist
 end

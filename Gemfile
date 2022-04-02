@@ -27,11 +27,7 @@ gem "jbuilder", "~> 2.7"
 gem "bootsnap", "~> 1.10", require: false
 
 gem "aasm", "~> 5.2"
-
-gem "activeadmin", github: "tagliala/activeadmin", branch: "feature/railties-7" # FIXME: revert to stable
-gem "arbre", github: "activeadmin/arbre" # FIXME: remove
-gem "inherited_resources", github: "activeadmin/inherited_resources" # FIXME: remove
-
+gem "activeadmin", "~> 2.11"
 gem "after_commit_everywhere", "~> 1.1"
 gem "aws-sdk-kms", "~> 1.53" # AWS KMS support for `kms_encrypted`
 gem "aws-sdk-rails", "~> 3.6"
@@ -70,21 +66,19 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring", "~> 4.0"
 
-  gem "annotate", github: "dabit/annotate_models", branch: "rails-7" # FIXME: revert to stable
+  gem "annotate", "~> 3.2"
   gem "mechanize", "~> 2.8"
 end
 
 group :test do
   gem "climate_control", "~> 1.0"
-  gem "cucumber-rails", "~> 2.4", # FIXME: revert to stable
-    require: false,
-    github: "cucumber/cucumber-rails", ref: "4919c18b89dcb476a908b667a3ee85ccafe7d249"
+  gem "cucumber-rails", "~> 2.5", require: false
   gem "database_cleaner", "~> 2.0"
   gem "factory_bot", "~> 6.2"
   gem "launchy", "~> 2.5"
   gem "rspec-rails", "~> 5.0"
   gem "selenium-webdriver", "~> 4.1"
-  gem "vcr", github: "vcr/vcr" # FIXME: revert to stable
+  gem "vcr", "~> 6.1"
   gem "webdrivers", "~> 5.0", require: false
   gem "webmock", "~> 3.14"
 end

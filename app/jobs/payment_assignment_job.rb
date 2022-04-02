@@ -11,7 +11,7 @@ class PaymentAssignmentJob < ApplicationJob
       return
     end
 
-    payment.update(donation: donation) unless payment.donation == donation
+    payment.update(donation:) unless payment.donation == donation
 
     if donation.pending?
       donation.confirm_payment!

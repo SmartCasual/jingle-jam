@@ -18,7 +18,7 @@ module Admin::NavigationHelpers
   end
 
   def go_to_admin_game(game, edit: false)
-    go_to_admin_record(game, within: "Games", edit: edit)
+    go_to_admin_record(game, within: "Games", edit:)
   end
 
   def go_to_game_csv_upload(game)
@@ -29,7 +29,7 @@ module Admin::NavigationHelpers
   end
 
   def go_to_admin_bundle_definition(bundle_definition, edit: false)
-    go_to_admin_record(bundle_definition, within: "Bundle Definitions", edit: edit)
+    go_to_admin_record(bundle_definition, within: "Bundle Definitions", edit:)
   end
 
   def go_to_admin_users
@@ -37,7 +37,7 @@ module Admin::NavigationHelpers
   end
 
   def go_to_admin_user(admin_user, edit: false)
-    go_to_admin_record(admin_user, within: "Admin Users", edit: edit)
+    go_to_admin_record(admin_user, within: "Admin Users", edit:)
   end
 
   def go_to_admin_record(record, within:, edit:)
