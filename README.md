@@ -4,9 +4,9 @@
 
 You will need:
 
-* Ruby 2.7.x (see `.ruby-version`)
-* Node 14.x
-* PostgreSQL 9.3 or above
+* Ruby 3.1.x (see `.ruby-version`)
+* Node 17.x
+* PostgreSQL 13.5 or above
 * [Yarn](https://yarnpkg.com/getting-started/install)
 
 We recommend the use of [rbenv](https://github.com/rbenv/rbenv) and [nvm](https://github.com/nvm-sh/nvm) to manage ruby and node versions.
