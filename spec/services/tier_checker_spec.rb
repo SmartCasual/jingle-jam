@@ -23,7 +23,7 @@ RSpec.describe TierChecker do
         end
 
         it "returns false" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to eq(false)
+          expect(tier_checker.donation_level_met?(tier, donator:)).to be(false)
         end
       end
 
@@ -36,7 +36,7 @@ RSpec.describe TierChecker do
         end
 
         it "returns true" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to eq(true)
+          expect(tier_checker.donation_level_met?(tier, donator:)).to be(true)
         end
       end
 
@@ -49,7 +49,7 @@ RSpec.describe TierChecker do
         end
 
         it "returns true" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to eq(true)
+          expect(tier_checker.donation_level_met?(tier, donator:)).to be(true)
         end
       end
     end
@@ -69,7 +69,7 @@ RSpec.describe TierChecker do
         end
 
         it "returns false" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to eq(false)
+          expect(tier_checker.donation_level_met?(tier, donator:)).to be(false)
         end
       end
 
@@ -82,7 +82,7 @@ RSpec.describe TierChecker do
         end
 
         it "returns true" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to eq(true)
+          expect(tier_checker.donation_level_met?(tier, donator:)).to be(true)
         end
       end
 
@@ -95,7 +95,7 @@ RSpec.describe TierChecker do
         end
 
         it "returns true" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to eq(true)
+          expect(tier_checker.donation_level_met?(tier, donator:)).to be(true)
         end
       end
     end
@@ -115,7 +115,7 @@ RSpec.describe TierChecker do
         end
 
         it "returns false" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to eq(false)
+          expect(tier_checker.donation_level_met?(tier, donator:)).to be(false)
         end
       end
 
@@ -128,7 +128,7 @@ RSpec.describe TierChecker do
         end
 
         it "returns true" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to eq(true)
+          expect(tier_checker.donation_level_met?(tier, donator:)).to be(true)
         end
       end
 
@@ -141,7 +141,7 @@ RSpec.describe TierChecker do
         end
 
         it "returns true" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to eq(true)
+          expect(tier_checker.donation_level_met?(tier, donator:)).to be(true)
         end
       end
     end
