@@ -32,6 +32,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
     bundle.donator.donations.create(
       amount_decimals: bundle.bundle_definition.price_decimals,
       amount_currency: bundle.bundle_definition.price_currency,
+      stripe_payment_intent_id: "pi_123456789",
     )
 
     allow(key_manager).to receive(:key_assigned?)

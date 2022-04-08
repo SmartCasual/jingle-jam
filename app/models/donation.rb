@@ -16,6 +16,7 @@
 # **`curated_streamer_id`**       | `bigint`           |
 # **`donated_by_id`**             | `bigint`           |
 # **`donator_id`**                | `bigint`           | `not null`
+# **`paypal_order_id`**           | `string`           |
 # **`stripe_payment_intent_id`**  | `string`           |
 #
 class Donation < ApplicationRecord

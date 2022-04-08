@@ -65,7 +65,7 @@ en:
       currency: "Currency"
       amount: "Amount"
       message: "Message (optional)"
-      action: "Donate"
+      action: "Card payment"
       lock: "Lock slider"
       error:
         split_calculation: "Your donation split doesn't add up to your total donation amount."

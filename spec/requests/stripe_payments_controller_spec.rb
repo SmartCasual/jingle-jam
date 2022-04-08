@@ -2,7 +2,7 @@ require "rails_helper"
 
 require_relative "../../test/support/request_test_helpers"
 
-RSpec.describe StripeController, type: :request do
+RSpec.describe StripePaymentsController, type: :request do
   include RequestTestHelpers
 
   describe "#prep_checkout_session" do

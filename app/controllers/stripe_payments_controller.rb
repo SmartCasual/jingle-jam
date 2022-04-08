@@ -1,20 +1,9 @@
-class StripeController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: :webhook
-
+class StripePaymentsController < PaymentsController
   def prep_checkout_session
-    save_donator_if_needed
-
-    donation = Donation.new(donation_params.merge(donator: current_donator))
-
-    if donation.valid?
+    super do |donation|
       stripe_session = create_stripe_session(donation)
       donation.stripe_payment_intent_id = stripe_session.payment_intent
-    end
-
-    if donation.save
-      render json: { id: stripe_session.id }
-    else
-      error donation.errors.full_messages.to_sentence
+      stripe_session.id
     end
   end
 
@@ -44,21 +33,6 @@ class StripeController < ApplicationController
 
 private
 
-  def donation_params
-    params.require(:donation)
-      .except(:manual, :lock)
-      .permit(
-        :amount,
-        :amount_currency,
-        :curated_streamer_id,
-        :message,
-        charity_splits_attributes: %i[
-          amount_decimals
-          charity_id
-        ],
-      )
-  end
-
   def create_stripe_session(donation)
     Stripe::Checkout::Session.create(
       payment_method_types: ["card"],
@@ -66,7 +40,7 @@ private
         price_data: {
           currency: donation.amount.currency.iso_code,
           product_data: {
-            name: "JingleJam donation",
+            name: "Jingle Jam donation",
           },
           unit_amount: donation.amount.cents,
         },
@@ -78,11 +52,5 @@ private
       cancel_url: donations_url(streamer: donation.curated_streamer&.twitch_username, status: "cancelled"),
       customer: current_donator.stripe_customer_id,
     )
-  end
-
-  def save_donator_if_needed
-    if current_donator.new_record?
-      current_donator.save && session[:donator_id] = current_donator.id
-    end
   end
 end

@@ -224,6 +224,8 @@ Style/BlockComments:
     - spec/**/*
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
+  Exclude:
+    - lib/**/*
 Style/Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:
@@ -316,3 +318,5 @@ Naming/VariableNumber:
 Metrics/ModuleLength:
   Exclude:
     - test/**/*
+RSpec/SubjectStub:
+  Enabled: false

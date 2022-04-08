@@ -23,8 +23,12 @@ Rails.application.routes.draw do
     get "/streams/:twitch_username/admin", to: "curated_streamers#admin", as: "curated_streamer_admin"
   end
 
-  post "/stripe/prep-checkout", to: "stripe#prep_checkout_session"
-  post "/stripe/webhook", to: "stripe#webhook"
+  post "/stripe/prep-checkout", to: "stripe_payments#prep_checkout_session"
+  post "/stripe/webhook", to: "stripe_payments#webhook"
+
+  post "/paypal/prep-checkout", to: "paypal_payments#prep_checkout_session"
+  post "/paypal/complete-checkout/:order_id", to: "paypal_payments#complete_checkout"
+  post "/paypal/webhook", to: "paypal_payments#webhook"
 
   get "/magic-redirect/:donator_id/:hmac", to: "sessions#magic_redirect", as: "magic_redirect"
   post "/logout", to: "sessions#logout"

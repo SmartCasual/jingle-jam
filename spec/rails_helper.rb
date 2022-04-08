@@ -3,6 +3,7 @@ require "spec_helper"
 
 ENV["RAILS_ENV"] ||= "test"
 ENV["OTP_ISSUER"] = "Jingle Jam (test)"
+ENV["PAYPAL_API_ENDPOINT"] = "https://api.paypal.example.com"
 
 require File.expand_path("../config/environment", __dir__)
 # Prevent database truncation if the environment is production
@@ -83,7 +84,10 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.before { ActionMailer::Base.deliveries.clear }
+  config.before do
+    ActionMailer::Base.deliveries.clear
+    Paypal::API.reset_connection
+  end
 
   config.include FactoryBot::Syntax::Methods
 end
