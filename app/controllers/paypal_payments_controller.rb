@@ -38,7 +38,7 @@ class PaypalPaymentsController < PaymentsController
     head :ok
   rescue JSON::ParserError
     head :unprocessable_entity
-  rescue WebhookEventVerificationFailed
+  rescue Paypal::WebhookEventVerificationFailed
     head :unauthorized
   end
 
