@@ -26,7 +26,7 @@ module DonationTestHelpers
 
     if submit
       donation_count = Donation.count
-      click_on "Donate"
+      click_on "Card payment"
       wait_for(Donation, :count, (donation_count + 1))
       simulate_stripe_payment_webhook(Donation.last)
       refresh

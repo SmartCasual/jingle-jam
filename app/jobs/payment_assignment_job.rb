@@ -1,9 +1,15 @@
 class PaymentAssignmentJob < ApplicationJob
   queue_as :default
 
-  def perform(payment_id)
+  def perform(payment_id, provider:)
     payment = Payment.find(payment_id)
-    donation = Donation.find_by(stripe_payment_intent_id: payment.stripe_payment_intent_id)
+
+    donation = case provider
+    when :stripe
+      Donation.find_by(stripe_payment_intent_id: payment.stripe_payment_intent_id)
+    when :paypal
+      Donation.find_by(paypal_order_id: payment.paypal_order_id)
+    end
 
     if donation.nil?
       # Notify error tracking

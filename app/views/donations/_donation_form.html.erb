@@ -1,10 +1,59 @@
 <% content_for :head do %>
   <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=<%= ENV['PAYPAL_CLIENT_ID'] %>&currency=GBP&integration-date=2022-04-08&disable-funding=card"></script>
   <script type="text/javascript">
     onReady(function() {
+      let csrfToken = null;
+      const csrfElement = document.querySelector("[name='csrf-token']")
+      if (csrfElement) {
+        csrfToken = csrfElement.content;
+      }
+
+      const form = document.getElementById("donation-form");
+
+      paypal.Buttons({
+        createOrder: (data, actions) => {
+          return fetch("/paypal/prep-checkout", {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken,
+            },
+            body: JSON.stringify({
+              donation: {
+                amount: form.querySelector("[name='donation[amount]']").value,
+                amount_currency: form.querySelector("[name='donation[amount_currency]']").value,
+                message: form.querySelector("[name='donation[message]']").value,
+                curated_streamer_id: form.querySelector("[name='donation[curated_streamer_id]']").value,
+              },
+            }),
+          })
+          .then((response) => response.json())
+          .then((order) => order.id);
+        },
+        // Finalize the transaction on the server after payer approval
+        onApprove: (data, actions) => {
+          return fetch(`/paypal/complete-checkout/${data.orderID}`, {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken,
+            },
+          })
+          .then((response) => response.json())
+          .then((orderData) => {
+            location.reload();
+          });
+        },
+        style: {
+          color: "silver",
+          tagline: false,
+        },
+      }).render("#paypal-donate-button");
+
       Packs.application.addStripeToForm(document.getElementById('donation-form'));
       Packs.application.enableCharitySplit(document.getElementsByClassName('charity-split')[0]);
-    })
+    });
   </script>
 <% end %>
 
@@ -50,4 +99,7 @@
   </div>
 
   <button id="stripe-donate"><%= t("donations.form.action") %></button>
+  <div id="paypal-donate-button-container">
+    <div id="paypal-donate-button"></div>
+  </div>
 <% end %>

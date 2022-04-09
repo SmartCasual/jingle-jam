@@ -22,6 +22,11 @@ jobs:
       CI: true
       FROM_EMAIL_ADDRESS: "jingle-jam@example.com"
       HMAC_SECRET: "c360bcae-df63-4616-808a-860f03d7da6b"
+      PAYPAL_API_ENDPOINT: "https://api.paypal.example.com"
+      PAYPAL_CLIENT_ID: "AakBwrFPLdPU4-oKX939jxpGlL-0_J9E10z1dSapKjp2G-o8pte9OjKw8bBlQEHKbyFWU9WqAdTMgupz"
+      PAYPAL_EMAIL_ADDRESS: "abcde@example.com"
+      PAYPAL_MERCHANT_ID: "abcde"
+      PAYPAL_WEBHOOK_ID: "abcde"
       PGHOST: 127.0.0.1
       PGPASSWORD: ""
       PGUSER: circleci

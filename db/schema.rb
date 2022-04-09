@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_14_122232) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_02_13_171923) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,8 +21,8 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
     t.bigint "resource_id"
     t.string "author_type"
     t.bigint "author_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
@@ -33,12 +32,12 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: 6
-    t.datetime "remember_created_at", precision: 6
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "otp_secret"
-    t.datetime "last_otp_at", precision: 6
+    t.datetime "last_otp_at"
     t.boolean "data_entry", default: false, null: false
     t.boolean "support", default: false, null: false
     t.boolean "manages_users", default: false, null: false
@@ -53,8 +52,8 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
     t.bigint "game_id", null: false
     t.integer "price_decimals"
     t.string "price_currency"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["bundle_definition_id"], name: "index_bundle_definition_game_entries_on_bundle_definition_id"
     t.index ["game_id"], name: "index_bundle_definition_game_entries_on_game_id"
   end
@@ -63,14 +62,14 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
     t.string "name", null: false
     t.integer "price_decimals", default: 0, null: false
     t.string "price_currency", default: "GBP", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "bundles", force: :cascade do |t|
     t.bigint "donator_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "bundle_definition_id", null: false
     t.index ["bundle_definition_id"], name: "index_bundles_on_bundle_definition_id"
     t.index ["donator_id"], name: "index_bundles_on_donator_id"
@@ -79,8 +78,8 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
   create_table "charities", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_charities_on_name"
   end
 
@@ -89,8 +88,8 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
     t.bigint "charity_id"
     t.string "amount_currency", default: "GBP", null: false
     t.integer "amount_decimals", default: 0, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["charity_id"], name: "index_charity_splits_on_charity_id"
     t.index ["donation_id"], name: "index_charity_splits_on_donation_id"
   end
@@ -98,8 +97,8 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
   create_table "curated_streamer_administrators", force: :cascade do |t|
     t.bigint "curated_streamer_id", null: false
     t.bigint "donator_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["curated_streamer_id", "donator_id"], name: "ref_index", unique: true
     t.index ["curated_streamer_id"], name: "index_curated_streamer_administrators_on_curated_streamer_id"
     t.index ["donator_id"], name: "index_curated_streamer_administrators_on_donator_id"
@@ -107,8 +106,8 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
 
   create_table "curated_streamers", force: :cascade do |t|
     t.string "twitch_username", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["twitch_username"], name: "index_curated_streamers_on_twitch_username"
   end
 
@@ -118,20 +117,22 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
     t.string "message"
     t.bigint "donator_id", null: false
     t.bigint "donated_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "aasm_state", default: "pending", null: false
     t.bigint "curated_streamer_id"
     t.string "stripe_payment_intent_id"
+    t.string "paypal_order_id"
     t.index ["curated_streamer_id"], name: "index_donations_on_curated_streamer_id"
     t.index ["donated_by_id"], name: "index_donations_on_donated_by_id"
     t.index ["donator_id"], name: "index_donations_on_donator_id"
+    t.check_constraint "num_nonnulls(stripe_payment_intent_id, paypal_order_id) > 0"
   end
 
   create_table "donators", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "email_address"
     t.string "chosen_name"
     t.string "stripe_customer_id"
@@ -139,16 +140,16 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
 
   create_table "games", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.text "description"
   end
 
   create_table "keys", force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "bundle_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.text "code_ciphertext"
     t.text "encrypted_kms_key"
     t.string "code_bidx"
@@ -162,10 +163,12 @@ ActiveRecord::Schema.define(version: 2021_08_14_122232) do
     t.string "amount_currency", default: "GBP", null: false
     t.integer "amount_decimals", default: 0, null: false
     t.bigint "donation_id"
-    t.string "stripe_payment_intent_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.string "stripe_payment_intent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "paypal_order_id"
     t.index ["donation_id"], name: "index_payments_on_donation_id"
+    t.check_constraint "num_nonnulls(stripe_payment_intent_id, paypal_order_id) > 0"
   end
 
 end

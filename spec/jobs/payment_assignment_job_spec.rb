@@ -22,22 +22,22 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
   let(:payment_id) { payment.id }
 
   it "links the payment and the donation" do
-    job.perform(payment_id)
+    job.perform(payment_id, provider: :stripe)
     expect(payment.reload.donation).to eq(donation)
   end
 
   it "marks the donation as paid" do
-    job.perform(payment_id)
+    job.perform(payment_id, provider: :stripe)
     expect(donation.reload).to be_paid
   end
 
   it "triggers a bundle check job for the donator" do
-    job.perform(payment_id)
+    job.perform(payment_id, provider: :stripe)
     expect(BundleCheckJob).to have_been_enqueued.with(donator.id)
   end
 
   it "notifies the donator" do
-    job.perform(payment_id)
+    job.perform(payment_id, provider: :stripe)
     expect(ActionMailer::MailDeliveryJob).to have_been_enqueued
   end
 
@@ -46,7 +46,7 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
 
     it "errors and does nothing" do
       expect {
-        job.perform(payment_id)
+        job.perform(payment_id, provider: :stripe)
       }.to raise_error(ActiveRecord::RecordNotFound)
 
       expect(BundleCheckJob).not_to have_been_enqueued
@@ -60,7 +60,7 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
     end
 
     it "reports the error and does nothing" do
-      job.perform(payment_id)
+      job.perform(payment_id, provider: :stripe)
       # TODO: Check for error tracking report
 
       expect(BundleCheckJob).not_to have_been_enqueued
@@ -74,22 +74,22 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
     end
 
     it "remains linked to the payment" do
-      job.perform(payment_id)
+      job.perform(payment_id, provider: :stripe)
       expect(payment.reload.donation).to eq(donation)
     end
 
     it "marks the donation as paid" do
-      job.perform(payment_id)
+      job.perform(payment_id, provider: :stripe)
       expect(donation.reload).to be_paid
     end
 
     it "triggers a bundle check job for the donator" do
-      job.perform(payment_id)
+      job.perform(payment_id, provider: :stripe)
       expect(BundleCheckJob).to have_been_enqueued.with(donator.id)
     end
 
     it "notifies the donator" do
-      job.perform(payment_id)
+      job.perform(payment_id, provider: :stripe)
       expect(ActionMailer::MailDeliveryJob).to have_been_enqueued
     end
   end
@@ -100,22 +100,22 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
     end
 
     it "remains marked as paid" do
-      job.perform(payment_id)
+      job.perform(payment_id, provider: :stripe)
       expect(donation.reload).to be_paid
     end
 
     it "links the payment and the donation" do
-      job.perform(payment_id)
+      job.perform(payment_id, provider: :stripe)
       expect(payment.reload.donation).to eq(donation)
     end
 
     it "does not trigger a bundle check job for the donator" do
-      job.perform(payment_id)
+      job.perform(payment_id, provider: :stripe)
       expect(BundleCheckJob).not_to have_been_enqueued
     end
 
     it "does not notify the donator" do
-      job.perform(payment_id)
+      job.perform(payment_id, provider: :stripe)
       expect(ActionMailer::MailDeliveryJob).not_to have_been_enqueued
     end
   end

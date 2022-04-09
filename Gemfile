@@ -12,7 +12,7 @@ gem "puma", "~> 5.6"
 # Use SCSS for stylesheets
 gem "sass-rails", ">= 6"
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem "webpacker", "~> 5.0"
+gem "webpacker", "~> 5.4"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder", "~> 2.7"
 # Use Redis adapter to run Action Cable in production
@@ -35,6 +35,8 @@ gem "blind_index", "~> 2.3" # Encrypted query support for `lockbox`
 gem "cancancan", "~> 3.2"
 gem "demopass", "~> 0.2"
 gem "devise", "~> 4.8"
+gem "faraday", "~> 2.2"
+gem "faraday-retry", "~> 1.0"
 gem "kms_encrypted", "~> 1.4" # KMS support for `lockbox`
 gem "lockbox", "~> 0.6" # Game key encryption
 gem "monetize", "~> 1.12"

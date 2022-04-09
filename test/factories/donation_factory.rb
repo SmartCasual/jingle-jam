@@ -5,6 +5,7 @@ FactoryBot.define do
     donator
     amount { Money.new(25_000) }
     message { "Some standard message" }
+    stripe_payment_intent_id { "stripe_payment_intent_id" }
 
     transient do
       charity_split { {} }
