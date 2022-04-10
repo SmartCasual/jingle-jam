@@ -48,11 +48,14 @@ class BundleDefinition < ApplicationRecord
       yield
       @without_assignments = previous
     end
+
+    def without_assignments?
+      !!@without_assignments
+    end
   end
 
   def update_assignments(force: false)
-    return if @without_assignments
-    return if draft? unless force
+    return if self.class.without_assignments? || (draft? && !force)
 
     bundles.each do |bundle|
       BundleKeyAssignmentJob.perform_later(bundle.id)

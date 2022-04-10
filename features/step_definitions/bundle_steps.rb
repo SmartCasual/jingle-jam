@@ -1,5 +1,5 @@
 Given("a bundle with the following games:") do |table|
-  @current_bundle_definition = FactoryBot.create(:bundle_definition, :empty)
+  @current_bundle_definition = FactoryBot.create(:bundle_definition, :empty, :live)
   @current_bundle_definition.bundle_definition_game_entries = table.symbolic_hashes.map { |hash|
     FactoryBot.create(:bundle_definition_game_entry,
       game: FactoryBot.create(:game, name: hash[:game], description: hash[:description]),

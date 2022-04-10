@@ -64,8 +64,14 @@ ActiveAdmin.register BundleDefinition do
     column("State", :aasm_state) { |bd| bd.aasm_state.humanize }
 
     actions do |bundle_definition|
-      item "Publish", publish_admin_bundle_definition_path(bundle_definition), method: :post, data: { confirm: "Make bundle live?" } if bundle_definition.draft?
-      item "Retract", retract_admin_bundle_definition_path(bundle_definition), method: :post, data: { confirm: "Retract bundle?" } if bundle_definition.live?
+      if bundle_definition.draft?
+        item "Publish", publish_admin_bundle_definition_path(bundle_definition), method: :post,
+                                                                                 data: { confirm: "Make bundle live?" }
+      end
+      if bundle_definition.live?
+        item "Retract", retract_admin_bundle_definition_path(bundle_definition), method: :post,
+                                                                                 data: { confirm: "Retract bundle?" }
+      end
     end
   end
 
@@ -82,7 +88,7 @@ ActiveAdmin.register BundleDefinition do
   controller do
     before_action :prevent_edit, only: [:edit]
 
-    private
+  private
 
     def prevent_edit
       redirect_to admin_bundle_definitions_path, alert: "Bundle definitions cannot be edited" if resource.live?

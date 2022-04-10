@@ -1,5 +1,5 @@
 Given("a tiered bundle priced at {amount} with the following tiers:") do |amount, table|
-  @current_bundle_definition = FactoryBot.create(:bundle_definition, :empty, price: amount)
+  @current_bundle_definition = FactoryBot.create(:bundle_definition, :empty, :live, price: amount)
   @current_bundle_definition.bundle_definition_game_entries = table.symbolic_hashes.map { |hash|
     FactoryBot.create(:bundle_definition_game_entry,
       game: FactoryBot.create(:game, :with_keys, name: hash[:game]),

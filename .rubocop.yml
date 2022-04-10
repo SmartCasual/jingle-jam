@@ -207,6 +207,8 @@ Rails/I18nLazyLookup: # new in 2.14
   Enabled: true
 Rails/I18nLocaleTexts: # new in 2.14
   Enabled: true
+  Exclude:
+    - app/admin/**/*
 Rails/MigrationClassName: # new in 2.14
   Enabled: true
 Rails/TransactionExitStatement: # new in 2.14

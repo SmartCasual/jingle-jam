@@ -20,15 +20,15 @@ RSpec.describe BundleDefinition, type: :model do
 
       context "when forced" do
         it "updates the bundle key assignments" do
-          expect(BundleKeyAssignmentJob).to receive(:perform_later).with(bundle.id)
           bundle_definition.update_assignments(force: true)
+          expect(BundleKeyAssignmentJob).to have_received(:perform_later).with(bundle.id)
         end
       end
 
       context "when not forced" do
         it "does not update the bundle key assignments" do
-          expect(BundleKeyAssignmentJob).not_to receive(:perform_later)
           bundle_definition.update_assignments
+          expect(BundleKeyAssignmentJob).not_to have_received(:perform_later)
         end
       end
     end
@@ -37,11 +37,15 @@ RSpec.describe BundleDefinition, type: :model do
       let(:bundle) { create(:bundle) }
       let(:bundle_definition) { bundle.bundle_definition }
 
-      before { bundle_definition.publish! }
+      before do
+        described_class.without_assignments do
+          bundle_definition.publish!
+        end
+      end
 
       it "updates the bundle key assignments" do
-        expect(BundleKeyAssignmentJob).to receive(:perform_later).with(bundle.id)
         bundle_definition.update_assignments
+        expect(BundleKeyAssignmentJob).to have_received(:perform_later).with(bundle.id)
       end
     end
   end
