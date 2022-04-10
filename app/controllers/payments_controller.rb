@@ -5,7 +5,7 @@ class PaymentsController < ApplicationController
   def prep_checkout_session
     save_donator_if_needed
 
-    donation = Donation.new(donation_params.merge(donator: current_donator))
+    donation = build_donation
 
     if donation.valid?
       id = yield donation
@@ -23,6 +23,17 @@ class PaymentsController < ApplicationController
   end
 
 private
+
+  def build_donation
+    Donation.new(donation_params).tap do |donation|
+      on_behalf_of = if params[:on_behalf_of].present?
+        Donator.find_by(email_address: params[:on_behalf_of])
+      end
+
+      donation.donator = on_behalf_of || current_donator
+      donation.donated_by = current_donator if on_behalf_of.present?
+    end
+  end
 
   def donation_params
     params.require(:donation)

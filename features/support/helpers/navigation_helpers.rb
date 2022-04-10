@@ -3,6 +3,10 @@ module NavigationHelpers
     go_to_if_not_at("/")
   end
 
+  def go_to_donations
+    go_to_if_not_at(donations_path)
+  end
+
   def go_to_game_keys
     go_to_if_not_at(keys_path)
   end

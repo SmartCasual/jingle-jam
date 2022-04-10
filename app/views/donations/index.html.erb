@@ -16,4 +16,9 @@
   <%= render "list", donations: @donations %>
 <% end %>
 
+<% if @gifted_donations.any? %>
+  <h2><%= t("donations.gifted_list.header") %></h2>
+  <%= render "gifted_list", donations: @gifted_donations %>
+<% end %>
+
 <%= render "donation_form" %>

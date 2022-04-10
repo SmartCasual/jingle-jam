@@ -322,3 +322,6 @@ Metrics/ModuleLength:
     - test/**/*
 RSpec/SubjectStub:
   Enabled: false
+Metrics/ParameterLists:
+  Exclude:
+    - features/support/helpers/**/*

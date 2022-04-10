@@ -4,7 +4,7 @@
       <th><%= t("donations.list.table.headers.amount") %></th>
       <th><%= t("donations.list.table.headers.status") %></th>
       <th><%= t("donations.list.table.headers.message") %></th>
-      <th><%= t("donations.list.table.headers.donated_by") %></th>
+      <th><%= t("donations.list.table.headers.on_behalf_of") %></th>
     </tr>
   </thead>
   <tbody>
@@ -18,7 +18,7 @@
         </td>
         <td><%= donation.state.humanize %></td>
         <td><%= donation.message %></td>
-        <td><%= (donation.donated_by || donation.donator).display_name(current_donator:) %></td>
+        <td><%= donation.donator.display_name(current_donator:) %></td>
       </tr>
     <% end %>
   </tbody>
