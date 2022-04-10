@@ -40,6 +40,7 @@ en:
       donate_here: "Donate here!"
       log_out: "Log out"
     abstract:
+      anonymous: "Anonymous"
       you: "You"
 
   # Site navigation
@@ -61,23 +62,32 @@ en:
     total:
       header: "Donation total"
     form:
-      header: "Make a donation"
-      currency: "Currency"
-      amount: "Amount"
-      message: "Message (optional)"
       action: "Card payment"
+      amount: "Amount"
+      currency: "Currency"
+      header: "Make a donation"
       lock: "Lock slider"
+      message: "Message (optional)"
+      on_behalf_of: "On behalf of"
       error:
         split_calculation: "Your donation split doesn't add up to your total donation amount."
         correct_and_try_again: "Please correct this and try again."
+    gifted_list:
+      header: "Gifted donations"
+      table:
+        headers:
+          amount: "Amount"
+          message: "Message"
+          on_behalf_of: "On behalf of"
+          status: "Status"
     list:
       header: "Current donations"
       table:
         headers:
           amount: "Amount"
-          status: "Status"
-          message: "Message"
           donated_by: "Donated by"
+          message: "Message"
+          status: "Status"
     admin:
       streamer:
         header: "%{streamer} admin"

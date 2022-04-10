@@ -25,6 +25,7 @@
                 amount_currency: form.querySelector("[name='donation[amount_currency]']").value,
                 message: form.querySelector("[name='donation[message]']").value,
                 curated_streamer_id: form.querySelector("[name='donation[curated_streamer_id]']").value,
+                on_behalf_of: form.querySelector("[name='on_behalf_of']").value,
               },
             }),
           })
@@ -89,6 +90,11 @@
   <p>
     <%= form.label :message, t("donations.form.message") %>
     <%= form.text_field :message %>
+  </p>
+
+  <p>
+    <%= label_tag :on_behalf_of, t("donations.form.on_behalf_of") %>
+    <%= text_field_tag :on_behalf_of %>
   </p>
 
   <%= form.hidden_field :curated_streamer_id %>

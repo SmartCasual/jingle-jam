@@ -21,7 +21,7 @@
 #
 class Donation < ApplicationRecord
   belongs_to :donator, inverse_of: :donations
-  belongs_to :donated_by, inverse_of: :donations, optional: true, class_name: "Donator"
+  belongs_to :donated_by, inverse_of: :gifted_donations, optional: true, class_name: "Donator"
   belongs_to :curated_streamer, inverse_of: :donations, optional: true
 
   has_many :payments, inverse_of: :donation, dependent: :nullify

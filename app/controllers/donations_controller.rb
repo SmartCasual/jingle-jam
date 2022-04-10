@@ -9,6 +9,7 @@ class DonationsController < ApplicationController
 
   def index
     @donations = get_donations.order(created_at: :desc)
+    @gifted_donations = get_donations(gifted: true).order(created_at: :desc)
 
     if current_donator.persisted?
       @magic_url = magic_redirect_url(donator_id: current_donator.id, hmac: current_donator.hmac)
@@ -17,10 +18,14 @@ class DonationsController < ApplicationController
 
 private
 
-  def get_donations
+  def get_donations(gifted: false)
     return unless known_user?
 
-    current_donator.donations
+    if gifted
+      current_donator.gifted_donations
+    else
+      current_donator.donations
+    end
   end
 
   def set_flash
