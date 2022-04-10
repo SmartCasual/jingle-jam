@@ -84,8 +84,10 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  require "paypal/api"
   config.before do
     ActionMailer::Base.deliveries.clear
+
     Paypal::API.reset_connection
   end
 
