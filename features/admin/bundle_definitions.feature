@@ -38,6 +38,16 @@ Scenario: Deleting a bundle definition
   When an admin deletes the bundle definition
   Then the bundle definition shouldn't appear on the admin bundle definitions list
 
+Scenario: Publishing a draft bundle definition
+  Given a draft bundle definition
+  When an admin publishes the bundle definition
+  Then the bundle definition should appear on the admin bundle definitions list as live
+
+Scenario: Retracting a live bundle definition
+  Given a live bundle definition
+  When an admin retracts the bundle definition
+  Then the bundle definition should appear on the admin bundle definitions list as draft
+
 @anonymous
 Scenario: Anonymous user cannot access this area
   When the user goes to the admin bundle definitions area

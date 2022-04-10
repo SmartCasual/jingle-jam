@@ -53,4 +53,29 @@ ActiveAdmin.register BundleDefinition do
 
     active_admin_comments
   end
+
+  index do
+    selectable_column
+
+    column :name
+    column :price do |bundle_definition|
+      bundle_definition.human_price(symbol: true)
+    end
+    column("State", :aasm_state) { |bd| bd.aasm_state.humanize }
+
+    actions do |bundle_definition|
+      item "Publish", publish_admin_bundle_definition_path(bundle_definition), method: :post, data: { confirm: "Make bundle live?" } if bundle_definition.draft?
+      item "Retract", retract_admin_bundle_definition_path(bundle_definition), method: :post, data: { confirm: "Retract bundle?" } if bundle_definition.live?
+    end
+  end
+
+  member_action :publish, method: :post do
+    resource.publish!
+    redirect_to admin_bundle_definitions_path, notice: "Bundle definition published"
+  end
+
+  member_action :retract, method: :post do
+    resource.retract!
+    redirect_to admin_bundle_definitions_path, notice: "Bundle definition retracted"
+  end
 end

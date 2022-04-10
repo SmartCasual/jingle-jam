@@ -28,6 +28,10 @@ Given("a bundle definition") do
   @current_bundle_definition = FactoryBot.create(:bundle_definition)
 end
 
+Given("a {word} bundle definition") do |state|
+  @current_bundle_definition = FactoryBot.create(:bundle_definition, state.to_sym)
+end
+
 Given("these games:") do |table|
   table.raw.each { |(name)| FactoryBot.create(:game, name:) }
 end
@@ -124,6 +128,28 @@ When("an admin deletes the bundle definition") do
   end
 end
 
+When("an admin publishes the bundle definition") do
+  go_to_admin_area "Bundle Definitions"
+  within "#bundle_definition_#{@current_bundle_definition.id}" do
+    accept_confirm do
+      click_on "Publish"
+    end
+  end
+end
+
+When("an admin retracts the bundle definition") do
+  go_to_admin_area "Bundle Definitions"
+  within "#bundle_definition_#{@current_bundle_definition.id}" do
+    accept_confirm do
+      click_on "Retract"
+    end
+  end
+end
+
 When("the user goes to the admin bundle definitions area") do
   visit admin_bundle_definitions_path
+end
+
+Then("the bundle definition should appear on the admin bundle definitions list as {word}") do |state|
+  expect(page).to have_css("#bundle_definition_#{@current_bundle_definition.id} .col-state", text: state.humanize)
 end
