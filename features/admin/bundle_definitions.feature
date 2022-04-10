@@ -48,6 +48,12 @@ Scenario: Retracting a live bundle definition
   When an admin retracts the bundle definition
   Then the bundle definition should appear on the admin bundle definitions list as draft
 
+Scenario: Attempting to edit a live bundle definition
+  Given a live bundle definition
+  Then the bundle definitions list should not have an edit link for that bundle definition
+  When an admin attempts to edit the bundle definition anyway
+  Then the admin should be redirected to the bundle definitions list
+
 @anonymous
 Scenario: Anonymous user cannot access this area
   When the user goes to the admin bundle definitions area

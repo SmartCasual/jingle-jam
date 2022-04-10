@@ -153,3 +153,16 @@ end
 Then("the bundle definition should appear on the admin bundle definitions list as {word}") do |state|
   expect(page).to have_css("#bundle_definition_#{@current_bundle_definition.id} .col-state", text: state.humanize)
 end
+
+Then("the bundle definitions list should not have an edit link for that bundle definition") do
+  visit admin_bundle_definitions_path
+  expect(page).not_to have_css("#bundle_definition_#{@current_bundle_definition.id} .col-edit")
+end
+
+When("an admin attempts to edit the bundle definition anyway") do
+  visit edit_admin_bundle_definition_path(@current_bundle_definition)
+end
+
+Then("the admin should be redirected to the bundle definitions list") do
+  expect(page).to have_css("h2", text: "Bundle Definitions")
+end

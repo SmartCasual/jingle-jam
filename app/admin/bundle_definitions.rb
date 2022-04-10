@@ -78,4 +78,14 @@ ActiveAdmin.register BundleDefinition do
     resource.retract!
     redirect_to admin_bundle_definitions_path, notice: "Bundle definition retracted"
   end
+
+  controller do
+    before_action :prevent_edit, only: [:edit]
+
+    private
+
+    def prevent_edit
+      redirect_to admin_bundle_definitions_path, alert: "Bundle definitions cannot be edited" if resource.live?
+    end
+  end
 end
