@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_13_171923) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_09_163825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,6 +64,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_171923) do
     t.string "price_currency", default: "GBP", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "aasm_state", default: "draft", null: false
   end
 
   create_table "bundles", force: :cascade do |t|

@@ -1,3 +1,5 @@
+require_relative "../support/aasm_factories"
+
 FactoryBot.define do
   factory :bundle_definition do
     sequence(:name) { |n| "Bundle definition #{n}" }
@@ -12,5 +14,7 @@ FactoryBot.define do
     trait :empty do
       bundle_definition_game_entries { [] }
     end
+
+    AASMFactories.init(self, BundleDefinition)
   end
 end
