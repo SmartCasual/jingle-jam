@@ -50,8 +50,9 @@ class BundleDefinition < ApplicationRecord
     end
   end
 
-  def update_assignments
+  def update_assignments(force: false)
     return if @without_assignments
+    return if draft? unless force
 
     bundles.each do |bundle|
       BundleKeyAssignmentJob.perform_later(bundle.id)
