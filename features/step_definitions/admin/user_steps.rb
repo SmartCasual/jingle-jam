@@ -6,7 +6,7 @@ When("an admin adds an admin user") do
 
   fill_in "Name", with: "An Admin"
   fill_in "Email", with: admin_user_email
-  fill_in "Password*", with: "password", exact: true
+  fill_in "Password", with: "password", exact: true
   fill_in "Password confirmation", with: "password"
 
   click_on "Create Admin user"
@@ -37,7 +37,7 @@ When("an admin edits the admin user") do
   go_to_admin_user(@created_admin_user, edit: true)
 
   fill_in "Name", with: (@new_name = SecureRandom.uuid)
-  fill_in "Password*", with: (@new_password = SecureRandom.uuid), exact: true
+  fill_in "Password", with: (@new_password = SecureRandom.uuid), exact: true
   fill_in "Password confirmation", with: @new_password
 
   click_on "Update Admin user"

@@ -325,3 +325,7 @@ RSpec/SubjectStub:
 Metrics/ParameterLists:
   Exclude:
     - features/support/helpers/**/*
+Layout/ArrayAlignment:
+  Enabled: false
+Layout/FirstArrayElementIndentation:
+  Enabled: false

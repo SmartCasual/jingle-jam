@@ -37,4 +37,16 @@ class AdminUser < ApplicationRecord
   def has_2sv?
     otp_secret.present?
   end
+
+  def permissions
+    if full_access?
+      ["full access"]
+    else
+      [].tap do |perms|
+        perms << "data entry" if data_entry?
+        perms << "manages users" if manages_users?
+        perms << "support" if support?
+      end
+    end
+  end
 end
