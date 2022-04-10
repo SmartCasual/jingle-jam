@@ -21,6 +21,8 @@ class Bundle < ApplicationRecord
   delegate :bundle_definition_game_entries, to: :bundle_definition
 
   def assign_keys
+    return unless bundle_definition.live?
+
     bundle_definition_game_entries.each do |game_entry|
       GameEntryKeyAssignmentJob.perform_later(game_entry.id, self.id)
     end

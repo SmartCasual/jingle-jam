@@ -26,7 +26,7 @@ class Donator < ApplicationRecord
   has_many :curated_streamers, through: :curated_streamer_administrators
 
   def assign_keys
-    BundleDefinition.find_each do |bundle_definition|
+    BundleDefinition.live.find_each do |bundle_definition|
       bundle = bundles.find_or_create_by!(bundle_definition:)
       BundleKeyAssignmentJob.perform_later(bundle.id)
     end

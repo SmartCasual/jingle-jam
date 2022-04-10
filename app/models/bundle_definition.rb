@@ -7,6 +7,7 @@
 # Name                  | Type               | Attributes
 # --------------------- | ------------------ | ---------------------------
 # **`id`**              | `bigint`           | `not null, primary key`
+# **`aasm_state`**      | `string`           | `default("draft"), not null`
 # **`name`**            | `string`           | `not null`
 # **`price_currency`**  | `string`           | `default("GBP"), not null`
 # **`price_decimals`**  | `integer`          | `default(0), not null`
@@ -14,6 +15,8 @@
 # **`updated_at`**      | `datetime`         | `not null`
 #
 class BundleDefinition < ApplicationRecord
+  include AASM
+
   monetize :price
 
   has_many :bundle_definition_game_entries, inverse_of: :bundle_definition, dependent: :destroy
@@ -25,6 +28,19 @@ class BundleDefinition < ApplicationRecord
 
   after_commit :update_assignments, on: [:update]
 
+  aasm do
+    state :draft, initial: true
+    state :live
+
+    event :publish do
+      transitions from: :draft, to: :live
+    end
+
+    event :retract do
+      transitions from: :live, to: :draft
+    end
+  end
+
   class << self
     def without_assignments
       previous = @without_assignments
@@ -32,10 +48,14 @@ class BundleDefinition < ApplicationRecord
       yield
       @without_assignments = previous
     end
+
+    def without_assignments?
+      !!@without_assignments
+    end
   end
 
-  def update_assignments
-    return if @without_assignments
+  def update_assignments(force: false)
+    return if self.class.without_assignments? || (draft? && !force)
 
     bundles.each do |bundle|
       BundleKeyAssignmentJob.perform_later(bundle.id)
