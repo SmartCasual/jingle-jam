@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_09_163825) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_11_152345) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -124,6 +124,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_09_163825) do
     t.bigint "curated_streamer_id"
     t.string "stripe_payment_intent_id"
     t.string "paypal_order_id"
+    t.string "donator_name"
     t.index ["curated_streamer_id"], name: "index_donations_on_curated_streamer_id"
     t.index ["donated_by_id"], name: "index_donations_on_donated_by_id"
     t.index ["donator_id"], name: "index_donations_on_donator_id"

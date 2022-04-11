@@ -18,7 +18,7 @@
         </td>
         <td><%= donation.state.humanize %></td>
         <td><%= donation.message %></td>
-        <td><%= (donation.donated_by || donation.donator).display_name(current_donator:) %></td>
+        <td><%= donation.donator_name.presence || (donation.donated_by || donation.donator).display_name(current_donator:) %></td>
       </tr>
     <% end %>
   </tbody>

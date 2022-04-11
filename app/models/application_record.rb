@@ -17,7 +17,7 @@ class ApplicationRecord < ActiveRecord::Base
       super("#{attribute}_decimals", **kwargs)
 
       define_method "human_#{attribute}=" do |value|
-        self.send("#{attribute}=", Monetize.parse(value, send(:price_currency)))
+        self.send("#{attribute}=", Monetize.parse(value, send("#{attribute}_currency")))
       end
 
       define_method("human_#{attribute}") do |symbol: false|

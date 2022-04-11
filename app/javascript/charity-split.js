@@ -13,7 +13,7 @@ export function enableCharitySplit(sliders) {
   const elements = form.elements;
   const listItems = Array.from(sliders.children);
   const ranges = Array.from(sliders.querySelectorAll('input[type="range"]'));
-  let donationAmount = GBP(elements['donation[amount]'].value);
+  let donationAmount = GBP(elements['donation[human_amount]'].value);
 
   const sumWarning = form.querySelector('.sum-warning');
   const submitButton = form.querySelector('button');
@@ -27,9 +27,9 @@ export function enableCharitySplit(sliders) {
     const manual_input = slider.querySelector('input.manual');
 
     manual_input.addEventListener('change', event => {
-        range.value = GBP(event.target.value).intValue;
-        range.dispatchEvent(new InputEvent('input'));
-      });
+      range.value = GBP(event.target.value).intValue;
+      range.dispatchEvent(new InputEvent('input'));
+    });
 
     slider.querySelector('input.lock')
       .addEventListener('change', event => {
@@ -69,7 +69,7 @@ export function enableCharitySplit(sliders) {
     range.dataset.previousAmount = range.value;
   });
 
-  elements['donation[amount]'].addEventListener('change', (event) => {
+  elements['donation[human_amount]'].addEventListener('change', (event) => {
     donationAmount = GBP(event.target.value);
 
     updateRangeCaps(donationAmount, ranges);

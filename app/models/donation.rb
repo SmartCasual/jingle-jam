@@ -10,6 +10,7 @@
 # **`aasm_state`**                | `string`           | `default("pending"), not null`
 # **`amount_currency`**           | `string`           | `default("GBP"), not null`
 # **`amount_decimals`**           | `integer`          | `default(0), not null`
+# **`donator_name`**              | `string`           |
 # **`message`**                   | `string`           |
 # **`created_at`**                | `datetime`         | `not null`
 # **`updated_at`**                | `datetime`         | `not null`
@@ -67,6 +68,10 @@ class Donation < ApplicationRecord
 
   def charity_name
     charity&.name
+  end
+
+  def donator_name
+    super || I18n.t("common.abstract.anonymous")
   end
 
   def state
