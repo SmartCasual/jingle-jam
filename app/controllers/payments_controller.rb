@@ -40,9 +40,9 @@ private
       .except(:manual, :lock)
       .permit(
         :amount_currency,
-        :amount,
         :curated_streamer_id,
         :donator_name,
+        :human_amount,
         :message,
         charity_splits_attributes: %i[
           amount_decimals

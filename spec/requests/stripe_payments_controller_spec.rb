@@ -9,7 +9,7 @@ RSpec.describe StripePaymentsController, type: :request do
     let(:params) do
       {
         donation: {
-          amount: "25.00",
+          human_amount: "25.00",
           amount_currency: currency,
         },
       }
