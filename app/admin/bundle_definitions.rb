@@ -91,7 +91,7 @@ ActiveAdmin.register BundleDefinition do
   private
 
     def prevent_edit
-      redirect_to admin_bundle_definitions_path, alert: "Bundle definitions cannot be edited" if resource.live?
+      redirect_to admin_bundle_definitions_path, alert: "Live bundle definitions cannot be edited" if resource.live?
     end
   end
 end

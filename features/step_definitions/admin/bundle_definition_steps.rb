@@ -28,6 +28,10 @@ Given("a bundle definition") do
   @current_bundle_definition = FactoryBot.create(:bundle_definition)
 end
 
+Given("a bundle definition with tiers") do
+  @current_bundle_definition = FactoryBot.create(:bundle_definition, :tiered)
+end
+
 Given("a {word} bundle definition") do |state|
   @current_bundle_definition = FactoryBot.create(:bundle_definition, state.to_sym)
 end
@@ -165,4 +169,24 @@ end
 
 Then("the admin should be redirected to the bundle definitions list") do
   expect(page).to have_css("h2", text: "Bundle Definitions")
+end
+
+When("an admin changes the price of a game tier within a bundle definition") do
+  go_to_admin_bundle_definition(@current_bundle_definition, edit: true)
+
+  @game_entry = @current_bundle_definition.bundle_definition_game_entries.find { |entry| entry.price.present? }
+  @new_price = @game_entry.price + Money.new(100, "USD")
+
+  fieldset = page.find("option[selected='selected']", text: @game_entry.game.name).ancestor("fieldset.has_many_fields")
+  within fieldset do
+    select @new_price.currency.iso_code, from: "Currency"
+    fill_in "Price", with: @new_price.format(symbol: false)
+  end
+
+  click_on "Update Bundle definition"
+end
+
+Then("the price of the game tier should've been saved") do
+  go_to_admin_bundle_definition(@current_bundle_definition)
+  expect(page).to have_css(".col-price", text: @new_price.format(no_cents_if_whole: true))
 end

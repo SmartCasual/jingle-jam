@@ -54,6 +54,11 @@ Scenario: Attempting to edit a live bundle definition
   When an admin attempts to edit the bundle definition anyway
   Then the admin should be redirected to the bundle definitions list
 
+Scenario: Changing the price of a game tier within a bundle definition
+  Given a bundle definition with tiers
+  When an admin changes the price of a game tier within a bundle definition
+  Then the price of the game tier should've been saved
+
 @anonymous
 Scenario: Anonymous user cannot access this area
   When the user goes to the admin bundle definitions area
