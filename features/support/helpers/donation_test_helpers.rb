@@ -3,7 +3,7 @@ require_relative "../../../test/support/request_test_helpers"
 module DonationTestHelpers
   include RequestTestHelpers
 
-  def make_donation(amount, name:, split: {}, message: nil, navigate: false, submit: true, on_behalf_of: nil) # rubocop:disable Metrics/CyclomaticComplexity
+  def make_donation(amount, name: nil, split: {}, message: nil, navigate: false, submit: true, on_behalf_of: nil) # rubocop:disable Metrics/CyclomaticComplexity
     if navigate
       go_to_homepage
       click_on "Donate here!"

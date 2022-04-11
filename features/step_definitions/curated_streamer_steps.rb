@@ -25,7 +25,7 @@ end
 
 Given("a some donations for a curated streamer") do
   @current_curated_streamer = FactoryBot.create(:curated_streamer)
-  @streamer_donations = FactoryBot.create_list(:donation, 2, curated_streamer: @current_curated_streamer)
+  @streamer_donations = FactoryBot.create_list(:donation, 2, curated_streamer: @current_curated_streamer, donator_name: "Superfan")
 end
 
 Given("some other donations") do
@@ -41,11 +41,11 @@ Then("a stream admin for that streamer should see the relevant donations on the 
   expect(page).to have_text("#{@current_curated_streamer.twitch_username} admin")
 
   @streamer_donations.each do |donation|
-    expect(page).to have_text("#{donation.amount.format} Pending #{donation.message} #{donation.donator.display_name}")
+    expect(page).to have_text("#{donation.amount.format} Pending #{donation.message} #{donation.donator_name}")
   end
 
   @non_streamer_donations.each do |donation|
-    expect(page).not_to have_text("#{donation.amount.format} Pending #{donation.message} #{donation.donator.display_name}")
+    expect(page).not_to have_text("#{donation.amount.format} Pending #{donation.message} #{donation.donator_name}")
   end
 
   expect(page).to have_text(@streamer_donations.each_with_object(Money.new(0)) { |d, sum| sum + d.amount }.format)
