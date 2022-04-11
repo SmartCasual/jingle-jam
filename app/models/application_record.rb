@@ -16,11 +16,8 @@ class ApplicationRecord < ActiveRecord::Base
     def monetize(attribute, **kwargs)
       super("#{attribute}_decimals", **kwargs)
 
-      attr_writer "human_#{attribute}"
-
-      before_validation do
-        human_val = instance_variable_get("@human_#{attribute}")
-        self.send("#{attribute}=", Monetize.parse(human_val, send(:price_currency))) if human_val.present?
+      define_method "human_#{attribute}=" do |value|
+        self.send("#{attribute}=", Monetize.parse(value, send(:price_currency)))
       end
 
       define_method("human_#{attribute}") do |symbol: false|
