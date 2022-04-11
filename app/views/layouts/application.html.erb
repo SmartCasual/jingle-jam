@@ -45,7 +45,7 @@
         <div class="donator">
           <% if current_donator&.id %>
             <ul>
-              <li><%= link_to current_donator.display_name, donator_path(current_donator) %></li>
+              <li><%= current_donator.display_name %></li>
               <li><%= button_to t("common.actions.log_out"), logout_path %></li>
             </ul>
           <% end %>
