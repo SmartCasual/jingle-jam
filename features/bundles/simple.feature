@@ -26,3 +26,7 @@ Scenario: A donator increases their donation above the threshold
   When the donator makes another £20 donation
   Then a £20 donation should be recorded
   And one key per game in the bundle should have been assigned
+
+Scenario: A donator leaves a name with their donation
+  When a donator makes a £10 donation with the name "Gary Donor"
+  Then a £10 donation should be recorded with the name "Gary Donor"

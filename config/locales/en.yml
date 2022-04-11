@@ -68,6 +68,7 @@ en:
       header: "Make a donation"
       lock: "Lock slider"
       message: "Message (optional)"
+      name: "Name (optional)"
       on_behalf_of: "On behalf of"
       error:
         split_calculation: "Your donation split doesn't add up to your total donation amount."

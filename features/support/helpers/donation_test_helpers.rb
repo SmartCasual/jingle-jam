@@ -3,7 +3,7 @@ require_relative "../../../test/support/request_test_helpers"
 module DonationTestHelpers
   include RequestTestHelpers
 
-  def make_donation(amount, split: {}, message: nil, navigate: false, submit: true, on_behalf_of: nil)
+  def make_donation(amount, name:, split: {}, message: nil, navigate: false, submit: true, on_behalf_of: nil) # rubocop:disable Metrics/CyclomaticComplexity
     if navigate
       go_to_homepage
       click_on "Donate here!"
@@ -12,6 +12,7 @@ module DonationTestHelpers
     select amount.currency.iso_code, from: "Currency"
     fill_in "Amount", with: amount.to_s, fill_options: { clear: :backspace }
     fill_in "Message", with: message if message
+    fill_in "Name", with: name if name
 
     if on_behalf_of.present?
       fill_in "On behalf of", with: on_behalf_of.email_address

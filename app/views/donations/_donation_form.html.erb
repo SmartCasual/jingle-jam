@@ -21,10 +21,11 @@
             },
             body: JSON.stringify({
               donation: {
-                amount: form.querySelector("[name='donation[amount]']").value,
                 amount_currency: form.querySelector("[name='donation[amount_currency]']").value,
-                message: form.querySelector("[name='donation[message]']").value,
+                amount: form.querySelector("[name='donation[amount]']").value,
                 curated_streamer_id: form.querySelector("[name='donation[curated_streamer_id]']").value,
+                donator_name: form.querySelector("[name='donation[donator_name]']").value,
+                message: form.querySelector("[name='donation[message]']").value,
                 on_behalf_of: form.querySelector("[name='on_behalf_of']").value,
               },
             }),
@@ -86,6 +87,11 @@
       </li>
     <% end %>
   </ul>
+
+  <p>
+    <%= form.label :donator_name, t("donations.form.name") %>
+    <%= form.text_field :donator_name, value: form.object[:donator_name] %>
+  </p>
 
   <p>
     <%= form.label :message, t("donations.form.message") %>
