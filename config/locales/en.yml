@@ -30,6 +30,21 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  active_admin:
+    devise:
+      email_address:
+        title: "Email address"
+
+  # Validation error overrides.  See this table ("message" column):
+  # https://guides.rubyonrails.org/i18n.html#error-message-interpolation
+  activerecord:
+    errors:
+      models:
+        donator:
+          attributes:
+            twitch_id:
+              taken: "ID is taken"
+
   # Generic translations available for use throughout the site
   common:
     twitch: "Twitch"
@@ -38,19 +53,16 @@ en:
       charities: "Charities"
     actions:
       donate_here: "Donate here!"
+      log_in: "Log in"
       log_out: "Log out"
     abstract:
       anonymous: "Anonymous"
       you: "You"
 
-  # Site navigation
-  navigation:
-    donations: "Your donations"
-    game_keys: "Your game keys"
-
-  # Homepage
-  homepage:
-    header: "Welcome to Jingle Jam!"
+  devise:
+    omniauth_callbacks:
+      donator:
+        signed_in: "Signed in"
 
   # All donation pages
   donations:
@@ -65,6 +77,7 @@ en:
       action: "Card payment"
       amount: "Amount"
       currency: "Currency"
+      email_address: "Email address (optional)"
       header: "Make a donation"
       lock: "Lock slider"
       message: "Message (optional)"
@@ -93,14 +106,6 @@ en:
       streamer:
         header: "%{streamer} admin"
 
-  # Game key pages
-  game_keys:
-    header: "Your game keys"
-    table:
-      headers:
-        game: "Game"
-        key: "Key"
-
   # Emails (used for both html and plain text)
   email:
     bundle_pending:
@@ -109,3 +114,20 @@ en:
     bundle_sent:
       header: "Thanks for your donation!"
       instructions: "You can find your game keys here:"
+
+  # Game key pages
+  game_keys:
+    header: "Your game keys"
+    table:
+      headers:
+        game: "Game"
+        key: "Key"
+
+  # Homepage
+  homepage:
+    header: "Welcome to Jingle Jam!"
+
+  # Site navigation
+  navigation:
+    donations: "Your donations"
+    game_keys: "Your game keys"

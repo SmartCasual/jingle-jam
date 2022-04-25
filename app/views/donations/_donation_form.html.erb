@@ -3,57 +3,15 @@
   <script src="https://www.paypal.com/sdk/js?client-id=<%= ENV['PAYPAL_CLIENT_ID'] %>&currency=GBP&integration-date=2022-04-08&disable-funding=card"></script>
   <script type="text/javascript">
     onReady(function() {
-      let csrfToken = null;
-      const csrfElement = document.querySelector("[name='csrf-token']")
-      if (csrfElement) {
-        csrfToken = csrfElement.content;
+      let payments;
+      if (window.testData && window.testData["fake_payment_providers"]) {
+        payments = Packs.application.fakePayments;
+      } else {
+        payments = Packs.application.payments;
       }
 
-      const form = document.getElementById("donation-form");
-
-      paypal.Buttons({
-        createOrder: (data, actions) => {
-          return fetch("/paypal/prep-checkout", {
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRF-Token": csrfToken,
-            },
-            body: JSON.stringify({
-              donation: {
-                amount_currency: form.querySelector("[name='donation[amount_currency]']").value,
-                curated_streamer_id: form.querySelector("[name='donation[curated_streamer_id]']").value,
-                donator_name: form.querySelector("[name='donation[donator_name]']").value,
-                human_amount: form.querySelector("[name='donation[human_amount]']").value,
-                message: form.querySelector("[name='donation[message]']").value,
-                on_behalf_of: form.querySelector("[name='on_behalf_of']").value,
-              },
-            }),
-          })
-          .then((response) => response.json())
-          .then((order) => order.id);
-        },
-        // Finalize the transaction on the server after payer approval
-        onApprove: (data, actions) => {
-          return fetch(`/paypal/complete-checkout/${data.orderID}`, {
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRF-Token": csrfToken,
-            },
-          })
-          .then((response) => response.json())
-          .then((orderData) => {
-            location.reload();
-          });
-        },
-        style: {
-          color: "silver",
-          tagline: false,
-        },
-      }).render("#paypal-donate-button");
-
-      Packs.application.addStripeToForm(document.getElementById('donation-form'));
+      payments.addStripe(document.getElementById('stripe-donate-button'));
+      payments.addPaypal(document.getElementById('paypal-donate-button'));
       Packs.application.enableCharitySplit(document.getElementsByClassName('charity-split')[0]);
     });
   </script>
@@ -93,6 +51,13 @@
     <%= form.text_field :donator_name, value: form.object[:donator_name] %>
   </p>
 
+  <% if !donator_logged_in? || current_donator.email_address.blank? %>
+    <p>
+      <%= label_tag :donator_email_address, t("donations.form.email_address") %>
+      <%= text_field_tag :donator_email_address %>
+    </p>
+  <% end %>
+
   <p>
     <%= form.label :message, t("donations.form.message") %>
     <%= form.text_field :message %>
@@ -110,8 +75,10 @@
     <p><%= t("donations.form.error.correct_and_try_again") %></p>
   </div>
 
-  <button id="stripe-donate"><%= t("donations.form.action") %></button>
+  <button id="stripe-donate-button"><%= t("donations.form.action") %></button>
   <div id="paypal-donate-button-container">
-    <div id="paypal-donate-button"></div>
+    <div id="paypal-donate-button">
+      Paypal
+    </div>
   </div>
 <% end %>

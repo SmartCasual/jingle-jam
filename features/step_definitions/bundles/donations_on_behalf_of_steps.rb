@@ -3,7 +3,9 @@ When("someone else makes a {amount} donation on their behalf") do |amount|
   log_out
 
   original_donator.update(email_address: "test-original@example.com")
+  original_donator.confirm
 
+  stub_stripe_session_creation(amount:)
   make_donation(amount,
     navigate: true,
     submit: true,

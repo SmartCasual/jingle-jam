@@ -1,18 +1,20 @@
-require "paypal/api"
-require "paypal/webhook_event"
+require "paypal/webhooks"
 
 class PaypalPaymentsController < PaymentsController
   def prep_checkout_session
     super do |donation|
-      create_paypal_order(donation).tap do |order_id|
-        donation.paypal_order_id = order_id
+      create_paypal_order(donation).tap do |order|
+        donation.paypal_order_id = order
       end
     end
   end
 
   def complete_checkout
     donation = Donation.find_by!(paypal_order_id: params[:order_id])
-    Paypal::API.capture_payment_for_order(donation.paypal_order_id)
+
+    response = Paypal::REST.capture_payment_for_order(donation.paypal_order_id, full_response: true)
+    set_donator_email_if_missing(response.dig(:payer, :email_address))
+
     Payment.create_and_assign(
       amount: donation.amount.cents,
       currency: donation.amount.currency.iso_code,
@@ -23,11 +25,13 @@ class PaypalPaymentsController < PaymentsController
   end
 
   def webhook
-    event = Paypal::WebhookEvent.new(params:, request:)
+    event = Paypal::Webhooks::Event.new(params:, request:)
     event.verify!
 
-    case event.data[:event_type]
+    case event.type
     when "CHECKOUT.ORDER.COMPLETED"
+      set_donator_email_if_missing(event.data.dig(:payer, :email_address))
+
       Payment.create_and_assign(
         amount: event.data.dig(:gross_amount, :value)&.gsub(/\D/, ""),
         currency: event.data.dig(:gross_amount, :currency_code),
@@ -38,19 +42,19 @@ class PaypalPaymentsController < PaymentsController
     head :ok
   rescue JSON::ParserError
     head :unprocessable_entity
-  rescue Paypal::WebhookEventVerificationFailed
+  rescue Paypal::Webhooks::EventVerificationFailed
     head :unauthorized
   end
 
 private
 
   def create_paypal_order(donation)
-    Paypal::API.create_order(
+    Paypal::REST.create_order(
       intent: "CAPTURE",
       purchase_units: [{
         amount: {
           currency_code: donation.amount.currency.iso_code,
-          value: donation.amount.cents,
+          value: donation.amount.format(symbol: false),
         },
         payee: {
           email_address: ENV["PAYPAL_EMAIL_ADDRESS"],

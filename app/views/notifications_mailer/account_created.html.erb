@@ -1,0 +1,6 @@
+<p>Welcome <%= @donator.email_address %>!</p>
+
+<p>You can access your account through the link below.</p>
+<p>If you have donated to receive a key bundle, they should appear here soon.</p>
+
+<p><%= link_to "Log in via token", log_in_via_token_donator_url(@donator, token: @donator.token_with_email_address, email_address: @donator.email_address) %></p>

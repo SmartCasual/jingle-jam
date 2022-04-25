@@ -37,7 +37,7 @@ private
 
   def donation_params
     params.require(:donation)
-      .except(:manual, :lock)
+      .except(:lock, :manual)
       .permit(
         :amount_currency,
         :curated_streamer_id,
@@ -52,8 +52,22 @@ private
   end
 
   def save_donator_if_needed
-    if current_donator.new_record?
-      current_donator.save && session[:donator_id] = current_donator.id
+    current_donator.name ||= donation_params[:donator_name]
+    current_donator.email_address ||= params[:donator_email_address]
+
+    current_donator.save
+
+    if current_donator.previously_new_record?
+      sign_in(current_donator)
+      NotificationsMailer.account_created(current_donator).deliver_now
     end
+  end
+
+  def set_donator_email_if_missing(new_email_address)
+    return if new_email_address.blank?
+    return if current_donator.email_address.present?
+    return if current_donator.email_address == new_email_address
+
+    current_donator.update(email_address: new_email_address)
   end
 end

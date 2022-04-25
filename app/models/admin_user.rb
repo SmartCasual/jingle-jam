@@ -8,7 +8,7 @@
 # ----------------------------- | ------------------ | ---------------------------
 # **`id`**                      | `bigint`           | `not null, primary key`
 # **`data_entry`**              | `boolean`          | `default(FALSE), not null`
-# **`email`**                   | `string`           | `default(""), not null`
+# **`email_address`**           | `string`           | `default(""), not null`
 # **`encrypted_password`**      | `string`           | `default(""), not null`
 # **`full_access`**             | `boolean`          | `default(FALSE), not null`
 # **`last_otp_at`**             | `datetime`         |
@@ -28,11 +28,9 @@ class AdminUser < ApplicationRecord
   devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
 
-  validates :name, presence: true
+  alias_attribute :email, :email_address
 
-  def email_address
-    email
-  end
+  validates :name, presence: true
 
   def has_2sv?
     otp_secret.present?

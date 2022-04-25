@@ -1,14 +1,15 @@
 module LoginHelpers
-  def log_in_with(email_address, otp_secret:, visit_page: true, expect_failure: false)
-    visit "/admin/login" if visit_page
-    fill_in "Email", with: email_address
-    fill_in "Password", with: "password"
+  def log_in_with(email_address, otp_secret:, navigate: true, expect_failure: false)
+    visit "/admin/login" if navigate
+
+    fill_in "Email address", with: email_address
+    fill_in "Password", with: "password123"
     click_on "Login"
 
     complete_2sv(otp_secret) if otp_secret.present?
 
     unless expect_failure
-      @current_admin_user = AdminUser.find_by!(email: email_address)
+      @current_admin_user = AdminUser.find_by!(email_address:)
       expect(page).to have_css("#current_user a", text: @current_admin_user.name)
       @current_admin_user
     end
@@ -33,15 +34,17 @@ module LoginHelpers
     when Donator
       use_magic_link(user)
     when AdminUser
-      log_in_with(user.email, otp_secret: user.otp_secret, **kwargs)
+      log_in_with(user.email_address, otp_secret: user.otp_secret, **kwargs)
     end
 
     user
   end
 
   def use_magic_link(donator)
-    visit magic_redirect_path(donator_id: donator.id, hmac: donator.hmac)
+    visit log_in_via_token_donator_path(donator, token: donator.token)
+    click_on "Log in via token"
     @current_donator = donator
+    expect(page).not_to have_text("LOG IN")
   end
 
   def ensure_logged_in(as: :donator, **kwargs)
@@ -51,6 +54,10 @@ module LoginHelpers
   def log_out
     go_to_homepage
     click_on "Log out"
+  end
+
+  def ensure_logged_out
+    log_out if page.has_css?("button", text: "Log out")
   end
 end
 

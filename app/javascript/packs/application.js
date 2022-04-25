@@ -7,7 +7,8 @@ import Rails from "@rails/ujs"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 
-export * from "../stripe/checkout"
+export { default as payments } from "../payments"
+export { default as fakePayments } from "../fake-payments"
 export * from "../charity-split"
 
 Rails.start()

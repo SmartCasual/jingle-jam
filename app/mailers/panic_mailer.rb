@@ -7,6 +7,6 @@ class PanicMailer < ApplicationMailer
   def missing_key(_donator, _game)
     @greeting = "Hi"
 
-    mail to: AdminUser.pluck(:email)
+    mail to: AdminUser.pluck(:email_address)
   end
 end

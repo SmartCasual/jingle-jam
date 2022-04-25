@@ -12,7 +12,7 @@ class DonationsController < ApplicationController
     @gifted_donations = get_donations(gifted: true).order(created_at: :desc)
 
     if current_donator.persisted?
-      @magic_url = magic_redirect_url(donator_id: current_donator.id, hmac: current_donator.hmac)
+      @magic_url = log_in_via_token_donator_url(current_donator, token: current_donator.token)
     end
   end
 

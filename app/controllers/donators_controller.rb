@@ -1,5 +1,10 @@
 class DonatorsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource(
+    except: %i[
+      log_in_via_token
+      request_login_email
+    ],
+  )
 
   def show; end
 
@@ -14,4 +19,8 @@ class DonatorsController < ApplicationController
 
     redirect_to donator_path(@donator)
   end
+
+  def request_login_email; end
+
+  def log_in_via_token; end
 end

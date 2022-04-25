@@ -1,0 +1,12 @@
+<h1>Log in</h1>
+
+<%= form_tag donator_token_omniauth_callback_path do %>
+  <%= hidden_field_tag :token, params[:token] %>
+  <%= hidden_field_tag :donator_id, params[:id] %>
+
+  <% if params[:email_address].present? %>
+    <%= hidden_field_tag :email_address, params[:email_address] %>
+  <% end %>
+
+  <button>Log in via token</button>
+<% end %>

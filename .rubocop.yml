@@ -79,8 +79,6 @@ Style/HashExcept: # (new in 1.7)
   Enabled: true
 Style/IfWithBooleanLiteralBranches: # (new in 1.9)
   Enabled: true
-
-# New rules
 Rails/ActiveRecordCallbacksOrder: # (new in 2.7)
   Enabled: true
 Rails/AfterCommitOverride: # (new in 2.8)
@@ -191,8 +189,6 @@ RSpec/FactoryBot/SyntaxMethods: # new in 2.7
   Enabled: true
 RSpec/Rails/AvoidSetupHook: # new in 2.4
   Enabled: true
-
-# New rules
 Style/NestedFileDirname: # new in 1.26
   Enabled: true
 Rails/ActionControllerTestCase: # new in 2.14
@@ -216,6 +212,10 @@ Rails/TransactionExitStatement: # new in 2.14
 RSpec/BeEq: # new in 2.9.0
   Enabled: true
 RSpec/BeNil: # new in 2.9.0
+  Enabled: true
+Lint/RefinementImportMethods: # new in 1.27
+  Enabled: true
+Style/RedundantInitialize: # new in 1.27
   Enabled: true
 
 # Alterations
@@ -248,6 +248,7 @@ RSpec/ExampleLength:
   Enabled: false
 RSpec/ContextWording:
   Prefixes:
+    - and
     - but
     - if
     - when
@@ -260,6 +261,8 @@ Metrics/BlockLength:
     - app/admin/**/*
     - spec/**/*
 Layout/ArgumentAlignment:
+  Enabled: false
+Layout/FirstArgumentIndentation:
   Enabled: false
 Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: consistent_comma
@@ -306,7 +309,9 @@ Naming/MethodParameterName:
     - id
 Layout/LineLength:
   Exclude:
-    - features/**/*_steps.rb
+    - features/**/*
+    - Gemfile
+    - test/**/*
 Metrics/AbcSize:
   Enabled: false
 Style/IfUnlessModifierOfIfUnless:
@@ -319,6 +324,7 @@ Naming/VariableNumber:
   EnforcedStyle: snake_case
 Metrics/ModuleLength:
   Exclude:
+    - features/**/*
     - test/**/*
 RSpec/SubjectStub:
   Enabled: false
@@ -329,3 +335,5 @@ Layout/ArrayAlignment:
   Enabled: false
 Layout/FirstArrayElementIndentation:
   Enabled: false
+Style/Alias:
+  EnforcedStyle: prefer_alias_method

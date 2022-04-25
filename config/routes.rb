@@ -12,11 +12,30 @@ Rails.application.routes.draw do
     post "/2sv/verify", to: "otp#verify", as: "otp_verify"
   end
 
+  devise_for :donators,
+    controllers: {
+      omniauth_callbacks: "donators/omniauth_callbacks",
+      path: "",
+      path_names: {
+        sign_in: "login",
+        sign_out: "logout",
+        sign_up: "sign-up",
+      }
+    }
+
   scope "(:locale)", defaults: { locale: "en" }, locale: /#{I18n.available_locales.join("|")}/ do
     resources :donations, except: %i[edit update delete destroy]
     resources :keys, only: [:index]
     resources :charities, only: [:show]
-    resources :donators, except: %i[index delete destroy]
+    resources :donators, except: %i[index delete destroy] do
+      collection do
+        get "/request-a-login-email", to: "donators#request_login_email", as: "request_login_email"
+      end
+
+      member do
+        get "/log-in-via-token/:token", to: "donators#log_in_via_token", as: "log_in_via_token"
+      end
+    end
     resources :games, only: [:show]
 
     get "/streams/:twitch_username", to: "curated_streamers#show", as: "curated_streamer"
@@ -29,9 +48,6 @@ Rails.application.routes.draw do
   post "/paypal/prep-checkout", to: "paypal_payments#prep_checkout_session"
   post "/paypal/complete-checkout/:order_id", to: "paypal_payments#complete_checkout"
   post "/paypal/webhook", to: "paypal_payments#webhook"
-
-  get "/magic-redirect/:donator_id/:hmac", to: "sessions#magic_redirect", as: "magic_redirect"
-  post "/logout", to: "sessions#logout"
 
   get "/:locale" => "home#home"
   root to: "home#home"

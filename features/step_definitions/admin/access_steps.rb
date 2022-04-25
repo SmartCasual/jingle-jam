@@ -25,13 +25,13 @@ Then("the admin should be able to comment on public information") do
 end
 
 Then("the admin should be able to see their own information") do
-  expect(page).not_to have_text(@current_admin_user.email)
+  expect(page).not_to have_text(@current_admin_user.email_address)
 
   within "#current_user" do
     click_on @current_admin_user.name
   end
 
-  expect(page).to have_text(@current_admin_user.email)
+  expect(page).to have_text(@current_admin_user.email_address)
 end
 
 Then("the admin should not be able to modify public information") do

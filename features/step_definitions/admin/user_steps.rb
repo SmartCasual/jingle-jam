@@ -5,23 +5,23 @@ When("an admin adds an admin user") do
   click_on "New Admin User"
 
   fill_in "Name", with: "An Admin"
-  fill_in "Email", with: admin_user_email
-  fill_in "Password", with: "password", exact: true
-  fill_in "Password confirmation", with: "password"
+  fill_in "Email address", with: admin_user_email
+  fill_in "Password", with: "password123", exact: true
+  fill_in "Password confirmation", with: "password123"
 
   click_on "Create Admin user"
 
-  @created_admin_user = AdminUser.find_by!(email: admin_user_email)
+  @created_admin_user = AdminUser.find_by!(email_address: admin_user_email)
 end
 
 Then("the admin user should appear on the admin users list") do
   go_to_admin_users
-  expect(page).to have_css("td.col-email", text: @created_admin_user.email)
+  expect(page).to have_css("td.col-email_address", text: @created_admin_user.email_address)
 end
 
 Then("the admin user shouldn't appear on the admin users list") do
   go_to_admin_users
-  expect(page).not_to have_css("td.col-email", text: @created_admin_user.email)
+  expect(page).not_to have_css("td.col-email_address", text: @created_admin_user.email_address)
 end
 
 Then("there should be an admin page for that admin user") do

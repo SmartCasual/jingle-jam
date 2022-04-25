@@ -12,6 +12,7 @@ require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 require_relative "../test/support/queue_type"
+require_relative "../test/support/test_data"
 require_relative "../test/support/with_env"
 
 FactoryBot.find_definitions
@@ -86,11 +87,15 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  require "paypal/api"
   config.before do
     ActionMailer::Base.deliveries.clear
+    Paypal::REST.reset_connection
+  end
 
-    Paypal::API.reset_connection
+  config.around do |example|
+    TestData.clear
+    example.run
+    TestData.clear
   end
 
   config.include FactoryBot::Syntax::Methods

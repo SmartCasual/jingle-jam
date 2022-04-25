@@ -23,6 +23,8 @@ RSpec.describe GameEntryKeyAssignmentJob do
 
   let!(:admin_users) { create_list(:admin_user, 2) }
 
+  let(:bundle_assigned_emails) { ActionMailer::Base.deliveries.select { |mail| mail.subject == "Bundle assigned" } }
+
   def last_sent_email
     expect(ActionMailer::Base.deliveries).not_to be_empty
     ActionMailer::Base.deliveries.last
@@ -78,7 +80,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
 
     it "notifies the admins" do
       job.perform(game_entry_id, bundle_id)
-      expect(last_sent_email.to).to match_array(admin_users.map(&:email))
+      expect(last_sent_email.to).to match_array(admin_users.map(&:email_address))
     end
   end
 
@@ -88,7 +90,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
     it "does nothing" do
       expect_any_instance_of(Key).not_to receive(:update)
       job.perform(game_entry_id, bundle_id)
-      expect(ActionMailer::Base.deliveries).to be_empty
+      expect(bundle_assigned_emails).to be_empty
     end
   end
 
@@ -98,7 +100,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
     it "does nothing" do
       expect_any_instance_of(Key).not_to receive(:update)
       job.perform(game_entry_id, bundle_id)
-      expect(ActionMailer::Base.deliveries).to be_empty
+      expect(bundle_assigned_emails).to be_empty
     end
   end
 
@@ -110,7 +112,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
     it "does nothing" do
       expect_any_instance_of(Key).not_to receive(:update)
       job.perform(game_entry_id, bundle_id)
-      expect(ActionMailer::Base.deliveries).to be_empty
+      expect(bundle_assigned_emails).to be_empty
     end
   end
 
@@ -122,7 +124,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
     it "does nothing" do
       expect_any_instance_of(Key).not_to receive(:update)
       job.perform(game_entry_id, bundle_id)
-      expect(ActionMailer::Base.deliveries).to be_empty
+      expect(bundle_assigned_emails).to be_empty
     end
   end
 
@@ -135,7 +137,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
     it "does nothing" do
       expect_any_instance_of(Key).not_to receive(:update)
       job.perform(game_entry_id, bundle_id)
-      expect(ActionMailer::Base.deliveries).to be_empty
+      expect(bundle_assigned_emails).to be_empty
     end
   end
 
@@ -148,7 +150,7 @@ RSpec.describe GameEntryKeyAssignmentJob do
     it "does nothing" do
       expect_any_instance_of(Key).not_to receive(:update)
       job.perform(game_entry_id, bundle_id)
-      expect(ActionMailer::Base.deliveries).to be_empty
+      expect(bundle_assigned_emails).to be_empty
     end
   end
 end

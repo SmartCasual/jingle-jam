@@ -3,7 +3,7 @@
 <% if @donations.any? %>
   <p>
     <%= t("donations.link_to_game_keys") %>
-    <%= link_to @magic_url, @magic_url %>
+    <%= link_to @magic_url, @magic_url, class: "token-url" %>
   </p>
 
   <% if current_donator.email_address.present? %>

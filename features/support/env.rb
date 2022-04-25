@@ -17,7 +17,10 @@ driver_urls = Webdrivers::Common.subclasses.map(&:base_url)
 WebMock.disable_net_connect!(allow_localhost: true, allow: driver_urls)
 
 require "rspec/mocks"
+require "cucumber/rspec/doubles"
+
 FactoryBot.find_definitions
+World(FactoryBot::Syntax::Methods)
 
 require "sidekiq/testing"
 Sidekiq::Testing.inline!
@@ -25,10 +28,35 @@ Sidekiq::Testing.inline!
 require_relative "../../test/support/with_env"
 World(WithEnv)
 
+require_relative "../../test/support/stripe_test_helpers"
+World(StripeTestHelpers)
+
+require_relative "../../test/support/test_data"
+
+Around do |_, block|
+  TestData.clear
+  block.call
+  TestData.clear
+end
+
+Before("not @real_payment_providers") do
+  TestData[:fake_payment_providers] = true
+end
+
+Around("@real_payment_providers") do |_, block|
+  WebMock.disable!
+  block.call
+  WebMock.enable!
+end
+
+TEST_PORT = 30_001
+
 Capybara.configure do |config|
   config.server = :puma, { Silent: true }
-  config.server_port = 30_001
+  config.server_port = TEST_PORT
 end
+
+ActionMailer::Base.default_url_options[:port] = TEST_PORT
 
 ActionController::Base.allow_rescue = false
 
@@ -39,7 +67,9 @@ rescue NameError
 end
 
 Before do
-  page.driver.browser.manage.window.maximize
+  if page.driver.browser.respond_to?(:manage)
+    page.driver.browser.manage.window.maximize
+  end
 end
 
 After do

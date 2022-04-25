@@ -1,4 +1,3 @@
-@stripe
 Feature: Donations on behalf of others
 
 Scenario: A donation is made on someone else's behalf

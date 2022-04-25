@@ -6,6 +6,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <% if Rails.env.test? %>
+      <script type="text/javascript">
+        window.testData = <%= JSON.dump(TestData).html_safe %>;
+      </script>
+    <% end %>
+
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= javascript_pack_tag 'application' %>
 
@@ -38,18 +44,27 @@
         <div class="logo-box">
           <%= link_to_unless_current image_tag("Jingle_Jam_Logo_White_Alt.png", class: "logo", alt: "The Jingle Jam"), root_path %>
         </div>
-        <ul>
-          <li><%= link_to_unless_current t("navigation.donations"), donations_path %></li>
-          <li><%= link_to_unless_current t("navigation.game_keys"), keys_path %></li>
-        </ul>
-        <div class="donator">
-          <% if current_donator&.id %>
+        <% if donator_signed_in? %>
+          <ul>
+            <li><%= link_to_unless_current t("navigation.donations"), donations_path %></li>
+            <li><%= link_to_unless_current t("navigation.game_keys"), keys_path %></li>
+          </ul>
+          <div class="donator">
             <ul>
               <li><%= current_donator.display_name %></li>
-              <li><%= button_to t("common.actions.log_out"), logout_path %></li>
+              <li><%= button_to t("common.actions.log_out"), destroy_donator_session_path, method: :delete %></li>
             </ul>
-          <% end %>
-        </div>
+          </div>
+        <% else %>
+          <ul>
+            <li><%= link_to_unless_current t("common.actions.donate_here"), donations_path %></li>
+          </ul>
+          <div class="donator">
+            <ul>
+              <li><%= link_to t("common.actions.log_in"), new_donator_session_path %></li>
+            </ul>
+          </div>
+        <% end %>
       </nav>
     </header>
 
