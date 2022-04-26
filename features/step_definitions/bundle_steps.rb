@@ -9,12 +9,10 @@ Given("a bundle with the following games:") do |table|
 end
 
 When("a donator makes a {amount} donation with the message {string}") do |amount, message|
-  stub_stripe_session_creation(amount:)
   make_donation(amount, message:, navigate: true)
 end
 
 When("a/the donator makes a/another {amount} donation") do |amount|
-  stub_stripe_session_creation(amount:)
   make_donation(amount, navigate: true)
 end
 

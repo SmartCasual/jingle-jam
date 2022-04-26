@@ -12,16 +12,23 @@ Rails.application.routes.draw do
     post "/2sv/verify", to: "otp#verify", as: "otp_verify"
   end
 
-  devise_for :donators,
+  devise_for :donators, {
+    path_names: {
+      sign_in: "login",
+      sign_out: "logout",
+      sign_up: "sign-up",
+    },
     controllers: {
+      confirmations: "donators/confirmations",
       omniauth_callbacks: "donators/omniauth_callbacks",
-      path: "",
-      path_names: {
-        sign_in: "login",
-        sign_out: "logout",
-        sign_up: "sign-up",
-      }
-    }
+    },
+  }
+
+  namespace :donators do
+    devise_scope :donator do
+      post :confirm_email_address, to: "confirmations#show"
+    end
+  end
 
   scope "(:locale)", defaults: { locale: "en" }, locale: /#{I18n.available_locales.join("|")}/ do
     resources :donations, except: %i[edit update delete destroy]

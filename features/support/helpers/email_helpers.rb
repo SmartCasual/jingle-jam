@@ -12,7 +12,21 @@ module EmailHelpers
   end
 
   def extract_links_from_email(email)
-    email.html_part.body.to_s.scan(/href="(.*?)"/).flatten
+    html_part = if email.multipart?
+      email.html_part
+    elsif email.mime_type == "text/html"
+      email.body
+    else
+      raise "Email is not multipart and has no HTML part"
+    end
+
+    html_part.to_s.scan(/href="(.*?)"/).flatten
+  end
+
+  def find_link(email, regex)
+    extract_links_from_email(email).find do |link|
+      link.match(regex)
+    end
   end
 end
 

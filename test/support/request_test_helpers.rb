@@ -236,4 +236,19 @@ module RequestTestHelpers
       .with(order_id, full_response: true)
       .and_return(payer: { email_address: })
   end
+
+  def stub_twitch_auth(auth_hash)
+    orig_test_mode = OmniAuth.config.test_mode
+    orig_mock_auth = OmniAuth.config.mock_auth[:twitch]
+
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.mock_auth[:twitch] = OmniAuth::AuthHash.new(
+      auth_hash.merge(provider: "twitch"),
+    )
+
+    yield
+
+    OmniAuth.config.test_mode = orig_test_mode
+    OmniAuth.config.mock_auth[:twitch] = orig_mock_auth
+  end
 end

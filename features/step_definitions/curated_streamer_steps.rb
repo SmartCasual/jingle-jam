@@ -9,7 +9,6 @@ end
 When("they make a donation") do
   @donation_amount = Money.new(5_00, "GBP")
   @donation_message = "Go team!"
-  stub_stripe_session_creation(amount: @donation_amount)
   make_donation(@donation_amount, message: @donation_message)
 end
 

@@ -5,7 +5,6 @@ Given("a simple bundle priced at {amount}") do |amount|
 end
 
 When("a donator makes a {amount} donation with the name {string}") do |amount, name|
-  stub_stripe_session_creation(amount:)
   make_donation(amount, name:, navigate: true)
 end
 

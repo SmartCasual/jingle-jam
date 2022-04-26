@@ -5,7 +5,6 @@ When("a donator splits their donation unevenly among the charities") do
   @charity_2 = FactoryBot.create(:charity)
   @charity_3 = FactoryBot.create(:charity)
 
-  stub_stripe_session_creation(amount: @amount)
   make_donation(@amount,
     navigate: true,
     split: {
@@ -29,9 +28,7 @@ When("a donator splits their donation in a way that doesn't add up to their tota
   @charity_2 = FactoryBot.create(:charity)
   @charity_3 = FactoryBot.create(:charity)
 
-  amount = Money.new(30_00, "GBP")
-  stub_stripe_session_creation(amount:)
-  make_donation(amount,
+  make_donation(Money.new(30_00, "GBP"),
     navigate: true,
     submit: false,
     split: {

@@ -15,6 +15,10 @@ module DonationTestHelpers
       submit: true,
     }.merge(options)
 
+    stripe_options = {
+      stub: true,
+    }.merge(stripe_options)
+
     if options[:navigate]
       go_to_homepage
       page.first("a", text: "Donate here!".upcase).click
@@ -69,6 +73,10 @@ module DonationTestHelpers
 
         wait_for { Donation.count == (donation_count + 1) }
       else
+        if stripe_options.delete(:stub)
+          stub_stripe_session_creation(amount:)
+        end
+
         click_on "Card payment"
         wait_for { Donation.count == (donation_count + 1) }
 

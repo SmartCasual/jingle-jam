@@ -3,7 +3,9 @@ class PaymentsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :webhook
 
   def prep_checkout_session
-    save_donator_if_needed
+    set_current_donator
+    update_current_donator
+    save_current_donator
 
     donation = build_donation
 
@@ -30,8 +32,12 @@ private
         Donator.find_by(email_address: params[:on_behalf_of])
       end
 
-      donation.donator = on_behalf_of || current_donator
-      donation.donated_by = current_donator if on_behalf_of.present?
+      if on_behalf_of.present?
+        donation.donator = on_behalf_of
+        donation.donated_by = current_donator
+      else
+        donation.donator = current_donator
+      end
     end
   end
 
@@ -51,11 +57,20 @@ private
       )
   end
 
-  def save_donator_if_needed
+  def set_current_donator
+    self.current_donator = ExistingDonatorFinder.find(
+      current_donator:,
+      email_address: params[:donator_email_address],
+    )
+  end
+
+  def update_current_donator
     current_donator.name ||= donation_params[:donator_name]
     current_donator.email_address ||= params[:donator_email_address]
+  end
 
-    current_donator.save
+  def save_current_donator
+    current_donator.save!
 
     if current_donator.previously_new_record?
       sign_in(current_donator)

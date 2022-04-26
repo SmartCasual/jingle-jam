@@ -45,6 +45,12 @@ class Donator < ApplicationRecord
 
   alias_attribute :email, :email_address
   alias_attribute :unconfirmed_email_address, :unconfirmed_email
+  skip_uniqueness_validation :email
+  validate :email_address, -> {
+    if email_address.present? && self.class.confirmed.where.not(id:).exists?(email_address:)
+      errors.add(:email_address, :taken)
+    end
+  }
 
   # If we have a password present then we need an email address,
   # since that's the username used to match with the password.
@@ -68,6 +74,8 @@ class Donator < ApplicationRecord
   def active_for_authentication?
     true
   end
+
+  scope :confirmed, -> { where.not(confirmed_at: nil) }
   ## /Devise
 
   has_many :donations, inverse_of: :donator, dependent: :nullify

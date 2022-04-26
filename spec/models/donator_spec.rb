@@ -65,7 +65,7 @@ RSpec.describe Donator do
     end
   end
 
-  describe "assign_keys" do
+  describe "#assign_keys" do
     before do
       allow(BundleKeyAssignmentJob).to receive(:perform_later)
     end
@@ -287,6 +287,49 @@ RSpec.describe Donator do
       let(:chosen_name) { "jdoe" }
 
       it { is_expected.to eq("You") }
+    end
+  end
+
+  describe "#email_address" do
+    let(:donator) { build(:donator, :with_email_address) }
+
+    it "is valid with a valid email address" do
+      donator.email_address = "valid@example.com"
+      expect(donator).to be_valid
+    end
+
+    it "is invalid with an invalid email address" do
+      donator.email_address = "invalid"
+      expect(donator).not_to be_valid
+    end
+
+    it "can be saved if two duplicates are unconfirmed" do
+      create(:donator, email_address: donator.email_address)
+      expect(donator.save).to be_truthy
+    end
+
+    it "cannot be saved if the existing duplicate is confirmed" do
+      create(:donator, :confirmed, email_address: donator.email_address)
+      expect { donator.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Email address has already been taken")
+    end
+
+    it "can be saved if only the new duplicate is confirmed" do
+      create(:donator, email_address: donator.email_address)
+      donator.confirmed_at = 2.days.ago
+      expect(donator.save).to be_truthy
+    end
+
+    it "cannot be saved if both duplicates are confirmed" do
+      create(:donator, :confirmed, email_address: donator.email_address)
+      donator.confirmed_at = 2.days.ago
+      expect { donator.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Email address has already been taken")
+    end
+
+    it "can be saved if the duplicate is itself" do
+      donator.confirm
+      expect(donator.reload.save).to be_truthy
     end
   end
 end

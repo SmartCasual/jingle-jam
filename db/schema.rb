@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_13_102743) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_26_090918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -151,7 +151,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_102743) do
     t.datetime "locked_at"
     t.string "twitch_id"
     t.index ["confirmation_token"], name: "index_donators_on_confirmation_token", unique: true
-    t.index ["email_address"], name: "index_donators_on_email_address", unique: true
+    t.index ["email_address"], name: "index_donators_on_email_address", unique: true, where: "(confirmed_at IS NOT NULL)"
     t.index ["reset_password_token"], name: "index_donators_on_reset_password_token", unique: true
     t.index ["twitch_id"], name: "index_donators_on_twitch_id", unique: true
     t.index ["unlock_token"], name: "index_donators_on_unlock_token", unique: true

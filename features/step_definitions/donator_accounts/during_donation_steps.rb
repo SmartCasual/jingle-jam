@@ -1,15 +1,9 @@
 When("a donator makes a donation without giving a name or an email address") do
-  amount = Money.new(10_00, "GBP")
-  stub_stripe_session_creation(amount:)
-
-  make_donation(amount, navigate: true)
+  make_donation(Money.new(10_00, "GBP"), navigate: true)
 end
 
 When("a donator makes a donation giving a name but no email address") do
-  amount = Money.new(10_00, "GBP")
-  stub_stripe_session_creation(amount:)
-
-  make_donation(amount,
+  make_donation(Money.new(10_00, "GBP"),
     navigate: true,
     name: "Test Donator",
   )
@@ -17,10 +11,7 @@ end
 
 When("a donator makes a donation giving an email address") do
   @expected_email_address = "test@example.com"
-  amount = Money.new(10_00, "GBP")
-  stub_stripe_session_creation(amount:)
-
-  make_donation(amount,
+  make_donation(Money.new(10_00, "GBP"),
     navigate: true,
     email_address: @expected_email_address,
   )
@@ -28,10 +19,7 @@ end
 
 When("a donator makes a donation giving an email address from Stripe") do
   @expected_email_address = "test@example.com"
-  amount = Money.new(10_00, "GBP")
-  stub_stripe_session_creation(amount:)
-
-  make_donation(amount,
+  make_donation(Money.new(10_00, "GBP"),
     navigate: true,
     stripe_options: {
       email_address: @expected_email_address,

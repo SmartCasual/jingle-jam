@@ -24,5 +24,14 @@ class ApplicationRecord < ActiveRecord::Base
         send(attribute)&.format(no_cents_if_whole: true, symbol:)
       end
     end
+
+    def skip_uniqueness_validation(attributes)
+      filter = _validate_callbacks.find { |c|
+        c.filter.is_a?(ActiveRecord::Validations::UniquenessValidator) &&
+          c.filter.attributes == Array(attributes)
+      }.filter
+
+      skip_callback(:validate, :before, filter)
+    end
   end
 end
