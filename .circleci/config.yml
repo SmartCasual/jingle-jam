@@ -6,7 +6,7 @@ orbs:
   browser-tools: circleci/browser-tools@1.2
 
 jobs:
-  test:  # our next job, called "test"
+  test: # our next job, called "test"
     docker:
       - image: cimg/ruby:3.1.1-browsers # this is our primary docker image, where step commands run.
       - image: cimg/postgres:13.5
@@ -23,7 +23,8 @@ jobs:
       FROM_EMAIL_ADDRESS: "jingle-jam@example.com"
       HMAC_SECRET: "c360bcae-df63-4616-808a-860f03d7da6b"
       PAYPAL_API_ENDPOINT: "https://api.paypal.example.com"
-      PAYPAL_CLIENT_ID: "AakBwrFPLdPU4-oKX939jxpGlL-0_J9E10z1dSapKjp2G-o8pte9OjKw8bBlQEHKbyFWU9WqAdTMgupz"
+      PAYPAL_CLIENT_ID: "AakBwrFPLdPU4-oKX939jxpGlL-0_J9E10z1dSapKjp2G-o8pte9OjKw8bBl\
+        QEHKbyFWU9WqAdTMgupz"
       PAYPAL_EMAIL_ADDRESS: "abcde@example.com"
       PAYPAL_MERCHANT_ID: "abcde"
       PAYPAL_WEBHOOK_ID: "abcde"
@@ -61,9 +62,11 @@ jobs:
       - run:
           name: Tests
           command: bundle exec rake
+    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: large
 
 workflows:
   version: 2
-  build_and_test:     # The name of our workflow is "build_and_test"
-    jobs:             # The list of jobs we run as part of this workflow.
-      - test          # Then run test,
+  build_and_test: # The name of our workflow is "build_and_test"
+    jobs: # The list of jobs we run as part of this workflow.
+      - test # Then run test,
