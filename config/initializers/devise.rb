@@ -274,10 +274,14 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth(:token,
     request_a_login_email_path: "/donators/request-a-login-email",
-    secret: ENV["HMAC_SECRET"],
+    secret: ENV.fetch("HMAC_SECRET"),
     uid_field: :donator_id,
   )
-  config.omniauth :twitch, ENV['TWITCH_CLIENT_ID'], ENV['TWITCH_CLIENT_SECRET'], scope: "user:read:email"
+  config.omniauth(:twitch, ENV.fetch("TWITCH_CLIENT_ID"), ENV.fetch("TWITCH_CLIENT_SECRET"),
+    scope: "user:read:email",
+    redirect_uri: ENV.fetch("TWITCH_REDIRECT_URI"),
+  )
+
   OmniAuth.config.logger = Rails.logger
 
   # ==> Warden configuration
