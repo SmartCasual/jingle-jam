@@ -8,8 +8,8 @@ RSpec.describe GameEntryKeyAssignmentJob do
     )
   end
 
-  let(:key_manager) { instance_double("KeyManager") }
-  let(:tier_checker) { instance_double("TierChecker") }
+  let(:key_manager) { instance_double(KeyManager) }
+  let(:tier_checker) { instance_double(TierChecker) }
 
   let(:donator) { create(:donator, :with_email_address) }
 

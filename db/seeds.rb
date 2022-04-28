@@ -1,5 +1,5 @@
 # rubocop:disable Rails/Output
-if Rails.env.development? || ENV["FORCE_SEEDS"] == "true"
+if Rails.env.development? || ENV.fetch("FORCE_SEEDS", nil) == "true"
   puts "Creating admin user admin@example.com"
   AdminUser.create!(
     name: "admin",

@@ -8,7 +8,7 @@ orbs:
 jobs:
   test: # our next job, called "test"
     docker:
-      - image: cimg/ruby:3.1.1-browsers # this is our primary docker image, where step commands run.
+      - image: cimg/ruby:3.1.2-browsers # this is our primary docker image, where step commands run.
       - image: cimg/postgres:13.5
         environment: # add POSTGRES environment variables.
           POSTGRES_USER: circleci

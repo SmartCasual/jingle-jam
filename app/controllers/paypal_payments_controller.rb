@@ -57,8 +57,8 @@ private
           value: donation.amount.format(symbol: false),
         },
         payee: {
-          email_address: ENV["PAYPAL_EMAIL_ADDRESS"],
-          merchant_id: ENV["PAYPAL_MERCHANT_ID"],
+          email_address: ENV.fetch("PAYPAL_EMAIL_ADDRESS", nil),
+          merchant_id: ENV.fetch("PAYPAL_MERCHANT_ID", nil),
         },
         description: "Jingle Jam donation",
       }],
