@@ -28,7 +28,7 @@ When("a donator makes a donation giving an email address from Stripe") do
 end
 
 When("a donator makes a donation giving an email address from Paypal") do
-  @expected_email_address = ENV["PAYPAL_TEST_DONATOR_EMAIL_ADDRESS"]
+  @expected_email_address = ENV.fetch("PAYPAL_TEST_DONATOR_EMAIL_ADDRESS", nil)
   amount = Money.new(10_00, "GBP")
 
   order_id = stub_paypal_order_creation(amount:)

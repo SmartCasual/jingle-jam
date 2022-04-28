@@ -13,7 +13,7 @@ class StripePaymentsController < PaymentsController
   def webhook
     sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
     payload = request.body.read
-    event = Stripe::Webhook.construct_event(payload, sig_header, ENV["STRIPE_WEBHOOK_SECRET_KEY"])&.to_hash
+    event = Stripe::Webhook.construct_event(payload, sig_header, ENV.fetch("STRIPE_WEBHOOK_SECRET_KEY", nil))&.to_hash
 
     event_data = event.dig(:data, :object)
 

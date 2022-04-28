@@ -59,7 +59,7 @@ module DonationTestHelpers
             switch_to_window { title == "PayPal" }
           end
 
-          fill_in "Email address", with: ENV["PAYPAL_TEST_DONATOR_EMAIL_ADDRESS"], wait: 30
+          fill_in "Email address", with: ENV.fetch("PAYPAL_TEST_DONATOR_EMAIL_ADDRESS", nil), wait: 30
           click_on "Next"
 
           fill_in "Password", with: ENV["PAYPAL_TEST_DONATOR_EMAIL_ADDRESS"].split("@").first, wait: 10

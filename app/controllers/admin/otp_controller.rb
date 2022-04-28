@@ -7,7 +7,7 @@ class Admin::OTPController < ApplicationController
 
   def setup
     session[:otp_secret] = ROTP::Base32.random
-    totp = ROTP::TOTP.new(session[:otp_secret], issuer: ENV["OTP_ISSUER"])
+    totp = ROTP::TOTP.new(session[:otp_secret], issuer: ENV.fetch("OTP_ISSUER", nil))
     @otp_url = totp.provisioning_uri(current_admin_user.email_address)
     @qr_code = RQRCode::QRCode.new(@otp_url).as_svg(standalone: false, module_size: 5)
   end
@@ -16,7 +16,7 @@ class Admin::OTPController < ApplicationController
     otp_secret = current_admin_user.otp_secret || session[:otp_secret]
     raise "Missing OTP secret" if otp_secret.blank?
 
-    totp = ROTP::TOTP.new(otp_secret, issuer: ENV["OTP_ISSUER"], after: current_admin_user.last_otp_at)
+    totp = ROTP::TOTP.new(otp_secret, issuer: ENV.fetch("OTP_ISSUER", nil), after: current_admin_user.last_otp_at)
 
     if totp.verify(params[:otp_code], drift_behind: 3)
       current_admin_user.otp_secret ||= session[:otp_secret]

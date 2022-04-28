@@ -1,7 +1,7 @@
 module RequestTestHelpers
   # https://stripe.com/docs/webhooks/signatures#verify-manually
   def valid_signature(timestamp, payload, stripe_webhook_secret_key = nil)
-    "t=#{timestamp},v1=#{hmac(timestamp, payload, stripe_webhook_secret_key || ENV['STRIPE_WEBHOOK_SECRET_KEY'])}"
+    "t=#{timestamp},v1=#{hmac(timestamp, payload, stripe_webhook_secret_key || ENV.fetch('STRIPE_WEBHOOK_SECRET_KEY', nil))}"
   end
 
   def hmac(timestamp, payload, secret_key)
