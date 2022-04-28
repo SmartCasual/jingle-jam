@@ -17,7 +17,10 @@ RSpec.describe StripePaymentsController, type: :request do
 
     let(:currency) { "GBP" }
 
-    context "when the donation passes validation", vcr: "prep_stripe_checkout_session" do
+    context "when the donation passes validation", vcr: {
+      cassette_name: "prep_stripe_checkout_session",
+      erb: { email_address: nil },
+    } do
       it "creates a pending donation" do
         expect {
           post_json("/stripe/prep-checkout", params)
@@ -40,7 +43,7 @@ RSpec.describe StripePaymentsController, type: :request do
         let(:donator) { create(:donator, stripe_customer_id:) }
 
         it "reuses that customer ID" do
-          get("/magic-redirect/#{donator.id}/#{donator.hmac}")
+          post(donator_token_omniauth_callback_path, params: { donator_id: donator.id, token: donator.token })
 
           stripe_request = a_request(:post, "https://api.stripe.com/v1/checkout/sessions")
             .with(body: /customer=#{stripe_customer_id}/)

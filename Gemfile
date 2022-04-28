@@ -37,11 +37,17 @@ gem "demopass", "~> 0.2"
 gem "devise", "~> 4.8"
 gem "faraday", "~> 2.2"
 gem "faraday-retry", "~> 1.0"
+gem "hmac", "~> 2.1"
 gem "kms_encrypted", "~> 1.4" # KMS support for `lockbox`
 gem "lockbox", "~> 0.6" # Game key encryption
 gem "monetize", "~> 1.12"
 gem "money-rails", "~> 1.15"
 gem "net-smtp", "~> 0.3", require: false
+gem "omniauth", "~> 2.0"
+gem "omniauth-rails_csrf_protection", "~> 1.0"
+gem "omniauth-token", "~> 1.0"
+gem "omniauth-twitch", github: "WebTheoryLLC/omniauth-twitch", ref: "500027926f44362daefa1818aa58080b456199c9" # FIXME: Replace github gem when 1.1.1 is released
+gem "paypal-rest", "~> 1.1"
 gem "rollbar", "~> 3.3"
 gem "rotp", "~> 6.2"
 gem "rqrcode", "~> 2.1"

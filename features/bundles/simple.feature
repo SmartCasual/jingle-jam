@@ -1,4 +1,3 @@
-@stripe
 Feature: Bundles: simple
 
 Background:

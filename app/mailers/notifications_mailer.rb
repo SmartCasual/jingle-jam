@@ -18,7 +18,15 @@ class NotificationsMailer < ApplicationMailer
   def bundle_assigned(donator)
     return if donator.email_address.blank?
 
-    @magic_url = magic_redirect_url(donator_id: donator.id, hmac: donator.hmac)
+    @magic_url = log_in_via_token_donator_url(donator, token: donator.token)
+
+    mail to: donator.email_address
+  end
+
+  def account_created(donator)
+    return if donator.email_address.blank?
+
+    @donator = donator
 
     mail to: donator.email_address
   end

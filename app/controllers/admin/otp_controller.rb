@@ -8,7 +8,7 @@ class Admin::OTPController < ApplicationController
   def setup
     session[:otp_secret] = ROTP::Base32.random
     totp = ROTP::TOTP.new(session[:otp_secret], issuer: ENV["OTP_ISSUER"])
-    @otp_url = totp.provisioning_uri(current_admin_user.email)
+    @otp_url = totp.provisioning_uri(current_admin_user.email_address)
     @qr_code = RQRCode::QRCode.new(@otp_url).as_svg(standalone: false, module_size: 5)
   end
 

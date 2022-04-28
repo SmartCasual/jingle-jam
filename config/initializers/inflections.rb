@@ -17,7 +17,6 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   %w[
     2SV
-    HMAC
     OTP
   ].each do |acronym|
     inflect.acronym(acronym)

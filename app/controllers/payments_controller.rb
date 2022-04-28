@@ -3,7 +3,9 @@ class PaymentsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :webhook
 
   def prep_checkout_session
-    save_donator_if_needed
+    set_current_donator
+    update_current_donator
+    save_current_donator
 
     donation = build_donation
 
@@ -30,14 +32,18 @@ private
         Donator.find_by(email_address: params[:on_behalf_of])
       end
 
-      donation.donator = on_behalf_of || current_donator
-      donation.donated_by = current_donator if on_behalf_of.present?
+      if on_behalf_of.present?
+        donation.donator = on_behalf_of
+        donation.donated_by = current_donator
+      else
+        donation.donator = current_donator
+      end
     end
   end
 
   def donation_params
     params.require(:donation)
-      .except(:manual, :lock)
+      .except(:lock, :manual)
       .permit(
         :amount_currency,
         :curated_streamer_id,
@@ -51,9 +57,32 @@ private
       )
   end
 
-  def save_donator_if_needed
-    if current_donator.new_record?
-      current_donator.save && session[:donator_id] = current_donator.id
+  def set_current_donator
+    self.current_donator = ExistingDonatorFinder.find(
+      current_donator:,
+      email_address: params[:donator_email_address],
+    )
+  end
+
+  def update_current_donator
+    current_donator.name ||= donation_params[:donator_name]
+    current_donator.email_address ||= params[:donator_email_address]
+  end
+
+  def save_current_donator
+    current_donator.save!
+
+    if current_donator.previously_new_record?
+      sign_in(current_donator)
+      NotificationsMailer.account_created(current_donator).deliver_now
     end
+  end
+
+  def set_donator_email_if_missing(new_email_address)
+    return if new_email_address.blank?
+    return if current_donator.email_address.present?
+    return if current_donator.email_address == new_email_address
+
+    current_donator.update(email_address: new_email_address)
   end
 end

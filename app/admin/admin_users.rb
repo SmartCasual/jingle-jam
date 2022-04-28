@@ -2,7 +2,7 @@ ActiveAdmin.register AdminUser do
   permit_params(
     *%i[
       data_entry
-      email
+      email_address
       full_access
       manages_users
       name
@@ -16,7 +16,7 @@ ActiveAdmin.register AdminUser do
     selectable_column
     id_column
     column :name
-    column :email
+    column :email_address
     column :current_sign_in_at
     column :sign_in_count
     column :permissions do |user|
@@ -26,7 +26,7 @@ ActiveAdmin.register AdminUser do
   end
 
   filter :name
-  filter :email
+  filter :email_address
   filter :current_sign_in_at
   filter :sign_in_count
   filter :created_at
@@ -34,7 +34,7 @@ ActiveAdmin.register AdminUser do
   form do |f|
     f.inputs do
       f.input :name
-      f.input :email
+      f.input :email_address
       f.input :password, required: false
       f.input :password_confirmation
     end

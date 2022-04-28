@@ -2,9 +2,10 @@ class ApplicationController < ActionController::Base
 private
 
   def current_donator
-    @current_donator ||= Donator.find_by(id: session[:donator_id]) || Donator.new
+    @current_donator ||= (super || Donator.new)
   end
-  helper_method :current_donator
+
+  attr_writer :current_donator
 
   def known_user?
     current_user.present?
@@ -17,6 +18,12 @@ private
   def current_ability
     @current_ability ||= PublicAbility.new(current_donator)
   end
+
+  def donator_signed_in?
+    current_donator&.persisted?
+  end
+  alias_method :donator_logged_in?, :donator_signed_in?
+  helper_method :donator_logged_in?
 
   around_action :switch_locale
   def switch_locale(&)

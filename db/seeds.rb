@@ -4,8 +4,8 @@ if Rails.env.development? || ENV["FORCE_SEEDS"] == "true"
   AdminUser.create!(
     name: "admin",
     email: "admin@example.com",
-    password: "password",
-    password_confirmation: "password",
+    password: "password123",
+    password_confirmation: "password123",
   )
 
   BundleDefinition.without_assignments do

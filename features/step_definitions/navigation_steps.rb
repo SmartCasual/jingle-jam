@@ -6,8 +6,10 @@ Then("they should see the header {string}") do |heading|
   expect(page).to have_css("h1", text: heading)
 end
 
-When("a donator clicks on {string}") do |link|
-  click_on link
+When("a donator clicks on nav link {string}") do |link|
+  within "nav" do
+    click_on link
+  end
 end
 
 When("a donator clicks on the main logo") do

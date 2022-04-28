@@ -1,11 +1,15 @@
 <h2>Sign up</h2>
 
+<h3>With Twitch</h3>
+<%= button_to "Sign up wth Twitch", donator_twitch_omniauth_authorize_path %>
+
+<h3>With an email address and password</h3>
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= f.label :email_address %><br />
+    <%= f.email_field :email_address, autofocus: true, autocomplete: "email" %>
   </div>
 
   <div class="field">
@@ -25,5 +29,3 @@
     <%= f.submit "Sign up" %>
   </div>
 <% end %>
-
-<%= render "devise/shared/links" %>

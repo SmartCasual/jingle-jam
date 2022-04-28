@@ -52,7 +52,7 @@ module RequestTestHelpers
     JSON
   end
 
-  def stripe_payment_intent_object(amount: "2500", currency: "gbp", payment_intent_id: "pi_00000000000000")
+  def stripe_payment_intent_object(amount: "2500", currency: "gbp", payment_intent_id: "pi_00000000000000", email_address: nil)
     <<~JSON
       {
         "id": "#{payment_intent_id}",
@@ -87,7 +87,7 @@ module RequestTestHelpers
                   "postal_code": null,
                   "state": null
                 },
-                "email": null,
+                "email": #{email_address.nil? ? 'null' : %("#{email_address}")},
                 "name": null,
                 "phone": null
               },
@@ -187,5 +187,68 @@ module RequestTestHelpers
         "transfer_group": null
       }
     JSON
+  end
+
+  def stub_stripe_session_creation(amount:, order_id: SecureRandom.uuid, payment_intent_id: "pi_#{SecureRandom.hex}", email_address: nil)
+    allow(Stripe::Checkout::Session).to receive(:create)
+      .with(
+        hash_including(
+          line_items: [
+            hash_including(
+              price_data: hash_including(
+                currency: amount.currency.iso_code,
+                unit_amount: amount.cents,
+              ),
+            ),
+          ],
+        ),
+      )
+      .and_return(
+        Stripe::Checkout::Session.new(id: order_id).tap { |s|
+          s.payment_intent = payment_intent_id
+          s.customer_email = email_address
+        },
+      )
+
+    payment_intent_id
+  end
+
+  def stub_paypal_order_creation(amount:, order_id: SecureRandom.uuid)
+    allow(Paypal::REST).to receive(:create_order)
+      .with(
+        hash_including(
+          purchase_units: [
+            hash_including(
+              amount: {
+                currency_code: amount.currency.iso_code,
+                value: amount.format(symbol: false),
+              },
+            ),
+          ],
+        ),
+      ).and_return(order_id)
+
+    order_id
+  end
+
+  def stub_paypal_payment_capture(order_id:, email_address: nil)
+    allow(Paypal::REST).to receive(:capture_payment_for_order)
+      .with(order_id, full_response: true)
+      .and_return(payer: { email_address: })
+  end
+
+  def stub_twitch_auth(auth_hash)
+    orig_test_mode = OmniAuth.config.test_mode
+    orig_mock_auth = OmniAuth.config.mock_auth[:twitch]
+
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.mock_auth[:twitch] = OmniAuth::AuthHash.new(
+      auth_hash.merge(provider: "twitch"),
+    )
+
+    yield
+
+    OmniAuth.config.test_mode = orig_test_mode
+    OmniAuth.config.mock_auth[:twitch] = orig_mock_auth
   end
 end

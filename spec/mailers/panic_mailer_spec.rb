@@ -9,13 +9,13 @@ RSpec.describe PanicMailer, type: :mailer do
     end
   end
 
-  describe "missing_key" do
+  describe "#missing_key" do
     let(:mail) { described_class.missing_key(nil, nil) }
     let!(:admins) { create_list(:admin_user, 2) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Missing key")
-      expect(mail.to).to eq(admins.map(&:email))
+      expect(mail.to).to eq(admins.map(&:email_address))
       expect(mail.from).to eq([from_address])
     end
 

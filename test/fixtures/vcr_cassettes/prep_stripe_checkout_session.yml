@@ -75,7 +75,7 @@ http_interactions:
           "currency": "gbp",
           "customer": null,
           "customer_details": null,
-          "customer_email": null,
+          "customer_email": <%= "\"#{email_address}\"" || "null" %>,
           "livemode": false,
           "locale": null,
           "metadata": {
