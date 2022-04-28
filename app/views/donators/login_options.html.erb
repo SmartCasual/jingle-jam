@@ -1,0 +1,44 @@
+<h1>Login options</h1>
+
+<p>Here you can provide more information to make it easier to access your account and game keys.</p>
+
+<h2>Logging in via token URL</h2>
+<p>You can always log in by going to this URL:</p>
+<p><%= log_in_via_token_donator_url(current_donator, token: current_donator.token) %></p>
+
+<%= form_for @donator, url: update_login_options_donator_path(@donator), method: :patch do |f| %>
+  <h2>By email</h2>
+  <p>If you provide (and confirm) your email address, we can send your token URL via email, so you can log in without having to remember it.</p>
+  <p>
+    <%= f.label :email_address, "Email address" %>
+    <%= f.text_field :email_address %>
+  </p>
+
+  <h2>With email address and password</h2>
+  <p>If you also provide a password, you can <%= link_to "log in directly", new_donator_session_path %> without needing a token URL.</p>
+  <p>
+    <%= f.label :password, "Password" %>
+    <%= f.password_field :password %>
+  </p>
+  <p>
+    <%= f.label :password_confirmation, "Confirm password" %>
+    <%= f.password_field :password_confirmation %>
+  </p>
+
+  <button>Update</button>
+<% end %>
+
+<h2>Via Twitch</h2>
+
+<% if current_donator.twitch_connected? %>
+  <p>Your account is connected to Twitch ID <%= current_donator.twitch_id %>.</p>
+  <p>If you don't want this, you can disconnect it:</p>
+  <p><%= button_to "Disconnect your Twitch account", disconnect_twitch_donator_path(current_donator), method: :delete %></p>
+<% else %>
+  <p>If you have a Twitch account, you can connect it by clicking the button below.</p>
+  <p>
+    We'll use the email address on your Twitch account and/or your Twitch ID to connect up your accounts,
+    and you can use Twitch to log in in future if you like.
+  </p>
+  <p><%= button_to "Connect your Twitch account", donator_twitch_omniauth_authorize_path %></p>
+<% end %>

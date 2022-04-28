@@ -1,5 +1,11 @@
 <h1><%= t("donations.header") %></h1>
 
+<% if donator_logged_in? && current_donator.no_identifying_marks? %>
+  <p>
+    <%= link_to t("donations.provide_more_information"), login_options_donator_path(current_donator) %>
+  </p>
+<% end %>
+
 <% if @donations.any? %>
   <p>
     <%= t("donations.link_to_game_keys") %>

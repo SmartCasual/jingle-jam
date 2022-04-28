@@ -69,6 +69,7 @@ en:
     header: "Your donations"
     link_to_game_keys: "Here's a permanent link to your game keys."
     link_to_game_keys_email_sent: "We've also sent the link in an email. Make sure you've received it before closing this page."
+    provide_more_information: "Provide more information to more easily access your account and game keys"
     viewer_donations:
       header: "Viewer donations"
     total:

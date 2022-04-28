@@ -332,4 +332,44 @@ RSpec.describe Donator do
       expect(donator.reload.save).to be_truthy
     end
   end
+
+  describe "#no_identifying_marks?" do
+    subject { donator.no_identifying_marks? }
+
+    context "when the donator has no identifying marks" do
+      before do
+        donator.update(
+          email_address: nil,
+          twitch_id: nil,
+        )
+      end
+
+      it { is_expected.to be(true) }
+    end
+
+    context "when the donator has an unconfirmed email address" do
+      before do
+        donator.update(email_address: "test@example.com")
+      end
+
+      it { is_expected.to be(true) }
+    end
+
+    context "when the donator has a confirmed email address" do
+      before do
+        donator.update(email_address: "test@example.com")
+        donator.confirm
+      end
+
+      it { is_expected.to be(false) }
+    end
+
+    context "when the donator has a Twitch ID" do
+      before do
+        donator.update(twitch_id: "123")
+      end
+
+      it { is_expected.to be(false) }
+    end
+  end
 end

@@ -30,6 +30,26 @@ module AccountTestHelpers
     visit find_link(email, /confirmation_token/)
     click_on "Confirm email address"
   end
+
+  def update_login_options(email_address: nil, password: nil, connect_twitch: false)
+    visit login_options_donator_path(@current_donator)
+
+    if email_address
+      fill_in "Email address", with: email_address
+
+      if password
+        fill_in "Password", with: password
+        fill_in "Confirm password", with: password
+      end
+
+      click_on "Update"
+    end
+
+    if connect_twitch
+      visit login_options_donator_path(@current_donator)
+      click_on "Connect with Twitch"
+    end
+  end
 end
 
 World(AccountTestHelpers)

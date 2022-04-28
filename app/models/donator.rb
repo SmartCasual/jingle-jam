@@ -144,4 +144,12 @@ class Donator < ApplicationRecord
   def anonymous?
     name.blank? && chosen_name.blank?
   end
+
+  def twitch_connected?
+    twitch_id.present?
+  end
+
+  def no_identifying_marks?
+    email_address.blank? && twitch_id.blank?
+  end
 end

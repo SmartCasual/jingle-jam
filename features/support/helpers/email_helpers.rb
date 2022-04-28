@@ -28,6 +28,12 @@ module EmailHelpers
       link.match(regex)
     end
   end
+
+  def find_email_with_link(regex)
+    ActionMailer::Base.deliveries.find do |email|
+      find_link(email, regex)
+    end
+  end
 end
 
 World(EmailHelpers)

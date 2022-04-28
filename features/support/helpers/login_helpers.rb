@@ -1,5 +1,5 @@
 module LoginHelpers
-  def log_in_with(email_address, otp_secret:, navigate: true, expect_failure: false)
+  def log_in_admin_with(email_address, otp_secret:, navigate: true, expect_failure: false)
     visit "/admin/login" if navigate
 
     fill_in "Email address", with: email_address
@@ -12,6 +12,21 @@ module LoginHelpers
       @current_admin_user = AdminUser.find_by!(email_address:)
       expect(page).to have_css("#current_user a", text: @current_admin_user.name)
       @current_admin_user
+    end
+  end
+
+  def log_in_donator_with(email_address:, password:, navigate: true, expect_failure: false)
+    click_on "Log in" if navigate
+
+    fill_in "Email", with: email_address
+    fill_in "Password", with: password
+    click_button "Log in"
+
+    if expect_failure
+      expect(page).to have_text("Invalid")
+      expect(logged_in?).to be(false)
+    else
+      expect(logged_in?).to be(true)
     end
   end
 
@@ -34,7 +49,7 @@ module LoginHelpers
     when Donator
       use_magic_link(user)
     when AdminUser
-      log_in_with(user.email_address, otp_secret: user.otp_secret, **kwargs)
+      log_in_admin_with(user.email_address, otp_secret: user.otp_secret, **kwargs)
     end
 
     user
@@ -51,13 +66,17 @@ module LoginHelpers
     log_in_as(as, **kwargs)
   end
 
-  def log_out
-    go_to_homepage
+  def log_out(navigate: true)
+    go_to_homepage if navigate
     click_on "Log out"
   end
 
   def ensure_logged_out
-    log_out if page.has_css?("button", text: "Log out")
+    log_out if logged_in?
+  end
+
+  def logged_in?
+    page.has_button?("Log out")
   end
 end
 

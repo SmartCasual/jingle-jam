@@ -41,6 +41,9 @@ Rails.application.routes.draw do
 
       member do
         get "/log-in-via-token/:token", to: "donators#log_in_via_token", as: "log_in_via_token"
+        get "/login-options", to: "donators#login_options", as: "login_options"
+        patch "/update-login-options", to: "donators#update_login_options", as: "update_login_options"
+        delete "/disconnect-twitch", to: "donators#disconnect_twitch", as: "disconnect_twitch"
       end
     end
     resources :games, only: [:show]

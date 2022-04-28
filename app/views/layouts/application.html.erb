@@ -51,7 +51,7 @@
           </ul>
           <div class="donator">
             <ul>
-              <li><%= current_donator.display_name %></li>
+              <li><%= link_to current_donator.display_name, current_donator %></li>
               <li><%= button_to t("common.actions.log_out"), destroy_donator_session_path, method: :delete %></li>
             </ul>
           </div>
