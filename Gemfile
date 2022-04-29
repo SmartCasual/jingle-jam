@@ -47,7 +47,7 @@ gem "omniauth", "~> 2.0"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "omniauth-token", "~> 1.0"
 gem "omniauth-twitch", github: "WebTheoryLLC/omniauth-twitch", ref: "500027926f44362daefa1818aa58080b456199c9" # FIXME: Replace github gem when 1.1.1 is released
-gem "paypal-rest", "~> 1.1"
+gem "paypal-rest", "~> 1.1", path: "../paypal-rest"
 gem "rollbar", "~> 3.3"
 gem "rotp", "~> 6.2"
 gem "rqrcode", "~> 2.1"

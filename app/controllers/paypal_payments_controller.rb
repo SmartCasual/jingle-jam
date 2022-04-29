@@ -7,6 +7,9 @@ class PaypalPaymentsController < PaymentsController
         donation.paypal_order_id = order
       end
     end
+  rescue Paypal::REST::ClientError => e
+    Rails.logger.error(e.message)
+    head :unprocessable_entity
   end
 
   def complete_checkout
@@ -22,6 +25,9 @@ class PaypalPaymentsController < PaymentsController
     )
 
     render json: { status: 200 }
+  rescue Paypal::REST::ClientError => e
+    Rails.logger.error(e.message)
+    head :unprocessable_entity
   end
 
   def webhook
