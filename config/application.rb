@@ -6,6 +6,8 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+require "rack-mini-profiler" if ENV.fetch("RACK_MINI_PROFILER", nil) == "true" && !Rails.env.production?
+
 module JingleJam
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

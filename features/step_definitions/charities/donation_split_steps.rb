@@ -1,12 +1,15 @@
 When("a donator splits their donation unevenly among the charities") do
   @amount = Money.new(30_00, "GBP")
 
-  @charity_1 = FactoryBot.create(:charity)
-  @charity_2 = FactoryBot.create(:charity)
-  @charity_3 = FactoryBot.create(:charity)
+  @fundraiser = create(:fundraiser, :active, name: "Fundraiser")
+
+  @charity_1 = create(:charity, fundraisers: [@fundraiser])
+  @charity_2 = create(:charity, fundraisers: [@fundraiser])
+  @charity_3 = create(:charity, fundraisers: [@fundraiser])
 
   make_donation(@amount,
     navigate: true,
+    fundraiser: @fundraiser,
     split: {
       @charity_1 => (@split_1 = Money.new(20_00, "GBP")),
       @charity_2 => (@split_2 = Money.new(6_00, "GBP")),
@@ -16,6 +19,7 @@ When("a donator splits their donation unevenly among the charities") do
 end
 
 Then("the donation split should appear on their donations list") do
+  go_to_donations(fundraiser: @fundraiser)
   expect(page).to have_text(@amount.format)
 
   expect(page).to have_text("#{@charity_1.name}: #{@split_1.format}")
@@ -24,13 +28,16 @@ Then("the donation split should appear on their donations list") do
 end
 
 When("a donator splits their donation in a way that doesn't add up to their total donation") do
-  @charity_1 = FactoryBot.create(:charity)
-  @charity_2 = FactoryBot.create(:charity)
-  @charity_3 = FactoryBot.create(:charity)
+  @fundraiser = create(:fundraiser, :active, name: "Fundraiser")
+
+  @charity_1 = create(:charity, fundraisers: [@fundraiser])
+  @charity_2 = create(:charity, fundraisers: [@fundraiser])
+  @charity_3 = create(:charity, fundraisers: [@fundraiser])
 
   make_donation(Money.new(30_00, "GBP"),
     navigate: true,
     submit: false,
+    fundraiser: @fundraiser,
     split: {
       @charity_1 => Money.new(20_00, "GBP"),
       @charity_2 => Money.new(0),
@@ -44,14 +51,16 @@ Then("the donator should be asked to correct their split") do
 end
 
 Given("a variety of split and unsplit donations") do
-  @popular_charity = FactoryBot.create(:charity, name: "Popular charity")
-  @unpopular_charity = FactoryBot.create(:charity, name: "Unpopular charity")
+  @fundraiser = create(:fundraiser, :active, name: "Fundraiser")
+
+  @popular_charity = create(:charity, name: "Popular charity", fundraisers: [@fundraiser])
+  @unpopular_charity = create(:charity, name: "Unpopular charity", fundraisers: [@fundraiser])
 
   # £15/£15
-  FactoryBot.create(:donation, amount: Money.new(30_00, "GBP"))
+  create(:donation, amount: Money.new(30_00, "GBP"))
 
   # £25/£5
-  FactoryBot.create(:donation,
+  create(:donation,
     amount: Money.new(30_00, "GBP"),
     charity_split: {
       @popular_charity => Money.new(25_00, "GBP"),
@@ -60,7 +69,7 @@ Given("a variety of split and unsplit donations") do
   )
 
   # £10/£5/(£7.50/£7.50)
-  FactoryBot.create(:donation,
+  create(:donation,
     amount: Money.new(30_00, "GBP"),
     charity_split: {
       @popular_charity => Money.new(10_00, "GBP"),

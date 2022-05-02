@@ -1,5 +1,5 @@
-When("a donator clicks on {string} on the homepage") do |charity_name|
-  go_to_homepage
+When("a donator clicks on {string} on the {string} fundraiser page") do |charity_name, fundraiser_name|
+  go_to_fundraiser(name: fundraiser_name)
   click_on charity_name
 end
 

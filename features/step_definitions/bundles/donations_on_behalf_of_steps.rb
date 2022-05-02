@@ -17,6 +17,7 @@ When("someone else makes a {amount} donation on their behalf") do |amount|
 end
 
 Then("a {amount} donation should be recorded under the name {string}") do |amount, name|
+  go_to_donations
   expect(page).to have_text("#{amount.format} Paid #{name}")
 end
 
@@ -24,6 +25,6 @@ Then("the {amount} donation should appear as a gifted donation on the other pers
   log_out
   log_in_as(Donator.last)
   go_to_donations
-  expect(page).to have_text("Gifted donations")
+  expect(page).to have_text("Your gifted donations")
   expect(page).to have_text("#{amount.format} Paid Anonymous")
 end

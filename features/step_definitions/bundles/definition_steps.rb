@@ -1,10 +1,10 @@
 Then("a donator should see a/the bundle priced at {amount}") do |amount|
-  go_to_homepage
+  go_to_first_fundraiser
   expect(page).to have_css(".bundle-definition h3", text: amount.format)
 end
 
 Then("a donator should see {int} bundle(s)") do |bundle_definition_count|
-  go_to_homepage
+  go_to_first_fundraiser
   expect(page).to have_css(".bundle-definition", count: bundle_definition_count)
 end
 

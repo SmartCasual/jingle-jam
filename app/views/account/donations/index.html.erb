@@ -1,0 +1,7 @@
+<h1><%= t("donations.header") %></h1>
+
+<h2>Your donations</h2>
+<%= render "donations/donations_block", donations: current_donator.donations %>
+
+<h2>Your gifted donations</h2>
+<%= render "donations/donations_block", donations: current_donator.gifted_donations, list_partial: "gifted_list" %>

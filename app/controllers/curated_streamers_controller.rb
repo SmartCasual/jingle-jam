@@ -1,10 +1,14 @@
 class CuratedStreamersController < ApplicationController
+  include Translated
+
   before_action :load_streamer
   before_action :check_admin, only: [:admin]
 
   helper DonationHelpers
 
-  def show; end
+  def show
+    @fundraiser = Fundraiser.find(params[:fundraiser_id])
+  end
 
   def admin; end
 

@@ -110,14 +110,20 @@ class Donator < ApplicationRecord
   end
 
   def assign_keys
-    BundleDefinition.live.find_each do |bundle_definition|
-      bundle = bundles.find_or_create_by!(bundle_definition:)
-      BundleKeyAssignmentJob.perform_later(bundle.id)
+    Fundraiser.active.open.find_each do |fundraiser|
+      fundraiser.bundle_definitions.live.find_each do |bundle_definition|
+        bundle = bundles.find_or_create_by!(bundle_definition:)
+        BundleKeyAssignmentJob.perform_later(bundle.id)
+      end
     end
   end
 
-  def total_donations
-    donations.map(&:amount).reduce(Money.new(0), :+)
+  def total_donations(fundraiser: nil)
+    if fundraiser
+      donations.where(fundraiser:)
+    else
+      donations
+    end.map(&:amount).reduce(Money.new(0), :+)
   end
 
   def token

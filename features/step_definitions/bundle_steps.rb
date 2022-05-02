@@ -17,10 +17,12 @@ When("a/the donator makes a/another {amount} donation") do |amount|
 end
 
 Then("a {amount} donation should be recorded with the message {string}") do |amount, message|
+  go_to_donations
   expect(page).to have_text("#{amount.format} Paid #{message}")
 end
 
 Then("a {amount} donation should be recorded") do |amount|
+  go_to_donations
   expect(page).to have_css(".donation-list td", text: amount.format)
 end
 

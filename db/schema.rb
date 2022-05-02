@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_26_090918) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_29_114650) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_26_090918) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "aasm_state", default: "draft", null: false
+    t.bigint "fundraiser_id"
+    t.index ["fundraiser_id"], name: "index_bundle_definitions_on_fundraiser_id"
   end
 
   create_table "bundles", force: :cascade do |t|
@@ -82,6 +84,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_26_090918) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_charities_on_name"
+  end
+
+  create_table "charity_fundraisers", force: :cascade do |t|
+    t.bigint "charity_id"
+    t.bigint "fundraiser_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["charity_id"], name: "index_charity_fundraisers_on_charity_id"
+    t.index ["fundraiser_id"], name: "index_charity_fundraisers_on_fundraiser_id"
   end
 
   create_table "charity_splits", force: :cascade do |t|
@@ -125,9 +136,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_26_090918) do
     t.string "stripe_payment_intent_id"
     t.string "paypal_order_id"
     t.string "donator_name"
+    t.bigint "fundraiser_id"
     t.index ["curated_streamer_id"], name: "index_donations_on_curated_streamer_id"
     t.index ["donated_by_id"], name: "index_donations_on_donated_by_id"
     t.index ["donator_id"], name: "index_donations_on_donator_id"
+    t.index ["fundraiser_id"], name: "index_donations_on_fundraiser_id"
     t.check_constraint "num_nonnulls(stripe_payment_intent_id, paypal_order_id) > 0"
   end
 
@@ -157,6 +170,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_26_090918) do
     t.index ["unlock_token"], name: "index_donators_on_unlock_token", unique: true
   end
 
+  create_table "fundraisers", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.string "short_url"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.string "overpayment_mode", default: "pro_bono", null: false
+    t.string "state", default: "inactive", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "games", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -172,9 +197,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_26_090918) do
     t.text "code_ciphertext"
     t.text "encrypted_kms_key"
     t.string "code_bidx"
+    t.bigint "fundraiser_id"
     t.index ["bundle_id", "game_id"], name: "index_keys_on_bundle_id_and_game_id", unique: true
     t.index ["bundle_id"], name: "index_keys_on_bundle_id"
     t.index ["code_bidx"], name: "index_keys_on_code_bidx", unique: true
+    t.index ["fundraiser_id"], name: "index_keys_on_fundraiser_id"
     t.index ["game_id"], name: "index_keys_on_game_id"
   end
 

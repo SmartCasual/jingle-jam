@@ -13,6 +13,7 @@
 # **`created_at`**         | `datetime`         | `not null`
 # **`updated_at`**         | `datetime`         | `not null`
 # **`bundle_id`**          | `bigint`           |
+# **`fundraiser_id`**      | `bigint`           |
 # **`game_id`**            | `bigint`           | `not null`
 #
 class Key < ApplicationRecord
@@ -23,6 +24,7 @@ class Key < ApplicationRecord
 
   belongs_to :game, inverse_of: :keys
   belongs_to :bundle, inverse_of: :keys, optional: true
+  belongs_to :fundraiser, inverse_of: :keys, optional: true
 
   validates :code, presence: true
 

@@ -4,6 +4,7 @@ When("an admin adds a bundle definition") do
   go_to_admin_area "Bundle Definitions"
   click_on "New Bundle Definition"
   fill_in "Name", with: bundle_definition_name
+  select Fundraiser.active.first.name, from: "Fundraiser"
   click_on "Create Bundle definition"
 
   @current_bundle_definition = BundleDefinition.find_by!(name: bundle_definition_name)

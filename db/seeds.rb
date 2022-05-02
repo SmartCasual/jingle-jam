@@ -6,13 +6,19 @@ if Rails.env.development? || ENV.fetch("FORCE_SEEDS", nil) == "true"
     email: "admin@example.com",
     password: "password123",
     password_confirmation: "password123",
+    full_access: true,
   )
+
+  puts "Creating an active fundraiser"
+  fundraiser = Fundraiser.create!(name: "Manatee Matinée")
+  fundraiser.activate!
 
   BundleDefinition.without_assignments do
     puts "Creating bundle definition"
     bundef = BundleDefinition.create!(
       price_decimals: 25_00,
       name: "Test bundle",
+      fundraiser:,
     )
 
     bundef.bundle_definition_game_entries.create!(
@@ -24,17 +30,20 @@ if Rails.env.development? || ENV.fetch("FORCE_SEEDS", nil) == "true"
       price_decimals: 10_00,
     )
 
-    puts "Adding 10,000 keys per game"
     Game.all.each do |game|
-      10_000.times do
-        game.keys.create(code: SecureRandom.uuid)
+      puts "Adding 1,000 keys for #{game.name}"
+      1_000.times do
+        game.keys.create(
+          code: SecureRandom.uuid,
+          fundraiser:,
+        )
       end
     end
   end
 
   puts "Creating charities"
-  Charity.create(name: "Help the Penguins")
-  Charity.create(name: "Justice for Dugongs")
-  Charity.create(name: "Free All Bats")
+  Charity.create(name: "Help the Penguins", fundraisers: [fundraiser])
+  Charity.create(name: "Justice for Dugongs", fundraisers: [fundraiser])
+  Charity.create(name: "Free All Bats", fundraisers: [fundraiser])
 end
 # rubocop:enable Rails/Output

@@ -9,51 +9,6 @@ RSpec.describe TierChecker do
     let(:bundle_price) { Money.new(2000) }
     let(:tier_price) { Money.new(500) }
 
-    context "with a full bundle" do
-      let!(:tier) do
-        create(:bundle_definition, price: bundle_price)
-      end
-
-      context "with a below-price donation" do
-        before do
-          create(:donation,
-            donator:,
-            amount: bundle_price - Money.new(1),
-          )
-        end
-
-        it "returns false" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to be(false)
-        end
-      end
-
-      context "with an at-price donation" do
-        before do
-          create(:donation,
-            donator:,
-            amount: bundle_price,
-          )
-        end
-
-        it "returns true" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to be(true)
-        end
-      end
-
-      context "with an above-price donation" do
-        before do
-          create(:donation,
-            donator:,
-            amount: bundle_price + Money.new(1),
-          )
-        end
-
-        it "returns true" do
-          expect(tier_checker.donation_level_met?(tier, donator:)).to be(true)
-        end
-      end
-    end
-
     context "with a bundle tier with a price" do
       let!(:tier) do
         bundle_definition = create(:bundle_definition, price: bundle_price)

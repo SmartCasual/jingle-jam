@@ -17,6 +17,7 @@
 # **`curated_streamer_id`**       | `bigint`           |
 # **`donated_by_id`**             | `bigint`           |
 # **`donator_id`**                | `bigint`           | `not null`
+# **`fundraiser_id`**             | `bigint`           |
 # **`paypal_order_id`**           | `string`           |
 # **`stripe_payment_intent_id`**  | `string`           |
 #
@@ -24,6 +25,7 @@ class Donation < ApplicationRecord
   belongs_to :donator, inverse_of: :donations
   belongs_to :donated_by, inverse_of: :gifted_donations, optional: true, class_name: "Donator"
   belongs_to :curated_streamer, inverse_of: :donations, optional: true
+  belongs_to :fundraiser, inverse_of: :donations
 
   has_many :payments, inverse_of: :donation, dependent: :nullify
 

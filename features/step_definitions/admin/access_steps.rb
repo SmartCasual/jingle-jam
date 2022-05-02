@@ -6,6 +6,7 @@ Given("at least one of each type of thing") do
     bundle_definition
     donation
     donator
+    fundraiser
     game
   ].index_with { |factory|
     FactoryBot.create(factory)

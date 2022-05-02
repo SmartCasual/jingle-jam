@@ -4,7 +4,7 @@
   <script type="text/javascript">
     onReady(function() {
       let payments;
-      if (window.testData && window.testData["fake_payment_providers"]) {
+      if (window.testData && window.testData['fake_payment_providers']) {
         payments = Packs.application.fakePayments;
       } else {
         payments = Packs.application.payments;
@@ -19,7 +19,7 @@
 
 <h2><%= t("donations.form.header") %></h2>
 
-<%= form_for new_donation("25.00", local_assigns[:streamer]), url: stripe_prep_checkout_path, html: { id: "donation-form", :'data-stripe-public-key' => ENV["STRIPE_PUBLIC_KEY"], :'data-test-mode' => Rails.env.test? } do |form| %>
+<%= form_for new_donation("25.00", fundraiser:), url: stripe_prep_checkout_path, html: { id: "donation-form", :'data-stripe-public-key' => ENV["STRIPE_PUBLIC_KEY"], :'data-test-mode' => Rails.env.test? } do |form| %>
   <p>
     <%= form.label :amount_currency, t("donations.form.currency") %>
     <%= form.select :amount_currency, options_for_select(Currency.present_all, Currency::DEFAULT_CURRENCY.downcase) %>
@@ -65,10 +65,11 @@
 
   <p>
     <%= label_tag :on_behalf_of, t("donations.form.on_behalf_of") %>
-    <%= text_field_tag :on_behalf_of %>
+    <%= text_field_tag :on_behalf_of, nil, placeholder: "your-best-friend@example.com" %>
   </p>
 
-  <%= form.hidden_field :curated_streamer_id %>
+  <%= form.hidden_field :curated_streamer_id, value: local_assigns[:streamer]&.id %>
+  <%= form.hidden_field :fundraiser_id, value: local_assigns[:fundraiser]&.id %>
 
   <div class="sum-warning" hidden>
     <p><%= t("donations.form.error.split_calculation") %></p>

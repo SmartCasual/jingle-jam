@@ -70,7 +70,7 @@ Then("the donator should have been logged in") do
 end
 
 Then("the donator should see a token log-in link on the page") do
-  expect(page).to have_content(log_in_via_token_donator_path(@current_donator, token: @current_donator.token))
+  expect(page).to have_content(log_in_via_token_account_path(@current_donator, token: @current_donator.token))
 end
 
 Then("the donator should have been sent a token log-in link via email") do

@@ -4,9 +4,9 @@
 
 <h2>Logging in via token URL</h2>
 <p>You can always log in by going to this URL:</p>
-<p><%= log_in_via_token_donator_url(current_donator, token: current_donator.token) %></p>
+<p><%= log_in_via_token_account_url(current_donator, token: current_donator.token) %></p>
 
-<%= form_for @donator, url: update_login_options_donator_path(@donator), method: :patch do |f| %>
+<%= form_for current_donator, url: update_login_options_account_path, method: :patch do |f| %>
   <h2>By email</h2>
   <p>If you provide (and confirm) your email address, we can send your token URL via email, so you can log in without having to remember it.</p>
   <p>
@@ -33,7 +33,7 @@
 <% if current_donator.twitch_connected? %>
   <p>Your account is connected to Twitch ID <%= current_donator.twitch_id %>.</p>
   <p>If you don't want this, you can disconnect it:</p>
-  <p><%= button_to "Disconnect your Twitch account", disconnect_twitch_donator_path(current_donator), method: :delete %></p>
+  <p><%= button_to "Disconnect your Twitch account", disconnect_twitch_account_path, method: :delete %></p>
 <% else %>
   <p>If you have a Twitch account, you can connect it by clicking the button below.</p>
   <p>

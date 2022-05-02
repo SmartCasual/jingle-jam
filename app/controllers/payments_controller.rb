@@ -7,16 +7,16 @@ class PaymentsController < ApplicationController
     update_current_donator
     save_current_donator
 
-    donation = build_donation
+    @donation = build_donation
 
-    if donation.valid?
-      id = yield donation
+    if @donation.valid?
+      id = yield @donation
     end
 
-    if donation.save
+    if @donation.save
       render json: { id: }
     else
-      error donation.errors.full_messages.to_sentence
+      error @donation.errors.full_messages.to_sentence
     end
   end
 
@@ -48,6 +48,7 @@ private
         :amount_currency,
         :curated_streamer_id,
         :donator_name,
+        :fundraiser_id,
         :human_amount,
         :message,
         charity_splits_attributes: %i[
@@ -84,5 +85,21 @@ private
     return if current_donator.email_address == new_email_address
 
     current_donator.update(email_address: new_email_address)
+  end
+
+  def success_url
+    return_url(status: "success")
+  end
+
+  def cancel_url
+    return_url(status: "cancelled")
+  end
+
+  def return_url(status:)
+    if @donation.curated_streamer
+      fundraiser_curated_streamer_url(@donation.fundraiser, @donation.curated_streamer, status:)
+    else
+      fundraiser_donations_url(@donation.fundraiser, status:)
+    end
   end
 end

@@ -44,27 +44,16 @@
         <div class="logo-box">
           <%= link_to_unless_current image_tag("Jingle_Jam_Logo_White_Alt.png", class: "logo", alt: "The Jingle Jam"), root_path %>
         </div>
-        <% if donator_signed_in? %>
+        <div class="donator">
           <ul>
-            <li><%= link_to_unless_current t("navigation.donations"), donations_path %></li>
-            <li><%= link_to_unless_current t("navigation.game_keys"), keys_path %></li>
-          </ul>
-          <div class="donator">
-            <ul>
-              <li><%= link_to current_donator.display_name, current_donator %></li>
+            <% if donator_signed_in? %>
+              <li><%= link_to current_donator.display_name, account_path %></li>
               <li><%= button_to t("common.actions.log_out"), destroy_donator_session_path, method: :delete %></li>
-            </ul>
-          </div>
-        <% else %>
-          <ul>
-            <li><%= link_to_unless_current t("common.actions.donate_here"), donations_path %></li>
-          </ul>
-          <div class="donator">
-            <ul>
+            <% else %>
               <li><%= link_to t("common.actions.log_in"), new_donator_session_path %></li>
-            </ul>
-          </div>
-        <% end %>
+            <% end %>
+          </ul>
+        </div>
       </nav>
     </header>
 

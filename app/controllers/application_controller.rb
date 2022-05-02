@@ -19,21 +19,16 @@ private
     @current_ability ||= PublicAbility.new(current_donator)
   end
 
+  def current_token_url
+    log_in_via_token_account_url(current_donator, token: current_donator.token) if donator_logged_in?
+  end
+  helper_method :current_token_url
+
   def donator_signed_in?
     current_donator&.persisted?
   end
   alias_method :donator_logged_in?, :donator_signed_in?
   helper_method :donator_logged_in?
-
-  around_action :switch_locale
-  def switch_locale(&)
-    locale = params[:locale] || I18n.default_locale
-    I18n.with_locale(locale, &)
-  end
-
-  def default_url_options
-    { locale: I18n.locale }
-  end
 
   def error(message)
     Rails.logger.error(message)

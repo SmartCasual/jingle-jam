@@ -1,0 +1,7 @@
+<h1><%= current_donator.display_name %></h1>
+
+<ul>
+  <li><%= link_to_unless_current t("navigation.donations"), account_donations_path %></li>
+  <li><%= link_to_unless_current t("navigation.game_keys"), account_keys_path %></li>
+  <li><%= link_to_unless_current t("navigation.settings"), login_options_account_path %></li>
+</ul>

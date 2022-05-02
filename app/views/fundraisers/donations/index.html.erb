@@ -1,0 +1,27 @@
+<h1><%= t("donations.header") %></h1>
+
+<% if @donations.any? %>
+  <p>
+    <%= t("donations.link_to_game_keys") %>
+    <%= link_to current_token_url, current_token_url, class: "token-url" %>
+  </p>
+
+  <% if current_donator.email_address.present? %>
+    <p>
+      <%= t("donations.link_to_game_keys_email_sent") %>
+    </p>
+  <% end %>
+
+  <h2>Your donations</h2>
+  <%= render "donations/donations_block", donations: @donations %>
+<% end %>
+
+<% if @gifted_donations.any? %>
+  <h2>Your gifted donations</h2>
+  <%= render "donations/donations_block", donations: @gifted_donations, list_partial: "donations/gifted_list" %>
+<% end %>
+
+<%= link_to t("navigation.donate"), new_fundraiser_donation_path(@fundraiser) %>
+
+<h2>All donations</h2>
+<%= render "donations/donations_block", donations:  @fundraiser.donations %>

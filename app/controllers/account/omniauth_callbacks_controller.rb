@@ -1,4 +1,4 @@
-class Donators::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+class Account::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: [:token]
 
   def token
@@ -29,7 +29,7 @@ private
 
   def log_in(donator)
     set_flash_message!(:notice, :signed_in)
-    sign_in(donator) unless donator_signed_in?
+    sign_in(donator, scope: :donator) unless donator_signed_in?
     redirect_to after_sign_in_path_for(donator)
   end
 

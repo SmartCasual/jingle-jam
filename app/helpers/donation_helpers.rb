@@ -1,8 +1,8 @@
 module DonationHelpers
-  def new_donation(amount, streamer)
-    Donation.new(amount:, curated_streamer: streamer).tap do |donation|
+  def new_donation(amount, fundraiser:)
+    Donation.new(amount:).tap do |donation|
       if donation.charity_splits.none?
-        Charity.find_each do |charity|
+        fundraiser.charities.find_each do |charity|
           donation.charity_splits.build(charity:)
         end
       end

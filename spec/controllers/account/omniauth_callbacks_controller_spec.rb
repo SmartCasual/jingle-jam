@@ -1,4 +1,4 @@
-RSpec.describe Donators::OmniauthCallbacksController, type: :controller do
+RSpec.describe Account::OmniauthCallbacksController, type: :controller do
   include Devise::Test::ControllerHelpers
 
   let(:request) { @request } # rubocop:disable RSpec/InstanceVariable

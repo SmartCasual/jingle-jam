@@ -13,11 +13,14 @@
 # **`price_decimals`**  | `integer`          | `default(0), not null`
 # **`created_at`**      | `datetime`         | `not null`
 # **`updated_at`**      | `datetime`         | `not null`
+# **`fundraiser_id`**   | `bigint`           |
 #
 class BundleDefinition < ApplicationRecord
   include AASM
 
   monetize :price
+
+  belongs_to :fundraiser, inverse_of: :bundle_definitions
 
   has_many :bundle_definition_game_entries, inverse_of: :bundle_definition, dependent: :destroy
   has_many :bundles, inverse_of: :bundle_definition, dependent: :nullify
