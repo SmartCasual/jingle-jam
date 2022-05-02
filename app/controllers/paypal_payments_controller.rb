@@ -69,8 +69,8 @@ private
         shipping_preference: "NO_SHIPPING",
         user_action: "PAY_NOW",
       },
-      return_url: donations_url(streamer: donation.curated_streamer&.twitch_username, status: "success"),
-      cancel_url: donations_url(streamer: donation.curated_streamer&.twitch_username, status: "cancelled"),
+      return_url: success_url,
+      cancel_url:,
     )
   end
 end

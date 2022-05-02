@@ -12,46 +12,6 @@ Rails.application.routes.draw do
     post "/2sv/verify", to: "otp#verify", as: "otp_verify"
   end
 
-  devise_for :donators, {
-    path_names: {
-      sign_in: "login",
-      sign_out: "logout",
-      sign_up: "sign-up",
-    },
-    controllers: {
-      confirmations: "donators/confirmations",
-      omniauth_callbacks: "donators/omniauth_callbacks",
-    },
-  }
-
-  namespace :donators do
-    devise_scope :donator do
-      post :confirm_email_address, to: "confirmations#show"
-    end
-  end
-
-  scope "(:locale)", defaults: { locale: "en" }, locale: /#{I18n.available_locales.join("|")}/ do
-    resources :donations, except: %i[edit update delete destroy]
-    resources :keys, only: [:index]
-    resources :charities, only: [:show]
-    resources :donators, except: %i[index delete destroy] do
-      collection do
-        get "/request-a-login-email", to: "donators#request_login_email", as: "request_login_email"
-      end
-
-      member do
-        get "/log-in-via-token/:token", to: "donators#log_in_via_token", as: "log_in_via_token"
-        get "/login-options", to: "donators#login_options", as: "login_options"
-        patch "/update-login-options", to: "donators#update_login_options", as: "update_login_options"
-        delete "/disconnect-twitch", to: "donators#disconnect_twitch", as: "disconnect_twitch"
-      end
-    end
-    resources :games, only: [:show]
-
-    get "/streams/:twitch_username", to: "curated_streamers#show", as: "curated_streamer"
-    get "/streams/:twitch_username/admin", to: "curated_streamers#admin", as: "curated_streamer_admin"
-  end
-
   post "/stripe/prep-checkout", to: "stripe_payments#prep_checkout_session"
   post "/stripe/webhook", to: "stripe_payments#webhook"
 
@@ -59,6 +19,55 @@ Rails.application.routes.draw do
   post "/paypal/complete-checkout/:order_id", to: "paypal_payments#complete_checkout"
   post "/paypal/webhook", to: "paypal_payments#webhook"
 
-  get "/:locale" => "home#home"
-  root to: "home#home"
+  namespace :account do
+    devise_scope :donator do
+      post :confirm_email_address, to: "confirmations#show"
+    end
+  end
+
+  devise_for(:donators,
+    only: :omniauth_callbacks,
+    controllers: {
+      omniauth_callbacks: "account/omniauth_callbacks",
+    },
+  )
+
+  scope "(:locale)", defaults: { locale: "en" }, locale: /#{I18n.available_locales.join("|")}/ do
+    devise_for(:donators,
+      skip: :omniauth_callbacks,
+      path_names: {
+        sign_in: "login",
+        sign_out: "logout",
+        sign_up: "sign-up",
+      },
+      controllers: {
+        confirmations: "account/confirmations",
+      },
+    )
+
+    resources :fundraisers, only: [:index, :show] do
+      resources :donations, only: %i[index new create], controller: "fundraisers/donations"
+      resources :curated_streamers, path: "streams", only: [:show] do
+        member do
+          get :admin
+        end
+      end
+    end
+
+    resource :account, only: %i[show], controller: "account" do
+      resources :donations, only: [:index], controller: "account/donations"
+      resources :keys, only: [:index]
+
+      get "/request-login-email", to: "account#request_login_email"
+      get "/log-in-via-token/:id/:token", to: "account#log_in_via_token", as: "log_in_via_token"
+      get "/login-options", to: "account#login_options"
+      patch "/update-login-options", to: "account#update_login_options"
+      delete "/disconnect-twitch", to: "account#disconnect_twitch"
+    end
+
+    resources :charities, only: [:index, :show]
+    resources :games, only: [:show]
+
+    root to: "home#home"
+  end
 end

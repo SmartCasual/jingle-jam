@@ -17,6 +17,7 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
     # environment variables specific to Ruby/Rails, applied to the primary container.
     environment:
+      APP_HOST: 127.0.0.1:3000
       BUNDLE_JOBS: "3"
       BUNDLE_RETRY: "3"
       CI: true
@@ -34,6 +35,8 @@ jobs:
       STRIPE_PUBLIC_KEY: "pk_test_a67ef84afbf01ea3d84adda4fabc4adc"
       STRIPE_SECRET_KEY: "sk_test_9800ec742bc5b49f66fc6430c7359b3d"
       STRIPE_WEBHOOK_SECRET_KEY: "whsec_ab50669157228f63305e8fea9244baa2"
+      TWITCH_CLIENT_ID: "abcde"
+      TWITCH_CLIENT_SECRET: "abcde"
     steps:
       - node/install:
           node-version: '16.14'

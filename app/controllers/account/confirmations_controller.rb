@@ -1,4 +1,6 @@
-class Donators::ConfirmationsController < Devise::ConfirmationsController
+class Account::ConfirmationsController < Devise::ConfirmationsController
+  include Translated
+
   def show
     super if request.method == "POST"
   end

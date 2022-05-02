@@ -59,8 +59,8 @@ private
       }],
       mode: "payment",
       submit_type: "donate",
-      success_url: donations_url(streamer: donation.curated_streamer&.twitch_username, status: "success"),
-      cancel_url: donations_url(streamer: donation.curated_streamer&.twitch_username, status: "cancelled"),
+      success_url:,
+      cancel_url:,
       customer: current_donator.stripe_customer_id,
     )
   end

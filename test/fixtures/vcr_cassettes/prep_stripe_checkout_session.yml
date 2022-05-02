@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.stripe.com/v1/checkout/sessions
     body:
       encoding: UTF-8
-      string: payment_method_types[0]=card&line_items[0][price_data][currency]=GBP&line_items[0][price_data][product_data][name]=JingleJam+donation&line_items[0][price_data][unit_amount]=2500&line_items[0][quantity]=1&mode=payment&success_url=http%3A%2F%2Fwww.example.com%2Fdonations%3Fstatus%3Dsuccess&cancel_url=http%3A%2F%2Fwww.example.com%2Fdonations%3Fstatus%3Dcancelled
+      string: payment_method_types[0]=card&line_items[0][price_data][currency]=GBP&line_items[0][price_data][product_data][name]=JingleJam+donation&line_items[0][price_data][unit_amount]=2500&line_items[0][quantity]=1&mode=payment&success_url=http%3A%2F%2Fwww.example.com%2Ffundraisers%2F1%2Fdonations%3Fstatus%3Dsuccess&cancel_url=http%3A%2F%2Fwww.example.com%2Ffundraisers%2F1%2Fdonations%3Fstatus%3Dcancelled
     headers:
       User-Agent:
       - Stripe/v1 RubyBindings/5.30.0
@@ -70,7 +70,7 @@ http_interactions:
             "status": null
           },
           "billing_address_collection": null,
-          "cancel_url": "http://www.example.com/donations?status=cancelled",
+          "cancel_url": "http://www.example.com/fundraisers/1/donations?status=cancelled",
           "client_reference_id": null,
           "currency": "gbp",
           "customer": null,
@@ -93,7 +93,7 @@ http_interactions:
           "shipping_address_collection": null,
           "submit_type": null,
           "subscription": null,
-          "success_url": "http://www.example.com/donations?status=success",
+          "success_url": "http://www.example.com/fundraisers/1/donations?status=success",
           "total_details": {
             "amount_discount": 0,
             "amount_shipping": 0,

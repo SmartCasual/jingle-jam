@@ -7,6 +7,8 @@ FactoryBot.define do
     # £10
     price { Money.new(1000, "GBP") }
 
+    fundraiser { Fundraiser.active.first || association(:fundraiser, :active) }
+
     bundle_definition_game_entries do
       FactoryBot.build_list(:bundle_definition_game_entry, 1, bundle_definition: @instance)
     end

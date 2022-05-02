@@ -2,7 +2,7 @@
 
 <%= render "streaming/twitch", channel: @streamer.twitch_username %>
 
-<%= render "donations/donation_form", streamer: @streamer %>
+<%= link_to t("common.actions.donate_here"), new_fundraiser_donation_path(@fundraiser, streamer: @streamer.twitch_username), class: "cta" %>
 
 <h2><%= t("donations.viewer_donations.header") %></h2>
-<%= render "donations/list", donations: @streamer.donations %>
+<%= render "donations/donations_block", donations: @streamer.donations.where(fundraiser: @fundraiser) %>

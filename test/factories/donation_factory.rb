@@ -7,6 +7,8 @@ FactoryBot.define do
     message { "Some standard message" }
     stripe_payment_intent_id { "stripe_payment_intent_id" }
 
+    fundraiser { Fundraiser.active.first || association(:fundraiser, :active) }
+
     transient do
       charity_split { {} }
     end

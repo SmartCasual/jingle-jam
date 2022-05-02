@@ -1,11 +1,7 @@
 class TierChecker
   def donation_level_met?(tier, donator:)
-    total_donations = donator.total_donations
+    total_donations = donator.total_donations(fundraiser: tier.bundle_definition.fundraiser)
 
-    if tier.respond_to?(:bundle_definition)
-      total_donations >= tier.bundle_definition.price || (tier.price.present? && total_donations >= tier.price)
-    else
-      total_donations >= tier.price
-    end
+    (total_donations >= tier.bundle_definition.price) || (tier.price.present? && total_donations >= tier.price)
   end
 end

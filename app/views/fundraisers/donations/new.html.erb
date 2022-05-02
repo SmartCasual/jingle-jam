@@ -1,0 +1,16 @@
+<h1>Make a donation to <%= @fundraiser.name %></h1>
+
+<%= render "donation_form", fundraiser: @fundraiser, streamer: @streamer %>
+
+<% if current_donator.no_identifying_marks? %>
+  <p>
+    <%= link_to t("donations.provide_more_information"), login_options_account_path %>
+  </p>
+<% end %>
+
+<% if current_donator.donations.where(fundraiser: @fundraiser).any? %>
+  <p>
+    <%= t("donations.link_to_game_keys") %>
+    <%= link_to current_token_url, current_token_url, class: "token-url" %>
+  </p>
+<% end %>

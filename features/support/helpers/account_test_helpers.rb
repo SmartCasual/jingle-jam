@@ -32,7 +32,7 @@ module AccountTestHelpers
   end
 
   def update_login_options(email_address: nil, password: nil, connect_twitch: false)
-    visit login_options_donator_path(@current_donator)
+    visit login_options_account_path
 
     if email_address
       fill_in "Email address", with: email_address
@@ -46,7 +46,7 @@ module AccountTestHelpers
     end
 
     if connect_twitch
-      visit login_options_donator_path(@current_donator)
+      visit login_options_account_path
       click_on "Connect with Twitch"
     end
   end

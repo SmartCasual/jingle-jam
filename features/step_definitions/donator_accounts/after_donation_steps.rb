@@ -11,6 +11,6 @@ Then("they can provide that information via their account page") do
   within "header" do
     click_on Donator.last.display_name
   end
-
+  click_on "Settings"
   expect(page).to have_text("Login options")
 end

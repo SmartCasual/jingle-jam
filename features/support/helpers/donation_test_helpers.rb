@@ -13,6 +13,7 @@ module DonationTestHelpers
       paypal: false,
       split: {},
       submit: true,
+      fundraiser: nil,
     }.merge(options)
 
     stripe_options = {
@@ -20,8 +21,10 @@ module DonationTestHelpers
     }.merge(stripe_options)
 
     if options[:navigate]
-      go_to_homepage
-      page.first("a", text: "Donate here!".upcase).click
+      fundraiser = (options[:fundraiser] || Fundraiser.active.first || create(:fundraiser, :active))
+      go_to_homepage || refresh
+      click_on fundraiser.name
+      click_on "Donate here!"
     end
 
     select amount.currency.iso_code, from: "Currency", wait: 5

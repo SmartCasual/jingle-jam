@@ -1,5 +1,6 @@
 ActiveAdmin.register BundleDefinition do
   permit_params(
+    :fundraiser_id,
     :human_price,
     :name,
     :price_currency,
@@ -18,6 +19,7 @@ ActiveAdmin.register BundleDefinition do
     f.inputs do
       f.input :name
       f.money :price, required: true
+      f.input :fundraiser, as: :select, collection: Fundraiser.all.map { |fr| [fr.name, fr.id] }
     end
 
     f.inputs do
@@ -40,6 +42,7 @@ ActiveAdmin.register BundleDefinition do
       row :price do |bundle_definition|
         bundle_definition.human_price(symbol: true)
       end
+      row :fundraiser
     end
 
     panel "Game entries" do
@@ -61,29 +64,15 @@ ActiveAdmin.register BundleDefinition do
     column :price do |bundle_definition|
       bundle_definition.human_price(symbol: true)
     end
+    column :fundraiser
     column("State", :aasm_state) { |bd| bd.aasm_state.humanize }
 
     actions do |bundle_definition|
-      if bundle_definition.draft?
-        item "Publish", publish_admin_bundle_definition_path(bundle_definition), method: :post,
-                                                                                 data: { confirm: "Make bundle live?" }
-      end
-      if bundle_definition.live?
-        item "Retract", retract_admin_bundle_definition_path(bundle_definition), method: :post,
-                                                                                 data: { confirm: "Retract bundle?" }
-      end
+      ActiveAdmin::AasmHelper.buttons(bundle_definition, self)
     end
   end
 
-  member_action :publish, method: :post do
-    resource.publish!
-    redirect_to admin_bundle_definitions_path, notice: "Bundle definition published"
-  end
-
-  member_action :retract, method: :post do
-    resource.retract!
-    redirect_to admin_bundle_definitions_path, notice: "Bundle definition retracted"
-  end
+  ActiveAdmin::AasmHelper.member_actions(BundleDefinition, self)
 
   controller do
     before_action :prevent_edit, only: [:edit]

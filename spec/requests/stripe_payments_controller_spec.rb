@@ -6,9 +6,11 @@ RSpec.describe StripePaymentsController, type: :request do
   include RequestTestHelpers
 
   describe "#prep_checkout_session" do
+    let(:fundraiser) { create(:fundraiser, :active) }
     let(:params) do
       {
         donation: {
+          fundraiser_id: fundraiser.id,
           human_amount: "25.00",
           amount_currency: currency,
         },

@@ -273,16 +273,17 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth(:token,
-    request_a_login_email_path: "/donators/request-a-login-email",
+    request_a_login_email_path: "/account/request-login-email",
     secret: ENV.fetch("HMAC_SECRET"),
     uid_field: :donator_id,
   )
   config.omniauth(:twitch, ENV.fetch("TWITCH_CLIENT_ID"), ENV.fetch("TWITCH_CLIENT_SECRET"),
     scope: "user:read:email",
-    redirect_uri: ENV.fetch("TWITCH_REDIRECT_URI"),
   )
 
   OmniAuth.config.logger = Rails.logger
+  scheme = Rails.env.production? ? "https" : "http"
+  OmniAuth.config.full_host = "#{scheme}://#{ENV.fetch('APP_HOST')}"
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

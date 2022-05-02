@@ -1,0 +1,38 @@
+<h1><%= @fundraiser.name %></h1>
+
+<h2><%= t("common.headers.bundles") %></h2>
+
+<% if @fundraiser.bundle_definitions.any? %>
+  <ul>
+    <% @fundraiser.bundle_definitions.each do |bundle_definition| %>
+      <li class="bundle-definition">
+        <h3><%= bundle_definition.name %>: <%= bundle_definition.price.format %></h3>
+        <ul>
+          <% bundle_definition.bundle_definition_game_entries.simple.each do |entry| %>
+            <li><%= link_to entry.game.name, game_path(entry.game) %></li>
+          <% end %>
+          <% bundle_definition.bundle_definition_game_entries.tiered.order(price_currency: :desc).each do |entry| %>
+            <li><%= link_to entry.game.name, game_path(entry.game) %>: <%= entry.price.format %></li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<p>
+  <%= link_to t("common.actions.donate_here"), new_fundraiser_donation_path(@fundraiser), class: "cta" %>
+</p>
+
+<p>
+  <%= link_to "See current donations", fundraiser_donations_path(@fundraiser), class: "cta" %>
+</p>
+
+<% if @fundraiser.charities.any? %>
+  <h2><%= t("common.headers.charities") %></h2>
+  <ul>
+    <% @fundraiser.charities.each do |charity| %>
+      <li><%= link_to charity.name, charity_path(charity) %></li>
+    <% end %>
+  </ul>
+<% end %>

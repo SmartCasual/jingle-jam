@@ -55,8 +55,9 @@ Capybara.configure do |config|
   config.server = :puma, { Silent: true }
   config.server_port = TEST_PORT
 end
-
 ActionMailer::Base.default_url_options[:port] = TEST_PORT
+ENV["APP_HOST"] = "127.0.0.1:#{TEST_PORT}"
+OmniAuth.config.full_host = "http://#{ENV.fetch('APP_HOST', nil)}"
 
 ActionController::Base.allow_rescue = false
 
@@ -70,6 +71,10 @@ Before do
   if page.driver.browser.respond_to?(:manage)
     page.driver.browser.manage.window.maximize
   end
+end
+
+Before do
+  create(:fundraiser, :active, name: "Default fundraiser")
 end
 
 After do

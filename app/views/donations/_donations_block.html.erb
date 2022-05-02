@@ -1,0 +1,5 @@
+<% if donations.any? %>
+    <%= render local_assigns.fetch(:list_partial, "donations/list"), donations: donations.order(created_at: :desc) %>
+  <% else %>
+    <p><%= t("donations.no_donations") %></p>
+  <% end %>

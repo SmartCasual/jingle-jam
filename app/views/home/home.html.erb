@@ -1,38 +1,15 @@
 <h1><%= t("homepage.header") %></h1>
 
 <h2><%= t("common.twitch") %></h2>
-
 <%= render "streaming/twitch", channel: "yogscast" %>
 
-<h2><%= t("common.headers.bundles") %></h2>
-
-<% if @bundle_definitions.any? %>
+<h2>Active fundraisers</h2>
+<% if (fundraisers = Fundraiser.active.open).any? %>
   <ul>
-    <% @bundle_definitions.each do |bundle_definition| %>
-      <li class="bundle-definition">
-        <h3><%= bundle_definition.name %>: <%= bundle_definition.price.format %></h3>
-        <ul>
-          <% bundle_definition.bundle_definition_game_entries.simple.each do |entry| %>
-            <li><%= link_to entry.game.name, game_path(entry.game) %></li>
-          <% end %>
-          <% bundle_definition.bundle_definition_game_entries.tiered.order(price_currency: :desc).each do |entry| %>
-            <li><%= link_to entry.game.name, game_path(entry.game) %>: <%= entry.price.format %></li>
-          <% end %>
-        </ul>
-      </li>
+    <% fundraisers.each do |fundraiser| %>
+      <li><%= link_to fundraiser %></li>
     <% end %>
   </ul>
-<% end %>
-
-<p>
-  <%= link_to t("common.actions.donate_here"), donations_path, class: "cta" %>
-</p>
-
-<% if @charities.any? %>
-  <h2><%= t("common.headers.charities") %></h2>
-  <ul>
-    <% @charities.each do |charity| %>
-      <li><%= link_to charity.name, charity_path(charity) %></li>
-    <% end %>
-  </ul>
+<% else %>
+  <p>No active fundraisers</p>
 <% end %>

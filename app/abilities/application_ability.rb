@@ -6,6 +6,7 @@ class ApplicationAbility
       BundleDefinition,
       BundleDefinitionGameEntry,
       Charity,
+      Fundraiser,
       Game,
     ].freeze
   end

@@ -56,10 +56,10 @@ module LoginHelpers
   end
 
   def use_magic_link(donator)
-    visit log_in_via_token_donator_path(donator, token: donator.token)
+    visit log_in_via_token_account_path(donator, token: donator.token)
     click_on "Log in via token"
     @current_donator = donator
-    expect(page).not_to have_text("LOG IN")
+    expect(logged_in?).to be(true)
   end
 
   def ensure_logged_in(as: :donator, **kwargs)
