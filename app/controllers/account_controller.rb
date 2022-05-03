@@ -3,6 +3,13 @@ class AccountController < ApplicationController
 
   def request_login_email; end
 
+  def send_login_email
+    NotificationsMailer.token_url_request(params[:email_address]).deliver_later
+    flash[:notice] = "A log in URL has been sent to #{params[:email_address]}."
+
+    redirect_to request_login_email_account_path
+  end
+
   def log_in_via_token; end
 
   def login_options; end
