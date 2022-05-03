@@ -59,9 +59,13 @@ Rails.application.routes.draw do
       resources :keys, only: [:index]
 
       get "/request-login-email", to: "account#request_login_email"
+      post "/send-login-email", to: "account#send_login_email"
+
       get "/log-in-via-token/:id/:token", to: "account#log_in_via_token", as: "log_in_via_token"
+
       get "/login-options", to: "account#login_options"
       patch "/update-login-options", to: "account#update_login_options"
+
       delete "/disconnect-twitch", to: "account#disconnect_twitch"
     end
 

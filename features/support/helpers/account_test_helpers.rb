@@ -50,6 +50,16 @@ module AccountTestHelpers
       click_on "Connect with Twitch"
     end
   end
+
+  def request_login_email(email_address)
+    ActionMailer::Base.deliveries.clear
+
+    go_to_homepage
+    click_on "Log in"
+    click_on "Sign in with Token"
+    fill_in "Email address", with: email_address
+    click_on "Request token URL"
+  end
 end
 
 World(AccountTestHelpers)

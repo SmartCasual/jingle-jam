@@ -1,1 +1,8 @@
 <h1>Request a login email</h1>
+
+<%= form_tag send_login_email_account_path do %>
+  <%= label_tag :email_address %>
+  <%= email_field_tag :email_address %>
+
+  <button>Request token URL</button>
+<% end %>
