@@ -1,12 +1,27 @@
 ActiveAdmin.register Fundraiser do
-  permit_params :name, :description, :starts_at, :ends_at, :overpayment_mode, :short_url, :state,
-bundle_definitions_attributes: %i[id fundraiser_id human_price name price_currency _destroy]
+  permit_params(
+    :description,
+    :ends_at,
+    :main_currency,
+    :name,
+    :overpayment_mode,
+    :short_url,
+    :starts_at,
+    :state,
+    bundles_attributes: %i[
+      _destroy
+      fundraiser_id
+      id
+      name
+    ],
+  )
 
   index do
     selectable_column
     id_column
     column :name
     column :description
+    column :main_currency
     column :starts_at
     column :ends_at
     column :overpayment_mode
@@ -25,6 +40,11 @@ bundle_definitions_attributes: %i[id fundraiser_id human_price name price_curren
     f.inputs do
       f.input :name
       f.input :description
+      f.input :main_currency,
+        as: :select,
+        collection: Currency.present_all,
+        include_blank: false,
+        required: true
       f.input :starts_at
       f.input :ends_at
       f.input :overpayment_mode, as: :select, collection: Fundraiser::OVERPAYMENT_MODES
@@ -38,6 +58,7 @@ bundle_definitions_attributes: %i[id fundraiser_id human_price name price_curren
     attributes_table do
       row :name
       row :description
+      row :main_currency
       row :starts_at
       row :ends_at
       row :overpayment_mode
@@ -45,11 +66,9 @@ bundle_definitions_attributes: %i[id fundraiser_id human_price name price_curren
       row :state
     end
 
-    panel "Bundle definitions" do
-      table_for fundraiser.bundle_definitions do
+    panel "Bundles" do
+      table_for fundraiser.bundles do
         column :name
-        column :human_price
-        column :price_currency
       end
     end
   end

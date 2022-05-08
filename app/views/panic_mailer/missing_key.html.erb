@@ -1,5 +1,6 @@
-<h1>Panic#missing_key</h1>
+<h1>Missing key</h1>
 
 <p>
-  <%= @greeting %>, find me in app/views/panic_mailer/missing_key.html.erb
+  We tried to assign a <%= @game.name %> key to donator <%= @donator.display_name %> (ID: <%= @donator.id %>, email address: <%= @donator.email_address.presence || "none" %>),
+  but we couldn't find an available key for that game.
 </p>

@@ -1,0 +1,14 @@
+<h1>Bundles</h1>
+
+<% if @bundles_by_fundraiser.any? %>
+  <% @bundles_by_fundraiser.each.with_index do |(fundraiser, bundles), index| %>
+    <h2><%= link_to(fundraiser.name, fundraiser_path(fundraiser)) %></h2>
+    <ul class="assigned-bundles">
+      <% bundles.each do |bundle| %>
+        <li><%= link_to("Bundle #{index + 1}", account_bundle_path(bundle)) %></li>
+      <% end %>
+    </ul>
+  <% end %>
+<% else %>
+  <p>You have no bundles assigned to you.</p>
+<% end %>

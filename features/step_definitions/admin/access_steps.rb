@@ -3,14 +3,13 @@ Given("at least one of each type of thing") do
     admin_comment
     admin_user
     bundle
-    bundle_definition
+    bundle_tier
     donation
     donator
+    donator_bundle
     fundraiser
     game
-  ].index_with { |factory|
-    FactoryBot.create(factory)
-  }
+  ].index_with { |factory| create(factory) }
 end
 
 Then("the admin should be able to see public information") do

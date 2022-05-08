@@ -1,4 +1,3 @@
-require "rails_helper"
 require "cancan/matchers"
 
 require_relative "shared_examples/admin_comments"
@@ -9,12 +8,13 @@ require_relative "shared_examples/public_info"
 RSpec.describe AdminAbility do
   subject(:ability) { described_class.new(user) }
 
-  let(:bundle_definition) { build(:bundle_definition) }
+  let(:bundle) { build(:bundle) }
   let(:charity) { build(:charity) }
   let(:game) { build(:game) }
-  let(:game_entry) { build(:bundle_definition_game_entry) }
+  let(:bundle_tier) { build(:bundle_tier) }
+  let(:bundle_tier_game) { build(:bundle_tier_game) }
 
-  let(:bundle) { create(:bundle) }
+  let(:donator_bundle) { create(:donator_bundle) }
   let(:donation) { create(:donation) }
   let(:donator) { create(:donator) }
   let(:key) { create(:key) }
@@ -39,8 +39,8 @@ RSpec.describe AdminAbility do
     include_examples "disallows accessing admin users"
 
     ApplicationAbility.public_classes.each do |public_class|
-      include_examples "allows adding comments on public information", public_class: public_class
-      include_examples "allows managing own comments on public information", public_class:
+      include_examples("allows adding comments on public information", public_class:)
+      include_examples("allows managing own comments on public information", public_class:)
     end
 
     it "allows reading self" do

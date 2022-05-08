@@ -8,15 +8,16 @@ require_relative "shared_examples/public_info"
 RSpec.describe PublicAbility do
   subject(:ability) { described_class.new(user) }
 
+  let(:bundle) { create(:bundle) }
+  let(:bundle_tier) { bundle.bundle_tiers.first }
+  let(:charity) { build(:charity) }
+  let(:game) { build(:game) }
+  let(:bundle_tier_game) { build(:bundle_tier_game, bundle_tier:) }
+
   context "with an anonymous user" do
     let(:user) { nil }
 
-    let(:bundle_definition) { build(:bundle_definition) }
-    let(:charity) { build(:charity) }
-    let(:game) { build(:game) }
-    let(:game_entry) { build(:bundle_definition_game_entry) }
-
-    let(:bundle) { create(:bundle) }
+    let(:donator_bundle) { DonatorBundle.create_from(bundle, donator: create(:donator)) }
     let(:donation) { create(:donation) }
     let(:donator) { create(:donator) }
     let(:key) { create(:key) }
@@ -32,13 +33,8 @@ RSpec.describe PublicAbility do
   context "with a known donator" do
     let(:user) { create(:donator) }
 
-    let(:bundle_definition) { build(:bundle_definition) }
-    let(:charity) { build(:charity) }
-    let(:game) { build(:game) }
-    let(:game_entry) { build(:bundle_definition_game_entry) }
-
-    let(:own_bundle) { create(:bundle, donator: user) }
-    let(:other_bundle) { create(:bundle, donator: other_donator) }
+    let(:own_bundle) { DonatorBundle.create_from(bundle, donator: user) }
+    let(:other_bundle) { create(:donator_bundle, donator: other_donator) }
 
     let(:own_donation) { create(:donation, donator: user) }
     let(:other_donation) { create(:donation, donator: other_donator) }
@@ -46,9 +42,9 @@ RSpec.describe PublicAbility do
     let(:own_donator) { user }
     let(:other_donator) { create(:donator) }
 
-    let(:own_key) { create(:key, bundle: own_bundle) }
-    let(:other_key) { create(:key, bundle: other_bundle) }
-    let(:unassigned_key) { create(:key, bundle: nil) }
+    let(:own_key) { create(:key, donator_bundle_tier: own_bundle.donator_bundle_tiers.first) }
+    let(:other_key) { create(:key, donator_bundle_tier: other_bundle.donator_bundle_tiers.first) }
+    let(:unassigned_key) { create(:key, donator_bundle_tier: nil) }
 
     let(:admin_user) { create(:admin_user) }
 

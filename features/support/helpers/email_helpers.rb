@@ -4,9 +4,11 @@ module EmailHelpers
     ActionMailer::Base.deliveries.last
   end
 
-  def email_with_subject(subject)
+  def email_with_subject(subject, recipient: nil)
     expect(ActionMailer::Base.deliveries).not_to be_empty
     ActionMailer::Base.deliveries.find do |email|
+      next if recipient && email.to.exclude?(recipient)
+
       email.subject == subject
     end
   end

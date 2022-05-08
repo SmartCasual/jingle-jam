@@ -9,8 +9,13 @@ module NavigationHelpers
     click_on "See current donations"
   end
 
+  def go_to_assigned_bundles
+    go_to_if_not_at(account_bundles_path)
+  end
+
   def go_to_game_keys
-    go_to_if_not_at(account_keys_path)
+    go_to_assigned_bundles
+    click_link "Bundle 1"
   end
 
   def go_to_profile(donator)
@@ -33,9 +38,9 @@ module NavigationHelpers
     go_to_fundraiser(name: Fundraiser.active.first.name)
   end
 
-  def go_to_fundraiser(name:)
+  def go_to_fundraiser(fundraiser = nil, name: nil)
     go_to_homepage
-    click_on name
+    click_on name || fundraiser.name
   end
 
   def go_to_if_not_at(path)

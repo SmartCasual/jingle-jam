@@ -45,6 +45,9 @@ en:
             twitch_id:
               taken: "ID is taken"
 
+  bundle:
+    no_keys_yet: "Your keys have not yet been assigned."
+
   # Generic translations available for use throughout the site
   common:
     twitch: "Twitch"

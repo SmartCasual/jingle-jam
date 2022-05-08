@@ -31,9 +31,9 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
     expect(donation.reload).to be_paid
   end
 
-  it "triggers a bundle check job for the donator" do
+  it "triggers a donator bundle assignment job for the donator" do
     job.perform(payment_id, provider: :stripe)
-    expect(BundleCheckJob).to have_been_enqueued.with(donator.id)
+    expect(DonatorBundleAssignmentJob).to have_been_enqueued.with(donator.id)
   end
 
   it "notifies the donator" do
@@ -49,7 +49,7 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
         job.perform(payment_id, provider: :stripe)
       }.to raise_error(ActiveRecord::RecordNotFound)
 
-      expect(BundleCheckJob).not_to have_been_enqueued
+      expect(DonatorBundleAssignmentJob).not_to have_been_enqueued
       expect(ActionMailer::MailDeliveryJob).not_to have_been_enqueued
     end
   end
@@ -63,7 +63,7 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
       job.perform(payment_id, provider: :stripe)
       # TODO: Check for error tracking report
 
-      expect(BundleCheckJob).not_to have_been_enqueued
+      expect(DonatorBundleAssignmentJob).not_to have_been_enqueued
       expect(ActionMailer::MailDeliveryJob).not_to have_been_enqueued
     end
   end
@@ -83,9 +83,9 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
       expect(donation.reload).to be_paid
     end
 
-    it "triggers a bundle check job for the donator" do
+    it "triggers a donator bundle assignment job for the donator" do
       job.perform(payment_id, provider: :stripe)
-      expect(BundleCheckJob).to have_been_enqueued.with(donator.id)
+      expect(DonatorBundleAssignmentJob).to have_been_enqueued.with(donator.id)
     end
 
     it "notifies the donator" do
@@ -109,9 +109,9 @@ RSpec.describe PaymentAssignmentJob, queue_type: :test do
       expect(payment.reload.donation).to eq(donation)
     end
 
-    it "does not trigger a bundle check job for the donator" do
+    it "does not trigger a donator bundle assignment job for the donator" do
       job.perform(payment_id, provider: :stripe)
-      expect(BundleCheckJob).not_to have_been_enqueued
+      expect(DonatorBundleAssignmentJob).not_to have_been_enqueued
     end
 
     it "does not notify the donator" do

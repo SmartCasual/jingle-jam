@@ -1,29 +1,27 @@
-require "rails_helper"
-
 RSpec.describe KeyManager do
   subject(:key_manager) { described_class.new }
 
   let(:game) { create(:game) }
-  let(:bundle) { create(:bundle) }
+  let(:donator_bundle_tier) { create(:donator_bundle_tier) }
 
-  describe "#key_assigned?(game, bundle:)" do
-    context "when the bundle has a key for the game" do
+  describe "#key_assigned?(game, donator_bundle_tier:)" do
+    context "when the donator_bundle_tier has a key for the game" do
       before do
-        create(:key, game:, bundle:)
+        create(:key, game:, donator_bundle_tier:)
       end
 
       it "returns true" do
-        expect(key_manager.key_assigned?(game, bundle:)).to be(true)
+        expect(key_manager.key_assigned?(game, donator_bundle_tier:)).to be(true)
       end
     end
 
-    context "when the bundle does not have a key for the game" do
+    context "when the donator_bundle_tier does not have a key for the game" do
       before do
-        create(:key, game:, bundle: nil)
+        create(:key, game:, donator_bundle_tier: nil)
       end
 
       it "returns true" do
-        expect(key_manager.key_assigned?(game, bundle:)).to be(false)
+        expect(key_manager.key_assigned?(game, donator_bundle_tier:)).to be(false)
       end
     end
   end
@@ -35,7 +33,7 @@ RSpec.describe KeyManager do
 
     context "when there's no unassigned keys for the game" do
       before do
-        create(:key, game:, bundle:)
+        create(:key, game:, donator_bundle_tier:)
         create(:key)
       end
 
@@ -52,7 +50,7 @@ RSpec.describe KeyManager do
     end
 
     context "when there are unassigned keys for the game" do
-      let!(:unassigned_key) { create(:key, game:, bundle: nil) }
+      let!(:unassigned_key) { create(:key, game:, donator_bundle_tier: nil) }
 
       it "opens a transaction" do
         key_manager.lock_unassigned_key(game)

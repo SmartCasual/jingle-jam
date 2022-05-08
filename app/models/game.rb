@@ -13,7 +13,7 @@
 # **`updated_at`**   | `datetime`         | `not null`
 #
 class Game < ApplicationRecord
-  has_many :bundle_definition_game_entries, inverse_of: :game, dependent: :destroy
+  has_many :bundle_tier_games, inverse_of: :game, dependent: :destroy
   has_many :keys, inverse_of: :game, dependent: :destroy
 
   validates :name, presence: true

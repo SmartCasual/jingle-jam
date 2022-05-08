@@ -1,6 +1,6 @@
 RSpec.shared_examples "disallows accessing private information" do
-  it "disallows accessing bundles" do
-    expect(ability).not_to be_able_to(%I[read manage update delete], bundle)
+  it "disallows accessing donator bundles" do
+    expect(ability).not_to be_able_to(%I[read manage update delete], donator_bundle)
   end
 
   it "disallows accessing donations" do
@@ -17,8 +17,8 @@ RSpec.shared_examples "disallows accessing private information" do
 end
 
 RSpec.shared_examples "allows reading donation information" do
-  it "allows reading bundles" do
-    expect(ability).to be_able_to(:read, bundle)
+  it "allows reading donator bundles" do
+    expect(ability).to be_able_to(:read, donator_bundle)
   end
 
   it "allows reading charities" do

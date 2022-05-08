@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_29_114650) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_04_184918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,35 +47,33 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_29_114650) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "bundle_definition_game_entries", force: :cascade do |t|
-    t.bigint "bundle_definition_id", null: false
+  create_table "bundle_tier_games", force: :cascade do |t|
+    t.bigint "bundle_tier_id", null: false
     t.bigint "game_id", null: false
-    t.integer "price_decimals"
-    t.string "price_currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bundle_definition_id"], name: "index_bundle_definition_game_entries_on_bundle_definition_id"
-    t.index ["game_id"], name: "index_bundle_definition_game_entries_on_game_id"
+    t.index ["bundle_tier_id"], name: "index_bundle_tier_games_on_bundle_tier_id"
+    t.index ["game_id"], name: "index_bundle_tier_games_on_game_id"
   end
 
-  create_table "bundle_definitions", force: :cascade do |t|
-    t.string "name", null: false
+  create_table "bundle_tiers", force: :cascade do |t|
     t.integer "price_decimals", default: 0, null: false
     t.string "price_currency", default: "GBP", null: false
+    t.string "name"
+    t.bigint "bundle_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "aasm_state", default: "draft", null: false
-    t.bigint "fundraiser_id"
-    t.index ["fundraiser_id"], name: "index_bundle_definitions_on_fundraiser_id"
+    t.index ["bundle_id"], name: "index_bundle_tiers_on_bundle_id"
   end
 
   create_table "bundles", force: :cascade do |t|
-    t.bigint "donator_id"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "bundle_definition_id", null: false
-    t.index ["bundle_definition_id"], name: "index_bundles_on_bundle_definition_id"
-    t.index ["donator_id"], name: "index_bundles_on_donator_id"
+    t.string "aasm_state", default: "draft", null: false
+    t.bigint "fundraiser_id", null: false
+    t.index ["fundraiser_id"], name: "index_bundles_on_fundraiser_id"
+    t.index ["name", "fundraiser_id"], name: "index_bundles_on_name_and_fundraiser_id", unique: true
   end
 
   create_table "charities", force: :cascade do |t|
@@ -144,6 +142,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_29_114650) do
     t.check_constraint "num_nonnulls(stripe_payment_intent_id, paypal_order_id) > 0"
   end
 
+  create_table "donator_bundle_tiers", force: :cascade do |t|
+    t.bigint "donator_bundle_id", null: false
+    t.bigint "bundle_tier_id", null: false
+    t.boolean "unlocked", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bundle_tier_id"], name: "index_donator_bundle_tiers_on_bundle_tier_id"
+    t.index ["donator_bundle_id"], name: "index_donator_bundle_tiers_on_donator_bundle_id"
+  end
+
+  create_table "donator_bundles", force: :cascade do |t|
+    t.bigint "donator_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "bundle_id", null: false
+    t.index ["bundle_id"], name: "index_donator_bundles_on_bundle_id"
+    t.index ["donator_id"], name: "index_donator_bundles_on_donator_id"
+  end
+
   create_table "donators", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -180,6 +197,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_29_114650) do
     t.string "state", default: "inactive", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "main_currency", default: "GBP", null: false
   end
 
   create_table "games", force: :cascade do |t|
@@ -191,16 +209,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_29_114650) do
 
   create_table "keys", force: :cascade do |t|
     t.bigint "game_id", null: false
-    t.bigint "bundle_id"
+    t.bigint "donator_bundle_tier_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "code_ciphertext"
     t.text "encrypted_kms_key"
     t.string "code_bidx"
     t.bigint "fundraiser_id"
-    t.index ["bundle_id", "game_id"], name: "index_keys_on_bundle_id_and_game_id", unique: true
-    t.index ["bundle_id"], name: "index_keys_on_bundle_id"
     t.index ["code_bidx"], name: "index_keys_on_code_bidx", unique: true
+    t.index ["donator_bundle_tier_id", "game_id"], name: "index_keys_on_donator_bundle_tier_id_and_game_id", unique: true
+    t.index ["donator_bundle_tier_id"], name: "index_keys_on_donator_bundle_tier_id"
     t.index ["fundraiser_id"], name: "index_keys_on_fundraiser_id"
     t.index ["game_id"], name: "index_keys_on_game_id"
   end
@@ -217,4 +235,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_29_114650) do
     t.check_constraint "num_nonnulls(stripe_payment_intent_id, paypal_order_id) > 0"
   end
 
+  add_foreign_key "bundle_tiers", "bundles"
+  add_foreign_key "donator_bundle_tiers", "bundle_tiers"
+  add_foreign_key "donator_bundle_tiers", "donator_bundles"
 end

@@ -68,6 +68,12 @@
     <%= text_field_tag :on_behalf_of, nil, placeholder: "your-best-friend@example.com" %>
   </p>
 
+  <% if fundraiser.pro_bono? %>
+    <p>By default any overpayment will be given directly to the charities.</p>
+  <% else %>
+    <p>You can have as many bundles as you like.  By default any overpayment will go towards another bundle for you.</p>
+  <% end %>
+
   <%= form.hidden_field :curated_streamer_id, value: local_assigns[:streamer]&.id %>
   <%= form.hidden_field :fundraiser_id, value: local_assigns[:fundraiser]&.id %>
 

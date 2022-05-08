@@ -1,38 +1,76 @@
 require "rails_helper"
 
 RSpec.describe Bundle, type: :model do
-  subject(:bundle) { create(:bundle, bundle_definition:) }
-
-  let(:bundle_definition) do
-    create(:bundle_definition, :draft,
-      bundle_definition_game_entries: [bundle_definition_game_entry],
+  subject(:bundle) do
+    described_class.new(
+      attrs.merge(
+        fundraiser:,
+        name: "Some bundle",
+      ),
     )
   end
 
-  let(:bundle_definition_game_entry) { create(:bundle_definition_game_entry) }
+  let(:attrs) { {} }
+  let(:fundraiser) { create(:fundraiser, main_currency: "GBP") }
 
-  describe "#assign_keys" do
-    before do
-      allow(GameEntryKeyAssignmentJob).to receive(:perform_later)
-    end
+  describe "state machine" do
+    it { is_expected.to have_state(:draft) }
+    it { is_expected.to transition_from(:draft).to(:live).on_event(:publish) }
+    it { is_expected.to transition_from(:live).to(:draft).on_event(:retract) }
+  end
 
-    context "with a draft bundle definition" do
-      it "does not assign keys" do
-        bundle.assign_keys
-        expect(GameEntryKeyAssignmentJob).not_to have_received(:perform_later)
+  describe "#highest_tier" do
+    context "if there's no tiers" do
+      it "returns nil" do
+        expect(bundle.highest_tier).to be_nil
       end
     end
 
-    context "with a live bundle definition" do
-      before do
-        bundle_definition.publish!
-      end
+    context "if there's tiers" do
+      let(:attrs) { { bundle_tiers: [lowest_tier, highest_tier] } }
 
-      it "assigns keys to the associated game entries" do
-        bundle.assign_keys
-        expect(GameEntryKeyAssignmentJob).to have_received(:perform_later)
-          .with(bundle_definition_game_entry.id, bundle.id)
+      let(:lowest_tier) { create(:bundle_tier, price: Money.new(1_00, "GBP")) }
+      let(:highest_tier) { create(:bundle_tier, price: Money.new(10_00, "GBP")) }
+
+      it "returns the highest tier" do
+        expect(bundle.highest_tier).to eq(highest_tier)
       end
+    end
+  end
+
+  describe "#lowest_tier" do
+    context "if there's no tiers" do
+      it "returns nil" do
+        expect(bundle.highest_tier).to be_nil
+      end
+    end
+
+    context "if there's tiers" do
+      let(:attrs) { { bundle_tiers: [lowest_tier, highest_tier] } }
+
+      let(:lowest_tier) { create(:bundle_tier, price: Money.new(1_00, "GBP")) }
+      let(:highest_tier) { create(:bundle_tier, price: Money.new(10_00, "GBP")) }
+
+      it "returns the lowest tier" do
+        expect(bundle.lowest_tier).to eq(lowest_tier)
+      end
+    end
+  end
+
+  describe "tier currency validation" do
+    let(:attrs) { { bundle_tiers: [gbp_tier, tier] } }
+
+    let(:gbp_tier) { build(:bundle_tier, price: Money.new(1_00, "GBP")) }
+    let(:tier) { build(:bundle_tier) }
+
+    it "is valid if the tiers are all in the same currency" do
+      tier.price = Money.new(1_00, "GBP")
+      expect(bundle).to be_valid
+    end
+
+    it "is invalid if the tiers are in different currencies" do
+      tier.price = Money.new(1_00, "EUR")
+      expect(bundle).not_to be_valid
     end
   end
 end

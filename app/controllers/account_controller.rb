@@ -1,4 +1,14 @@
 class AccountController < ApplicationController
+  include Translated
+  include DonatorRequired
+
+  skip_before_action :require_current_donator,
+    only: %i[
+      log_in_via_token
+      request_login_email
+      send_login_email
+    ]
+
   def show; end
 
   def request_login_email; end

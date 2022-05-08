@@ -1,7 +1,7 @@
 Feature: Donations on behalf of others
 
 Scenario: A donation is made on someone else's behalf
-  Given a simple bundle priced at £25
+  Given a bundle priced at £25
   When a donator makes a £10 donation
   Then a £10 donation should be recorded under the name "You"
   And no keys should have been assigned for that bundle

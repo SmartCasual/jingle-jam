@@ -34,7 +34,8 @@ module DonationTestHelpers
     fill_in "Email address", with: options[:email_address] if options[:email_address]
 
     if (on_behalf_of = options[:on_behalf_of])
-      fill_in "On behalf of", with: on_behalf_of.email_address
+      on_behalf_of = on_behalf_of.email_address if on_behalf_of.respond_to?(:email_address)
+      fill_in "On behalf of", with: on_behalf_of
     end
 
     if (split = options[:split]).present?

@@ -1,4 +1,4 @@
-When("a donator clicks on {string} in the bundle definition") do |game_name|
+When("a donator clicks on {string} in the bundle description") do |game_name|
   go_to_first_fundraiser
   click_on game_name
 end

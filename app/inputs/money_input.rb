@@ -1,9 +1,10 @@
 class MoneyInput
   include Formtastic::Inputs::Base
 
-  def initialize(*args, **kwargs)
-    super
+  def initialize(*args, default_currency: nil, **kwargs)
+    super(*args, **kwargs)
     @required = kwargs[:required]
+    @default_currency = default_currency
   end
 
   def to_html
@@ -13,7 +14,8 @@ class MoneyInput
         collection: Currency.present_all,
         include_blank: !@required,
         label: "Currency",
-        required: @required
+        required: @required,
+        selected: builder.object.send("#{method}_currency").presence || @default_currency
       builder.input "human_#{method}", label: label_text, required: @required
     }
 

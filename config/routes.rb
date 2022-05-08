@@ -56,7 +56,7 @@ Rails.application.routes.draw do
 
     resource :account, only: %i[show], controller: "account" do
       resources :donations, only: [:index], controller: "account/donations"
-      resources :keys, only: [:index]
+      resources :bundles, only: [:index, :show], controller: "account/bundles"
 
       get "/request-login-email", to: "account#request_login_email"
       post "/send-login-email", to: "account#send_login_email"
