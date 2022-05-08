@@ -13,10 +13,11 @@ class PublicAbility < ApplicationAbility
 private
 
   def allow_reading_own_stuff(donator)
-    can :read, Bundle, donator_id: donator.id
     can :read, Donation, donator_id: donator.id
     can :read, Donator, id: donator.id
-    can :read, Key, bundle: { donator_id: donator.id }
+    can :read, DonatorBundle, donator_id: donator.id
+    can :read, DonatorBundleTier, donator_bundle: { donator_id: donator.id }
+    can :read, Key, donator_bundle_tier: { donator_bundle: { donator_id: donator.id } }
   end
 
   def allow_editing_own_stuff(donator)

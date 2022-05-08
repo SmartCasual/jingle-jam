@@ -1,0 +1,22 @@
+<h1><%= t("game_keys.header") %></h1>
+
+<% if @bundle.keys.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th><%= t("game_keys.table.headers.game") %></th>
+        <th><%= t("game_keys.table.headers.key") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @bundle.keys.each do |key| %>
+        <tr class="key">
+          <td class="game"><%= key.game.name %></td>
+          <td class="code"><%= key.code %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p><%= t("bundle.no_keys_yet") %></p>
+<% end %>

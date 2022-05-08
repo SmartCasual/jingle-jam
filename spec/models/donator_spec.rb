@@ -3,25 +3,32 @@ require "rails_helper"
 RSpec.describe Donator do
   subject(:donator) { create(:donator) }
 
-  describe "#total_donations" do
+  describe "#total_donations(fundraiser: nil)" do
+    let(:fundraiser) { create(:fundraiser) }
+
     before do
       create(:donation,
         donator:,
-        amount: Money.new(1000, "USD"),
+        amount: Money.new(10_00, "USD"),
       )
       create(:donation,
         donator:,
-        amount: Money.new(1000, "GBP"),
+        amount: Money.new(10_00, "GBP"),
       )
       create(:donation,
         donator:,
-        amount: Money.new(1000, "EUR"),
+        amount: Money.new(10_00, "EUR"),
+        fundraiser:,
       )
     end
 
     it "sums all donations into the primary currency" do
       # TODO: Make this adapt with changing exchange rates
-      expect(donator.total_donations).to eq(Money.new(2585, "GBP"))
+      expect(donator.total_donations).to eq(Money.new(25_85, "GBP"))
+    end
+
+    it "sums all donations for the given fundraiser (if any)" do
+      expect(donator.total_donations(fundraiser:)).to eq(Money.new(10_00, "EUR"))
     end
   end
 
@@ -61,41 +68,6 @@ RSpec.describe Donator do
 
       it "changes when the email address changes" do
         expect { donator.email_address = "new@example.com" }.to change(donator, :token_with_email_address)
-      end
-    end
-  end
-
-  describe "#assign_keys" do
-    before do
-      allow(BundleKeyAssignmentJob).to receive(:perform_later)
-    end
-
-    context "with a draft bundle definition" do
-      before { create(:bundle_definition, :draft) }
-
-      it "does not assign keys" do
-        donator.assign_keys
-        expect(BundleKeyAssignmentJob).not_to have_received(:perform_later)
-      end
-    end
-
-    context "with a live bundle definition" do
-      let!(:bundle_definition) { create(:bundle_definition, :live) }
-
-      it "assigns keys to a new bundle" do
-        expect { donator.assign_keys }.to change(Bundle, :count).by(1)
-        expect(BundleKeyAssignmentJob).to have_received(:perform_later)
-          .with(Bundle.last.id)
-      end
-
-      context "if the donator already has a bundle for that bundle definition" do
-        let!(:bundle) { create(:bundle, bundle_definition:, donator:) }
-
-        it "assigns keys to the existing bundle" do
-          expect { donator.reload.assign_keys }.not_to change(Bundle, :count)
-          expect(BundleKeyAssignmentJob).to have_received(:perform_later)
-            .with(bundle.id)
-        end
       end
     end
   end

@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :key do
     code { SecureRandom.uuid }
     game
-    bundle { nil }
+    donator_bundle_tier { nil }
   end
 end

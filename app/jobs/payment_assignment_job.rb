@@ -22,7 +22,7 @@ class PaymentAssignmentJob < ApplicationJob
     if donation.pending?
       donation.confirm_payment!
 
-      BundleCheckJob.perform_later(donation.donator_id)
+      DonatorBundleAssignmentJob.perform_later(donation.donator_id)
       NotificationsMailer.donation_received(donation.donator).deliver_later
       # TODO: Notify webhooks
     end

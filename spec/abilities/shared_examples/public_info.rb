@@ -1,6 +1,12 @@
 RSpec.shared_examples "allows reading public information" do
-  it "allows reading bundle definitions" do
-    expect(ability).to be_able_to(:read, bundle_definition)
+  it "allows reading live bundles" do
+    expect(ability).not_to be_able_to(:read, bundle)
+    bundle.publish!
+    expect(ability).to be_able_to(:read, bundle)
+  end
+
+  it "allows reading tiers" do
+    expect(ability).to be_able_to(:read, bundle_tier)
   end
 
   it "allows reading charities" do
@@ -12,31 +18,39 @@ RSpec.shared_examples "allows reading public information" do
   end
 
   it "allows reading game entries" do
-    expect(ability).to be_able_to(:read, game_entry)
+    expect(ability).to be_able_to(:read, bundle_tier_game)
   end
 end
 
 RSpec.shared_examples "allows managing public information" do
-  it "allows reading bundle definitions" do
-    expect(ability).to be_able_to(:manage, bundle_definition)
+  it "allows managing bundles" do
+    expect(ability).to be_able_to(:manage, bundle)
   end
 
-  it "allows reading charities" do
+  it "allows managing tiers" do
+    expect(ability).to be_able_to(:manage, bundle_tier)
+  end
+
+  it "allows managing charities" do
     expect(ability).to be_able_to(:manage, charity)
   end
 
-  it "allows reading games" do
+  it "allows managing games" do
     expect(ability).to be_able_to(:manage, game)
   end
 
-  it "allows reading game entries" do
-    expect(ability).to be_able_to(:manage, game_entry)
+  it "allows managing game entries" do
+    expect(ability).to be_able_to(:manage, bundle_tier_game)
   end
 end
 
 RSpec.shared_examples "disallows reading public information" do
-  it "disallows reading bundle definitions" do
-    expect(ability).not_to be_able_to(:read, bundle_definition)
+  it "disallows reading bundles" do
+    expect(ability).not_to be_able_to(:read, bundle)
+  end
+
+  it "disallows reading tiers" do
+    expect(ability).not_to be_able_to(:manage, bundle_tier)
   end
 
   it "disallows reading charities" do
@@ -48,13 +62,17 @@ RSpec.shared_examples "disallows reading public information" do
   end
 
   it "disallows reading game entries" do
-    expect(ability).not_to be_able_to(:read, game_entry)
+    expect(ability).not_to be_able_to(:read, bundle_tier_game)
   end
 end
 
 RSpec.shared_examples "disallows modifying public information" do
-  it "disallows modifying bundle definitions" do
-    expect(ability).not_to be_able_to(%I[manage update delete], bundle_definition)
+  it "disallows modifying bundles" do
+    expect(ability).not_to be_able_to(%I[manage update delete], bundle)
+  end
+
+  it "disallows modifying tiers" do
+    expect(ability).not_to be_able_to(:manage, bundle_tier)
   end
 
   it "disallows modifying charities" do
@@ -66,6 +84,6 @@ RSpec.shared_examples "disallows modifying public information" do
   end
 
   it "disallows modifying game entries" do
-    expect(ability).not_to be_able_to(%I[manage update delete], game_entry)
+    expect(ability).not_to be_able_to(%I[manage update delete], bundle_tier_game)
   end
 end

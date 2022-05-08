@@ -4,8 +4,11 @@ class PanicMailer < ApplicationMailer
   #
   #   en.panic_mailer.missing_key.subject
   #
-  def missing_key(_donator, _game)
-    @greeting = "Hi"
+  def missing_key(donator, game)
+    return if AdminUser.none?
+
+    @donator = donator
+    @game = game
 
     mail to: AdminUser.pluck(:email_address)
   end

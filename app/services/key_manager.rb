@@ -1,6 +1,6 @@
 class KeyManager
-  def key_assigned?(game, bundle:)
-    bundle.assigned_games.include?(game)
+  def key_assigned?(game, donator_bundle_tier:)
+    donator_bundle_tier.assigned_games.include?(game)
   end
 
   def lock_unassigned_key(game)
@@ -9,7 +9,7 @@ class KeyManager
     Key.transaction do
       yield Key.lock("FOR UPDATE SKIP LOCKED").find_by(
         game:,
-        bundle: nil,
+        donator_bundle_tier: nil,
       )
     end
   end

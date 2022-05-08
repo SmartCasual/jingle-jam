@@ -5,12 +5,12 @@ class Fundraisers::DonationsController < ApplicationController
 
   def new
     @fundraiser = Fundraiser.find(params[:fundraiser_id])
-    @streamer = CuratedStreamer.find_by(twitch_username: params[:streamer])
+    @streamer = CuratedStreamer.find_by(twitch_username: params[:streamer]) if params[:streamer]
   end
 
   def index
     @fundraiser = Fundraiser.find(params[:fundraiser_id])
-    @streamer = CuratedStreamer.find_by(twitch_username: params[:streamer])
+    @streamer = CuratedStreamer.find_by(twitch_username: params[:streamer]) if params[:streamer]
 
     set_flash_and_redirect_maybe
 
@@ -40,7 +40,7 @@ private
       return
     end
 
-    if params[:streamer]
+    if @streamer
       redirect_to fundraiser_curated_streamer_path(@fundraiser, @streamer)
     else
       redirect_to fundraiser_donations_path(@fundraiser)

@@ -9,6 +9,7 @@
 # **`id`**                | `bigint`           | `not null, primary key`
 # **`description`**       | `text`             |
 # **`ends_at`**           | `datetime`         |
+# **`main_currency`**     | `string`           | `default("GBP"), not null`
 # **`name`**              | `string`           | `not null`
 # **`overpayment_mode`**  | `string`           | `default("pro_bono"), not null`
 # **`short_url`**         | `string`           |
@@ -18,7 +19,7 @@
 # **`updated_at`**        | `datetime`         | `not null`
 #
 class Fundraiser < ApplicationRecord
-  has_many :bundle_definitions, inverse_of: :fundraiser, dependent: :nullify
+  has_many :bundles, inverse_of: :fundraiser, dependent: :nullify
   has_many :charity_fundraisers, inverse_of: :fundraiser, dependent: :destroy
   has_many :charities, through: :charity_fundraisers
   has_many :donations, inverse_of: :fundraiser, dependent: :nullify
@@ -62,5 +63,13 @@ class Fundraiser < ApplicationRecord
 
   def to_s
     name
+  end
+
+  def pro_bono?
+    overpayment_mode == PRO_BONO
+  end
+
+  def pro_se?
+    overpayment_mode == PRO_SE
   end
 end

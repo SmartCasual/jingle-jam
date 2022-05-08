@@ -9,30 +9,31 @@ if Rails.env.development? || ENV.fetch("FORCE_SEEDS", nil) == "true"
     full_access: true,
   )
 
-  puts "Creating an active fundraiser"
-  fundraiser = Fundraiser.create!(name: "Manatee Matinée")
-  fundraiser.activate!
+  puts "Creating active fundraisers"
+  wwf = Fundraiser.create!(name: "WWF Manatee Matinée (London)", main_currency: "GBP")
+  msf = Fundraiser.create!(name: "MSF Gala (Paris)", main_currency: "EUR")
 
-  BundleDefinition.without_assignments do
-    puts "Creating bundle definition"
-    bundef = BundleDefinition.create!(
-      price_decimals: 25_00,
+  [wwf, msf].each do |fundraiser|
+    puts "Populating the fundraiser #{fundraiser.name}"
+    fundraiser.activate!
+
+    puts "Creating bundle"
+    bundle = Bundle.create!(
       name: "Test bundle",
       fundraiser:,
     )
 
-    bundef.bundle_definition_game_entries.create!(
-      game: Game.new(name: "The Witness"),
-    )
+    bundle.highest_tier.update(price_decimals: 25_00)
+    bundle.highest_tier.bundle_tier_games.create!(game: Game.find_or_initialize_by(name: "The Witness"))
 
-    bundef.bundle_definition_game_entries.create!(
-      game: Game.new(name: "Doom"),
-      price_decimals: 10_00,
-    )
+    tier = bundle.bundle_tiers.create!(price_decimals: 10_00)
+
+    tier.bundle_tier_games.create!(game: Game.find_or_initialize_by(name: "Doom"))
+    tier.bundle_tier_games.create!(game: Game.find_or_initialize_by(name: "Duke Nukem Forever"))
 
     Game.all.each do |game|
-      puts "Adding 1,000 keys for #{game.name}"
-      1_000.times do
+      puts "Adding 100 keys for #{game.name}"
+      100.times do
         game.keys.create(
           code: SecureRandom.uuid,
           fundraiser:,
@@ -42,8 +43,9 @@ if Rails.env.development? || ENV.fetch("FORCE_SEEDS", nil) == "true"
   end
 
   puts "Creating charities"
-  Charity.create(name: "Help the Penguins", fundraisers: [fundraiser])
-  Charity.create(name: "Justice for Dugongs", fundraisers: [fundraiser])
-  Charity.create(name: "Free All Bats", fundraisers: [fundraiser])
+  Charity.create(name: "Help the Penguins", fundraisers: [wwf])
+  Charity.create(name: "World Wildlife Foundation", fundraisers: [wwf])
+  Charity.create(name: "Vets Without Borders", fundraisers: [wwf, msf])
+  Charity.create(name: "Médecins Sans Frontières", fundraisers: [msf])
 end
 # rubocop:enable Rails/Output

@@ -28,8 +28,8 @@ module Admin::NavigationHelpers
     expect(page).to have_text("#{game.name} CSV upload")
   end
 
-  def go_to_admin_bundle_definition(bundle_definition, edit: false)
-    go_to_admin_record(bundle_definition, within: "Bundle Definitions", edit:)
+  def go_to_admin_bundle(bundle, edit: false)
+    go_to_admin_record(bundle, within: "Bundles", edit:)
   end
 
   def go_to_admin_users

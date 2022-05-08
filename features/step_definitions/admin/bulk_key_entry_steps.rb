@@ -1,5 +1,5 @@
 When("an admin enters a list of game keys for a game") do
-  @game = FactoryBot.create(:game)
+  @game = create(:game)
   go_to_admin_game(@game, edit: true)
 
   @keys = (1..5).map { SecureRandom.uuid }

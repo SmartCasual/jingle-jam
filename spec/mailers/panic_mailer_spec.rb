@@ -9,9 +9,13 @@ RSpec.describe PanicMailer, type: :mailer do
     end
   end
 
+  before do
+    admins.each(&:save!)
+  end
+
   describe "#missing_key" do
-    let(:mail) { described_class.missing_key(nil, nil) }
-    let!(:admins) { create_list(:admin_user, 2) }
+    let(:mail) { described_class.missing_key(create(:donator), create(:game)) }
+    let(:admins) { build_list(:admin_user, 2) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Missing key")
@@ -20,7 +24,15 @@ RSpec.describe PanicMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("Hi")
+      expect(mail.body.encoded).to match("Missing key")
+    end
+
+    context "if there are no admin users" do
+      let(:admins) { [] }
+
+      it "does not send the email" do
+        expect { mail.deliver_now }.not_to change(ActionMailer::Base.deliveries, :count)
+      end
     end
   end
 end

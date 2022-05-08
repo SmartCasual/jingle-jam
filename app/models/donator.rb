@@ -81,9 +81,9 @@ class Donator < ApplicationRecord
   has_many :donations, inverse_of: :donator, dependent: :nullify
   has_many :gifted_donations, inverse_of: :donated_by, dependent: :nullify, class_name: "Donation",
                               foreign_key: "donated_by_id"
-  has_many :bundles, inverse_of: :donator, dependent: :nullify
-  has_many :bundle_definitions, through: :bundles
-  has_many :keys, through: :bundles
+  has_many :donator_bundles, inverse_of: :donator, dependent: :nullify
+  has_many :bundles, through: :donator_bundles
+  has_many :donator_bundle_tiers, through: :donator_bundles
 
   has_many :curated_streamer_administrators, dependent: :destroy, inverse_of: :donator
   has_many :curated_streamers, through: :curated_streamer_administrators
@@ -107,15 +107,6 @@ class Donator < ApplicationRecord
   def email_address=(new_email_address)
     super(new_email_address.presence)
     @token_with_email_address = nil
-  end
-
-  def assign_keys
-    Fundraiser.active.open.find_each do |fundraiser|
-      fundraiser.bundle_definitions.live.find_each do |bundle_definition|
-        bundle = bundles.find_or_create_by!(bundle_definition:)
-        BundleKeyAssignmentJob.perform_later(bundle.id)
-      end
-    end
   end
 
   def total_donations(fundraiser: nil)

@@ -1,11 +1,8 @@
 Given("a bundle with the following games:") do |table|
-  @current_bundle_definition = FactoryBot.create(:bundle_definition, :empty, :live)
-  @current_bundle_definition.bundle_definition_game_entries = table.symbolic_hashes.map { |hash|
-    FactoryBot.create(:bundle_definition_game_entry,
-      game: FactoryBot.create(:game, name: hash[:game], description: hash[:description]),
-      bundle_definition: @current_bundle_definition,
-    )
-  }
+  @current_bundle = create(:bundle, :empty, :live)
+  table.symbolic_hashes.each do |hash|
+    @current_bundle.highest_tier.games << create(:game, name: hash[:game], description: hash[:description])
+  end
 end
 
 When("a donator makes a {amount} donation with the message {string}") do |amount, message|
@@ -27,13 +24,12 @@ Then("a {amount} donation should be recorded") do |amount|
 end
 
 Then("no keys should have been assigned for that bundle") do
-  expect(@current_bundle_definition.keys.unassigned).to exist
-  expect(@current_bundle_definition.keys.assigned).not_to exist
+  expect(@current_bundle.donator_bundles.flat_map(&:donator_bundle_tiers).flat_map { |t| t.keys.assigned }).to be_empty
 end
 
 Then("one key per game in the bundle should have been assigned") do
   go_to_game_keys
-  @current_bundle_definition.games.each do |game|
+  @current_bundle.bundle_tiers.flat_map(&:games).each do |game|
     expect(page).to have_css(".key .game", text: game.name)
     expect(page).to have_css(".key .code", text: RegexHelpers::UUID_PATTERN)
   end

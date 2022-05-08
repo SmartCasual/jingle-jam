@@ -2,17 +2,30 @@
 
 <h2><%= t("common.headers.bundles") %></h2>
 
-<% if @fundraiser.bundle_definitions.any? %>
+<% if @fundraiser.bundles.any? %>
   <ul>
-    <% @fundraiser.bundle_definitions.each do |bundle_definition| %>
-      <li class="bundle-definition">
-        <h3><%= bundle_definition.name %>: <%= bundle_definition.price.format %></h3>
+    <% @fundraiser.bundles.each do |bundle| %>
+      <li class="bundle">
+        <h3><%= bundle.name %></h3>
+        <p>Donate <%= bundle.highest_tier.price.format %> or more to receive everything in this bundle.</p>
+
         <ul>
-          <% bundle_definition.bundle_definition_game_entries.simple.each do |entry| %>
-            <li><%= link_to entry.game.name, game_path(entry.game) %></li>
-          <% end %>
-          <% bundle_definition.bundle_definition_game_entries.tiered.order(price_currency: :desc).each do |entry| %>
-            <li><%= link_to entry.game.name, game_path(entry.game) %>: <%= entry.price.format %></li>
+          <% bundle.bundle_tiers.sort_by(&:price)[0..-1].each.with_index do |tier, index| %>
+            <li class="tier">
+              <% if bundle.bundle_tiers.count > 1 %>
+                <h4><%= tier.price.format %><%= " (#{tier.name})" if tier.name.present? %></h4>
+                <p>Donate <%= tier.price.format %> or more to receive everything in this tier.</p>
+                <% if index.positive? %>
+                  <p>Includes everything in the previous tiers.</p>
+                <% end %>
+              <% end %>
+
+              <ul>
+                <% tier.games.each do |game| %>
+                  <li class="game"><%= link_to game.name, game_path(game) %></li>
+                <% end %>
+              </ul>
+            </li>
           <% end %>
         </ul>
       </li>
