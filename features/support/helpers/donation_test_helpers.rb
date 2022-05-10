@@ -101,6 +101,8 @@ module DonationTestHelpers
       end
 
       wait_for { Payment.count == (payment_count + 1) }
+      wait_for { KeyAssignment::RequestProcessor.finished_backlog? }
+
       refresh
     end
   end

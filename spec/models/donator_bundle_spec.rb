@@ -104,6 +104,16 @@ RSpec.describe DonatorBundle, type: :model do
       end
     end
 
+    context "when some donator bundle tiers are unlocked but the rest are out of date" do
+      before do
+        bottom_bundle_tier.unlock!
+        middle_bundle_tier.bundle_tier.update(starts_at: 1.week.from_now)
+        top_bundle_tier.bundle_tier.update(ends_at: 1.week.ago)
+      end
+
+      it { is_expected.to be_nil }
+    end
+
     context "when all donator bundle tiers are unlocked" do
       before do
         donator_bundle.donator_bundle_tiers.each(&:unlock!)

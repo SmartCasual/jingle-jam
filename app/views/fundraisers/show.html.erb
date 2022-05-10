@@ -2,27 +2,39 @@
 
 <h2><%= t("common.headers.bundles") %></h2>
 
-<% if (bundles = @fundraiser.bundles.live).any? %>
+<% if @tiers_by_bundle.any? %>
   <ul>
-    <% bundles.each do |bundle| %>
+    <% @tiers_by_bundle.each do |bundle, tiers_by_price| %>
       <li class="bundle">
         <h3><%= bundle.name %></h3>
         <p>Donate <%= bundle.highest_tier.price.format %> or more to receive everything in this bundle.</p>
 
         <ul>
-          <% bundle.bundle_tiers.sort_by(&:price)[0..-1].each.with_index do |tier, index| %>
+          <% tiers_by_price.each.with_index do |(tier_price, tiers), index| %>
             <li class="tier">
               <% if bundle.bundle_tiers.count > 1 %>
-                <h4><%= tier.price.format %><%= " (#{tier.name})" if tier.name.present? %></h4>
-                <p>Donate <%= tier.price.format %> or more to receive everything in this tier.</p>
+                <h4><%= tier_price.format %></h4>
+                <p>Donate <%= tier_price.format %> or more to receive everything in this tier.</p>
                 <% if index.positive? %>
                   <p>Includes everything in the previous tiers.</p>
                 <% end %>
               <% end %>
 
               <ul>
-                <% tier.games.each do |game| %>
-                  <li class="game"><%= link_to game.name, game_path(game) %></li>
+                <% tiers.group_by(&:availability_text).each do |availability_text, tiers_for_availability| %>
+                  <li class="availability-tier">
+                    <% if tiers.any?(&:availability_text) %>
+                      <h5><%= availability_text || "Available now" %></h5>
+                    <% end %>
+
+                    <ul>
+                      <% tiers_for_availability.flat_map(&:games).each do |game| %>
+                        <li class="game">
+                          <%= link_to game.name, game_path(game) %>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </li>
                 <% end %>
               </ul>
             </li>

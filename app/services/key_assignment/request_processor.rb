@@ -38,6 +38,12 @@ class KeyAssignment::RequestProcessor # rubocop:disable Metrics/ClassLength
       raise PingTimeoutError, e
     end
 
+    def finished_backlog?
+      # Don't change this to `!status_report[:processing_backlog]` because we want to
+      # wait for the backlog to start processing and then finish.
+      status_report[:processing_backlog] == false
+    end
+
     def status_report
       send_command(STATUS_REPORT_COMMAND, await_response: true, json: true)
     end

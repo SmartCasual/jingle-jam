@@ -87,6 +87,7 @@ group :test do
   gem "launchy", "~> 2.5"
   gem "rspec-rails", "~> 5.0"
   gem "selenium-webdriver", "~> 4.1"
+  gem "timecop", "~> 0.9"
   gem "vcr", "~> 6.1"
   gem "webdrivers", "~> 5.0", require: false
   gem "webmock", "~> 3.14"

@@ -32,7 +32,7 @@ class DonatorBundle < ApplicationRecord
   end
 
   def complete?
-    unlockable_tiers.none?
+    locked_tiers.none?
   end
 
   def next_unlockable_tier
@@ -45,7 +45,19 @@ class DonatorBundle < ApplicationRecord
 
 private
 
+  def locked_tiers
+    donator_bundle_tiers.locked
+  end
+
   def unlockable_tiers
-    donator_bundle_tiers.joins(:bundle_tier).locked.order(:price_decimals)
+    window_sql = <<~SQL.squish
+      (bundle_tiers.starts_at IS NULL OR bundle_tiers.starts_at <= :now)
+      AND (bundle_tiers.ends_at IS NULL OR bundle_tiers.ends_at > :now)
+    SQL
+
+    locked_tiers
+      .joins(:bundle_tier)
+      .order(:price_decimals)
+      .where(window_sql, now: Time.now.utc)
   end
 end
