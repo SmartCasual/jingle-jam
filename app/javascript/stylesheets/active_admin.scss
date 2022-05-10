@@ -7,9 +7,9 @@
 // For example, to change the sidebar width:
 // $sidebar-width: 242px;
 
-// Active Admin's got SASS!
 @import "~@activeadmin/activeadmin/src/scss/mixins";
 @import "~@activeadmin/activeadmin/src/scss/base";
+@import "@activeadmin-plugins/active_admin_theme";
 
 // Overriding any non-variable Sass must be done after the fact.
 // For example, to change the default status-tag color:
