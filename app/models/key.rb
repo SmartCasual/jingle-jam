@@ -31,6 +31,10 @@ class Key < ApplicationRecord
   scope :unassigned, -> { where(donator_bundle_tier: nil) }
   scope :assigned, -> { where.not(donator_bundle_tier: nil) }
 
+  after_commit on: :create do
+    KeyAssignment::RequestProcessor.recheck_database
+  end
+
   def assigned?
     donator_bundle_tier_id.present?
   end

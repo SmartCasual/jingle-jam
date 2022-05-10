@@ -1,6 +1,12 @@
-require "rails_helper"
-
 RSpec.describe Key do
+  describe "after creation" do
+    it "instructs the key assigner to recheck the database backlog" do
+      allow(KeyAssignment::RequestProcessor).to receive(:recheck_database)
+      create(:key)
+      expect(KeyAssignment::RequestProcessor).to have_received(:recheck_database)
+    end
+  end
+
   describe "#code" do
     subject(:game_key) { create(:key, code: plaintext) }
 

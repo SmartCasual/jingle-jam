@@ -21,6 +21,7 @@ if Rails.env.development? || ENV.fetch("FORCE_SEEDS", nil) == "true"
     bundle = Bundle.create!(
       name: "Test bundle",
       fundraiser:,
+      aasm_state: "live",
     )
 
     bundle.highest_tier.update(price_decimals: 25_00)

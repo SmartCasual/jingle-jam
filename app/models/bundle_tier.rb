@@ -24,4 +24,6 @@ class BundleTier < ApplicationRecord
   has_many :games, through: :bundle_tier_games
 
   accepts_nested_attributes_for :bundle_tier_games, allow_destroy: true
+
+  delegate :fundraiser, to: :bundle
 end

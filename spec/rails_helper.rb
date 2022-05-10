@@ -12,8 +12,10 @@ require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 require_relative "../test/support/queue_type"
+require_relative "../test/support/retry_helpers"
 require_relative "../test/support/test_data"
 require_relative "../test/support/with_env"
+require_relative "../test/support/with_key_assignment_processor"
 
 FactoryBot.find_definitions
 
@@ -42,6 +44,8 @@ end
 
 RSpec.configure do |config|
   config.include WithEnv
+  config.include WithKeyAssignmentProcessor
+  config.include RetryHelpers
   QueueType.apply_to(config)
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -82,8 +86,16 @@ RSpec.configure do |config|
 
   config.around do |example|
     TestData.clear
+    KeyAssignment::RequestProcessor.clear_all_queues
     example.run
+    KeyAssignment::RequestProcessor.clear_all_queues
     TestData.clear
+  end
+
+  config.around(with_key_assignment_processor: true) do |example|
+    with_key_assignment_processor do
+      example.run
+    end
   end
 
   config.include FactoryBot::Syntax::Methods

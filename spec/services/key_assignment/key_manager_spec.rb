@@ -1,4 +1,4 @@
-RSpec.describe KeyManager do
+RSpec.describe KeyAssignment::KeyManager do
   subject(:key_manager) { described_class.new }
 
   let(:game) { create(:game) }
@@ -26,7 +26,9 @@ RSpec.describe KeyManager do
     end
   end
 
-  describe "#lock_unassigned_key(game)" do
+  describe "#lock_unassigned_key(game, fundraiser: nil)" do
+    subject(:lock) { key_manager.lock_unassigned_key(game) }
+
     before do
       allow(Key).to receive(:transaction)
     end
@@ -38,12 +40,12 @@ RSpec.describe KeyManager do
       end
 
       it "opens a transaction" do
-        key_manager.lock_unassigned_key(game)
+        lock
         expect(Key).to have_received(:transaction)
       end
 
       it "yields nothing" do
-        key_manager.lock_unassigned_key(game) do |key|
+        lock do |key|
           expect(key).to be_nil
         end
       end
@@ -53,13 +55,59 @@ RSpec.describe KeyManager do
       let!(:unassigned_key) { create(:key, game:, donator_bundle_tier: nil) }
 
       it "opens a transaction" do
-        key_manager.lock_unassigned_key(game)
+        lock
         expect(Key).to have_received(:transaction)
       end
 
       it "yields an unassigned key" do
-        key_manager.lock_unassigned_key(game) do |key|
+        lock do |key|
           expect(key).to eq(unassigned_key)
+        end
+      end
+    end
+
+    context "if a fundraiser is specified" do
+      subject(:lock) do
+        key_manager.lock_unassigned_key(game, fundraiser:)
+      end
+
+      let(:fundraiser) { create(:fundraiser) }
+
+      context "and there is a key available for the fundraiser" do
+        let!(:fundraiser_key) { create(:key, game:, fundraiser:) }
+
+        it "yields the fundraiser key" do
+          lock do |key|
+            expect(key).to eq(fundraiser_key)
+          end
+        end
+      end
+
+      context "and there isn't a fundraiser-specific key but there is a generic key" do
+        let!(:generic_key) { create(:key, game:, fundraiser: nil) }
+
+        it "yields the generic key" do
+          lock do |key|
+            expect(key).to eq(generic_key)
+          end
+        end
+      end
+
+      context "and there isn't a fundraiser-specific or generic key" do
+        it "yields nothing" do
+          lock do |key|
+            expect(key).to be_nil
+          end
+        end
+      end
+
+      context "and there isn't a key for that fundraiser but there is a key for another fundraiser" do
+        before { create(:key, game:, fundraiser: create(:fundraiser)) }
+
+        it "yields nothing" do
+          lock do |key|
+            expect(key).to be_nil
+          end
         end
       end
     end
