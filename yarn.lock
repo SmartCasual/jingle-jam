@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@activeadmin-plugins/active_admin_theme@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@activeadmin-plugins/active_admin_theme/-/active_admin_theme-1.1.4.tgz#d7c123ed410ee58788a9e16d74f339d97c91c8f0"
+  integrity sha512-bbLN3/3n9DT/ECHmjB1mLpbMLen9zk5WL8vi8RxtvVN8PWqzK0wEZ/gz7Erw42Y+/0Pfk811lWBUDg9BckigmQ==
+
 "@activeadmin/activeadmin@^2.0.0":
   version "2.12.0"
   resolved "https://registry.yarnpkg.com/@activeadmin/activeadmin/-/activeadmin-2.12.0.tgz#f0f69fbc5828a538802512884304744e3d94a619"
