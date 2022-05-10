@@ -22,6 +22,20 @@ class DonatorBundleTier < ApplicationRecord
 
   scope :locked, -> { where(unlocked: false) }
   scope :unlocked, -> { where(unlocked: true) }
+  scope :oldest_first, -> { order(updated_at: :asc) }
+  scope :unfulfilled, -> {
+    join_sql = <<~SQL.squish
+      INNER JOIN bundle_tier_games ON bundle_tier_games.bundle_tier_id = donator_bundle_tiers.bundle_tier_id
+      LEFT OUTER JOIN keys ON keys.game_id = bundle_tier_games.game_id
+        AND keys.donator_bundle_tier_id = donator_bundle_tiers.id
+    SQL
+
+    distinct.joins(join_sql).where(keys: { id: nil })
+  }
+  scope :for_fundraiser, ->(fundraiser) do
+    joins(bundle_tier: { bundle: :fundraiser })
+    .where("bundles.fundraiser_id" => fundraiser.id)
+  end
 
   delegate :price, to: :bundle_tier
 
@@ -41,9 +55,13 @@ class DonatorBundleTier < ApplicationRecord
     !unlocked?
   end
 
+  def fulfilled?
+    bundle_tier.bundle_tier_games.count == assigned_games.count
+  end
+
 private
 
   def trigger_fulfillment
-    DonatorBundleTierFulfillmentJob.perform_later(id)
+    KeyAssignment::RequestProcessor.queue_fulfillment(self)
   end
 end

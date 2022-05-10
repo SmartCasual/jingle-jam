@@ -1,20 +1,18 @@
-class DonatorBundleTierFulfillmentJob < ApplicationJob
-  queue_as :default
-
-  def initialize(*args, key_manager: nil)
-    super(*args)
-
-    @key_manager = key_manager || KeyManager.new
+class KeyAssignment::KeyAssigner
+  def initialize(key_manager: nil)
+    @key_manager = key_manager || KeyAssignment::KeyManager.new
   end
 
-  def perform(donator_bundle_tier_id) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    return if (donator_bundle_tier = DonatorBundleTier.find_by(id: donator_bundle_tier_id)).blank?
+  def assign(donator_bundle_tier, fundraiser: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    return if donator_bundle_tier.nil?
     return if donator_bundle_tier.locked?
+
+    fundraiser ||= donator_bundle_tier.bundle_tier.fundraiser
 
     donator_bundle_tier.bundle_tier.games.each do |game|
       next if @key_manager.key_assigned?(game, donator_bundle_tier:)
 
-      @key_manager.lock_unassigned_key(game) do |key|
+      @key_manager.lock_unassigned_key(game, fundraiser:) do |key|
         donator = donator_bundle_tier.donator_bundle.donator
 
         if key

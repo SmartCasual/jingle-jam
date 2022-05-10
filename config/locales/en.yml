@@ -120,6 +120,9 @@ en:
       header: "Thanks for your donation!"
       instructions: "You can find your game keys here:"
 
+  fundraisers:
+    show:
+      no_bundles: "No active bundles for this fundraiser"
   # Game key pages
   game_keys:
     header: "Your game keys"

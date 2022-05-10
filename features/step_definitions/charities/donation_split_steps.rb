@@ -1,7 +1,10 @@
 When("a donator splits their donation unevenly among the charities") do
   @amount = Money.new(30_00, "GBP")
 
-  @fundraiser = create(:fundraiser, :active, name: "Fundraiser")
+  @fundraiser = create(:fundraiser, :active,
+    name: "Fundraiser",
+    bundles: build_list(:bundle, 1, :live),
+  )
 
   @charity_1 = create(:charity, fundraisers: [@fundraiser])
   @charity_2 = create(:charity, fundraisers: [@fundraiser])
@@ -28,7 +31,10 @@ Then("the donation split should appear on their donations list") do
 end
 
 When("a donator splits their donation in a way that doesn't add up to their total donation") do
-  @fundraiser = create(:fundraiser, :active, name: "Fundraiser")
+  @fundraiser = create(:fundraiser, :active,
+    name: "Fundraiser",
+    bundles: build_list(:bundle, 1, :live),
+  )
 
   @charity_1 = create(:charity, fundraisers: [@fundraiser])
   @charity_2 = create(:charity, fundraisers: [@fundraiser])
@@ -51,7 +57,10 @@ Then("the donator should be asked to correct their split") do
 end
 
 Given("a variety of split and unsplit donations") do
-  @fundraiser = create(:fundraiser, :active, name: "Fundraiser")
+  @fundraiser = create(:fundraiser, :active,
+    name: "Fundraiser",
+    bundles: build_list(:bundle, 1, :live),
+  )
 
   @popular_charity = create(:charity, name: "Popular charity", fundraisers: [@fundraiser])
   @unpopular_charity = create(:charity, name: "Unpopular charity", fundraisers: [@fundraiser])

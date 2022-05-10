@@ -2,9 +2,9 @@
 
 <h2><%= t("common.headers.bundles") %></h2>
 
-<% if @fundraiser.bundles.any? %>
+<% if (bundles = @fundraiser.bundles.live).any? %>
   <ul>
-    <% @fundraiser.bundles.each do |bundle| %>
+    <% bundles.each do |bundle| %>
       <li class="bundle">
         <h3><%= bundle.name %></h3>
         <p>Donate <%= bundle.highest_tier.price.format %> or more to receive everything in this bundle.</p>
@@ -31,6 +31,10 @@
       </li>
     <% end %>
   </ul>
+<% else %>
+  <p>
+    <%= t("fundraisers.show.no_bundles") %>
+  </p>
 <% end %>
 
 <p>

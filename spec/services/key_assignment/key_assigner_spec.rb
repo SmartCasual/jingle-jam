@@ -1,14 +1,11 @@
-RSpec.describe DonatorBundleTierFulfillmentJob do
-  subject(:job) do
-    described_class.new(key_manager:)
-  end
+RSpec.describe KeyAssignment::KeyAssigner do
+  subject(:service) { described_class.new(key_manager:) }
 
-  let(:key_manager) { instance_double(KeyManager) }
+  let(:key_manager) { instance_double(KeyAssignment::KeyManager) }
 
   let(:donator) { create(:donator, :with_email_address, :confirmed) }
   let(:donator_bundle) { create(:donator_bundle, donator:) }
   let(:donator_bundle_tier) { create(:donator_bundle_tier, donator_bundle:, unlocked: true) }
-  let(:donator_bundle_tier_id) { donator_bundle_tier.id }
 
   let(:game) { donator_bundle_tier.bundle_tier.games.first }
 
@@ -33,16 +30,16 @@ RSpec.describe DonatorBundleTierFulfillmentJob do
 
     before do
       allow(key_manager).to receive(:lock_unassigned_key)
-        .with(game).and_yield(key)
+        .with(game, fundraiser: anything).and_yield(key)
     end
 
     it "assigns the key" do
-      job.perform(donator_bundle_tier_id)
+      service.assign(donator_bundle_tier)
       expect(key.reload.donator_bundle_tier).to eq(donator_bundle_tier)
     end
 
     it "notifies the donator" do
-      job.perform(donator_bundle_tier_id)
+      service.assign(donator_bundle_tier)
       expect(last_sent_email.to).to eq([donator.email_address])
     end
 
@@ -53,12 +50,12 @@ RSpec.describe DonatorBundleTierFulfillmentJob do
       end
 
       it "assigns the keys" do
-        job.perform(donator_bundle_tier_id)
+        service.assign(donator_bundle_tier)
         expect(donator_bundle_tier.reload.keys).not_to be_empty
       end
 
       it "does not email the donator" do
-        job.perform(donator_bundle_tier_id)
+        service.assign(donator_bundle_tier)
         expect(bundle_assigned_emails).to be_empty
       end
     end
@@ -70,12 +67,12 @@ RSpec.describe DonatorBundleTierFulfillmentJob do
       end
 
       it "assigns the keys" do
-        job.perform(donator_bundle_tier_id)
+        service.assign(donator_bundle_tier)
         expect(donator_bundle_tier.reload.keys).not_to be_empty
       end
 
       it "does not email the donator" do
-        job.perform(donator_bundle_tier_id)
+        service.assign(donator_bundle_tier)
         expect(bundle_assigned_emails).to be_empty
       end
     end
@@ -86,12 +83,12 @@ RSpec.describe DonatorBundleTierFulfillmentJob do
       end
 
       it "assigns the keys" do
-        job.perform(donator_bundle_tier_id)
+        service.assign(donator_bundle_tier)
         expect(donator_bundle_tier.reload.keys).not_to be_empty
       end
 
       it "does not email the donator" do
-        job.perform(donator_bundle_tier_id)
+        service.assign(donator_bundle_tier)
         expect(bundle_assigned_emails).to be_empty
       end
     end
@@ -100,31 +97,30 @@ RSpec.describe DonatorBundleTierFulfillmentJob do
   context "when it fails to gets a lock on an unassigned key" do
     before do
       allow(key_manager).to receive(:lock_unassigned_key)
-        .with(game).and_yield(nil)
+        .with(game, fundraiser: anything).and_yield(nil)
     end
 
     it "does not assign the key" do
-      job.perform(donator_bundle_tier_id)
+      service.assign(donator_bundle_tier)
       expect(donator_bundle_tier.reload.keys).to be_empty
     end
 
     it "does not notify the donator" do
-      job.perform(donator_bundle_tier_id)
+      service.assign(donator_bundle_tier)
       expect(last_sent_email.to).not_to include(donator.email_address)
     end
 
     it "notifies the admins" do
-      job.perform(donator_bundle_tier_id)
+      service.assign(donator_bundle_tier)
       expect(last_sent_email.to).to match_array(admin_users.map(&:email_address))
     end
   end
 
   context "when there's no donator bundle tier" do
-    let(:donator_bundle_tier_id) { 7001 }
+    let(:donator_bundle_tier) { nil }
 
     it "does nothing" do
-      job.perform(donator_bundle_tier_id)
-      expect(donator_bundle_tier.reload.keys).to be_empty
+      service.assign(donator_bundle_tier)
       expect(bundle_assigned_emails).to be_empty
     end
   end
@@ -135,7 +131,7 @@ RSpec.describe DonatorBundleTierFulfillmentJob do
     end
 
     it "does nothing" do
-      job.perform(donator_bundle_tier_id)
+      service.assign(donator_bundle_tier)
       expect(donator_bundle_tier.reload.keys).to be_empty
       expect(bundle_assigned_emails).to be_empty
     end
@@ -147,7 +143,7 @@ RSpec.describe DonatorBundleTierFulfillmentJob do
     end
 
     it "does nothing" do
-      job.perform(donator_bundle_tier_id)
+      service.assign(donator_bundle_tier)
       expect(donator_bundle_tier.reload.keys).to be_empty
       expect(bundle_assigned_emails).to be_empty
     end
@@ -160,7 +156,7 @@ RSpec.describe DonatorBundleTierFulfillmentJob do
     end
 
     it "does nothing" do
-      job.perform(donator_bundle_tier_id)
+      service.assign(donator_bundle_tier)
       expect(donator_bundle_tier.reload.keys).to be_empty
       expect(bundle_assigned_emails).to be_empty
     end

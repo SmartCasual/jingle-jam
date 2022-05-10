@@ -33,9 +33,15 @@ World(StripeTestHelpers)
 
 require_relative "../../test/support/test_data"
 
+require_relative "../../test/support/with_key_assignment_processor"
+World(WithKeyAssignmentProcessor)
+
+require_relative "../../test/support/retry_helpers"
+World(RetryHelpers)
+
 Around do |_, block|
   TestData.clear
-  block.call
+  with_key_assignment_processor(&block)
   TestData.clear
 end
 
