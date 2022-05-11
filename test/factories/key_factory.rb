@@ -5,5 +5,9 @@ FactoryBot.define do
     donator_bundle_tier { nil }
 
     trait :unassigned
+
+    trait :assigned do
+      donator_bundle_tier
+    end
   end
 end

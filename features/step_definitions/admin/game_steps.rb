@@ -47,26 +47,23 @@ end
 
 When("the keys should be on the admin page for that game") do
   go_to_admin_game(@current_game)
-
-  @key_codes.each do |key_code|
-    expect(page).to have_css(".col-code", text: key_code)
-  end
+  expect(page).to have_css(".row-unassigned_keys", text: @key_codes.count)
 end
 
 When("the key shouldn't be on the admin page for that game") do
   go_to_admin_game(@current_game)
-  expect(page).not_to have_css(".col-code", text: @deleted_code)
+  expect(page).to have_css(".row-unassigned_keys", text: @current_game.keys.count)
 end
 
 When("an admin edits the game") do
   go_to_admin_game(@current_game, edit: true)
-  fill_in "Name", with: (@new_name = SecureRandom.uuid)
+  fill_in "Name", with: (@new_name = SecureRandom.uuid), fill_options: { clear: :backspace }
   click_on "Update Game"
 end
 
 When("an admin edits a key") do
   go_to_admin_game(@current_game, edit: true)
-  fill_in "Code", with: (@new_code = SecureRandom.uuid), currently_with: @current_game.keys.first.code
+  fill_in "Code", with: (@new_code = SecureRandom.uuid), currently_with: @current_game.keys.first.code, fill_options: { clear: :backspace }
   click_on "Update Game"
 end
 
@@ -77,7 +74,7 @@ end
 
 Then("the edits to the key should've been saved") do
   go_to_admin_game(@current_game)
-  expect(page).to have_css(".col-code", text: @new_code)
+  expect(@current_game.reload.keys.map(&:code)).to include(@new_code)
 end
 
 When("an admin deletes the game") do

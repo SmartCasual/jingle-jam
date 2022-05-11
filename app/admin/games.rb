@@ -14,6 +14,12 @@ ActiveAdmin.register Game do
     id_column
     column :name
     column :description
+    column :unassigned_keys do |game|
+      game.keys.unassigned.count
+    end
+    column :assigned_keys do |game|
+      game.keys.assigned.count
+    end
     column :created_at
     column :updated_at
 
@@ -45,12 +51,12 @@ ActiveAdmin.register Game do
   show do
     attributes_table do
       row :name
-    end
-
-    panel "Keys" do
-      table_for game.keys do
-        column :code
-        column :assigned, &:assigned?
+      row :description
+      row :unassigned_keys do |game|
+        game.keys.unassigned.count
+      end
+      row :assigned_keys do |game|
+        game.keys.assigned.count
       end
     end
 

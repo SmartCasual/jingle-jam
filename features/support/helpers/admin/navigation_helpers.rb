@@ -18,6 +18,7 @@ module Admin::NavigationHelpers
   end
 
   def go_to_admin_game(game, edit: false)
+    game = Game.find_by(name: game) if game.is_a?(String)
     go_to_admin_record(game, within: "Games", edit:)
   end
 
