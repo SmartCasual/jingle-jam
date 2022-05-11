@@ -4,10 +4,12 @@ ActiveAdmin.register Bundle do
     :name,
     bundle_tiers_attributes: [
       :_destroy,
+      :ends_at,
       :human_price,
       :id,
       :name,
       :price_currency,
+      :starts_at,
       { bundle_tier_games_attributes: %i[
         _destroy
         id
@@ -35,6 +37,8 @@ ActiveAdmin.register Bundle do
         tier.money :price,
           required: true,
           default_currency: bundle.fundraiser&.main_currency
+        tier.input :starts_at, as: :datepicker
+        tier.input :ends_at, as: :datepicker
 
         tier.has_many(:bundle_tier_games,
           heading: "Games",
@@ -64,6 +68,8 @@ ActiveAdmin.register Bundle do
         row :price do
           tier.human_price(symbol: true)
         end
+        row :starts_at
+        row :ends_at
         row :games do
           tier.bundle_tier_games.map(&:game).map(&:name).join(", ")
         end

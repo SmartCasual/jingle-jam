@@ -7,9 +7,11 @@
 # Name                  | Type               | Attributes
 # --------------------- | ------------------ | ---------------------------
 # **`id`**              | `bigint`           | `not null, primary key`
+# **`ends_at`**         | `datetime`         |
 # **`name`**            | `string`           |
 # **`price_currency`**  | `string`           | `default("GBP"), not null`
 # **`price_decimals`**  | `integer`          | `default(0), not null`
+# **`starts_at`**       | `datetime`         |
 # **`created_at`**      | `datetime`         | `not null`
 # **`updated_at`**      | `datetime`         | `not null`
 # **`bundle_id`**       | `bigint`           | `not null`
@@ -26,4 +28,34 @@ class BundleTier < ApplicationRecord
   accepts_nested_attributes_for :bundle_tier_games, allow_destroy: true
 
   delegate :fundraiser, to: :bundle
+
+  def availability_text # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    return unless starts_at || ends_at
+
+    if starts_at && starts_at > Time.now.utc
+      if ends_at
+        "Available between #{time(starts_at)} and #{time(ends_at)}"
+      else
+        "Available from #{time(starts_at)}"
+      end
+    elsif ends_at
+      if ends_at > Time.now.utc
+        "Available until #{time(ends_at)}"
+      else
+        "No longer available"
+      end
+    end
+  end
+
+private
+
+  def time(datetime)
+    format = if datetime.sec.zero?
+      "%F %R (UTC)" # Don't include seconds
+    else
+      "%F %T (UTC)" # Do include seconds
+    end
+
+    datetime.utc.strftime(format)
+  end
 end

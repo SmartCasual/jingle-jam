@@ -7,6 +7,9 @@ if Rails.env.development? || ENV.fetch("FORCE_SEEDS", nil) == "true"
     password: "password123",
     password_confirmation: "password123",
     full_access: true,
+    # otpauth://totp/Jingle%20Jam%20%28Staging%29:admin%40example.com?secret=EEKMC5VPZQDAD2XT27DRKIWXAJTHDKVC&issuer=Jingle%20Jam%20%28Staging%29
+    otp_secret: "EEKMC5VPZQDAD2XT27DRKIWXAJTHDKVC",
+    last_otp_at: Time.zone.now,
   )
 
   puts "Creating active fundraisers"
@@ -27,7 +30,7 @@ if Rails.env.development? || ENV.fetch("FORCE_SEEDS", nil) == "true"
     bundle.highest_tier.update(price_decimals: 25_00)
     bundle.highest_tier.bundle_tier_games.create!(game: Game.find_or_initialize_by(name: "The Witness"))
 
-    tier = bundle.bundle_tiers.create!(price_decimals: 10_00)
+    tier = bundle.bundle_tiers.create!(price_decimals: 10_00, currency: fundraiser.main_currency)
 
     tier.bundle_tier_games.create!(game: Game.find_or_initialize_by(name: "Doom"))
     tier.bundle_tier_games.create!(game: Game.find_or_initialize_by(name: "Duke Nukem Forever"))

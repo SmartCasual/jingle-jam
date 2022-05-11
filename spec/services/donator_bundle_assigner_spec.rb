@@ -130,6 +130,21 @@ RSpec.describe DonatorBundleAssigner do
             .donator_bundle_tiers.unlocked.map(&:price)
           expect(unlocked_tier_prices).to match_array([bottom_tier_price])
         end
+
+        context "but the bundle cannot be fully unlocked" do
+          before do
+            bundle.highest_tier.update(starts_at: 2.days.from_now)
+          end
+
+          it "only creates 1 donator bundle" do
+            expect { assignment }.to change(donator.reload.donator_bundles, :count).by(1)
+          end
+
+          it "does not fully unlock the bundle" do
+            assignment
+            expect(donator.donator_bundles.order(:id).first).not_to be_complete
+          end
+        end
       end
     end
   end

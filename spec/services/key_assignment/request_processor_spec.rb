@@ -34,12 +34,7 @@ RSpec.describe KeyAssignment::RequestProcessor do
 
       with_key_assignment_processor do
         wait_for do
-          # At startup this status item should be `nil` until
-          # the backlog processing has started, and then
-          # `false` when it's finished.
-          #
-          # This prevents a false positive on this test.
-          described_class.status_report[:processing_backlog] == false
+          described_class.finished_backlog?
         end
       end
 
