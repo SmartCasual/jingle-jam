@@ -23,6 +23,5 @@ end
 Then("the game keys should be added to that game") do
   go_to_admin_game(@game)
 
-  expect(page).to have_css(".col-code", count: @keys.count + 1)
-  @keys.each { |k| expect(page).to have_text(k) }
+  expect(page).to have_css(".row-unassigned_keys td", text: @keys.count)
 end
