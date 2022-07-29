@@ -30,7 +30,7 @@ if Rails.env.development? || ENV.fetch("FORCE_SEEDS", nil) == "true"
     bundle.highest_tier.update(price_decimals: 25_00)
     bundle.highest_tier.bundle_tier_games.create!(game: Game.find_or_initialize_by(name: "The Witness"))
 
-    tier = bundle.bundle_tiers.create!(price_decimals: 10_00, currency: fundraiser.main_currency)
+    tier = bundle.bundle_tiers.create!(price_decimals: 10_00, price_currency: fundraiser.main_currency)
 
     tier.bundle_tier_games.create!(game: Game.find_or_initialize_by(name: "Doom"))
     tier.bundle_tier_games.create!(game: Game.find_or_initialize_by(name: "Duke Nukem Forever"))
