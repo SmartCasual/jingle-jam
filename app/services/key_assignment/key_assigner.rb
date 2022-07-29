@@ -26,5 +26,7 @@ class KeyAssignment::KeyAssigner
         end
       end
     end
+  rescue Aws::SES::Errors::MessageRejected => e
+    Rollbar.error(e)
   end
 end
