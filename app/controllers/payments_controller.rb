@@ -85,6 +85,8 @@ private
     return if current_donator.email_address == new_email_address
 
     current_donator.update(email_address: new_email_address)
+  rescue Aws::SES::Errors::MessageRejected => e
+    Rollbar.error(e)
   end
 
   def success_url
