@@ -3,6 +3,8 @@ class PaymentsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :webhook
 
   def prep_checkout_session
+    return unless request.headers["Accept"] == "application/json"
+
     set_current_donator
     update_current_donator
     save_current_donator
