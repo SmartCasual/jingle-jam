@@ -16,6 +16,8 @@ export default class Payments {
     if (csrfElement) {
       this.csfrToken = csrfElement.content;
     }
+
+    this.postingForm = false;
   }
 
   addStripe() {
@@ -24,10 +26,20 @@ export default class Payments {
       self._undisableFields();
       event.preventDefault();
 
+      if (self.postingForm) {
+        return;
+      }
+
+      self.postingForm = true;
+      self._disableStripeButton();
+
       const stripe = Stripe(self.form.dataset.stripePublicKey);
 
       self._postForm("/stripe/prep-checkout")
         .then(function(session) {
+          self.postingForm = false;
+          self._enableStripeButton();
+
           return stripe.redirectToCheckout({ sessionId: session.id });
         })
         .then(function(result) {
@@ -72,6 +84,7 @@ export default class Payments {
       method: 'POST',
       headers: {
         "X-CSRF-Token": this.csfrToken,
+        "Accept": "application/json",
       },
     }).then((resp) => resp.json());
   }
@@ -81,8 +94,17 @@ export default class Payments {
       method: 'POST',
       headers: {
         "X-CSRF-Token": this.csfrToken,
+        "Accept": "application/json",
       },
       body: (new FormData(this.form)),
     }).then((resp) => resp.json());
+  }
+
+  _disableStripeButton() {
+    this.button.disabled = true;
+  }
+
+  _enableStripeButton() {
+    this.button.disabled = false;
   }
 }
