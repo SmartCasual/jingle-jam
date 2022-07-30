@@ -24,6 +24,8 @@ class Account::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 private
 
   def confirm_email_address(donator)
+    return if omniauth_email_address.blank?
+
     donator.confirm if donator.email_address == omniauth_email_address
   end
 
