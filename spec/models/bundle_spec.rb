@@ -73,4 +73,22 @@ RSpec.describe Bundle, type: :model do
       expect(bundle).not_to be_valid
     end
   end
+
+  describe "#currency" do
+    context "if the bundle has no tiers" do
+      it "returns nil" do
+        expect(bundle.currency).to be_nil
+      end
+    end
+
+    context "if the bundle has tiers" do
+      let(:attrs) { { bundle_tiers: [tier] } }
+
+      let(:tier) { build(:bundle_tier, price: Money.new(1_00, "GBP")) }
+
+      it "returns the currency of the highest tier" do
+        expect(bundle.currency).to eq("GBP")
+      end
+    end
+  end
 end

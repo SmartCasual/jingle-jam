@@ -148,4 +148,41 @@ RSpec.describe DonatorBundleAssigner do
       end
     end
   end
+
+  # https://github.com/SmartCasual/jingle-jam/issues/177
+  describe "donations and tiers in different currencies" do
+    subject(:assignment) do
+      described_class.assign(donator:, bundle:, fund:)
+    end
+
+    let(:donator) { create(:donator) }
+    let(:bundle) { create(:bundle, bundle_tiers:) }
+    let(:fund) { Money.new(40_00, "GBP") }
+
+    let(:bundle_tiers) do
+      [
+        build(:bundle_tier, price: top_tier_price),
+        build(:bundle_tier, price: bottom_tier_price),
+      ]
+    end
+
+    let(:top_tier_price) { Money.new(25_00, "EUR") }
+    let(:bottom_tier_price) { Money.new(10_00, "EUR") }
+
+    before do
+      bundle.fundraiser.update(overpayment_mode: Fundraiser::PRO_SE)
+    end
+
+    it "assigns one fully unlocked bundle and one partially unlocked bundle" do
+      expect(DonatorBundle.count).to eq(0)
+
+      assignment
+
+      expect(DonatorBundle.count).to eq(2)
+      expect(donator.reload.donator_bundles.count).to eq(2)
+
+      expect(donator.donator_bundles.order(:id).first).to be_complete
+      expect(donator.donator_bundles.order(:id).second).not_to be_complete
+    end
+  end
 end
