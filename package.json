@@ -9,6 +9,7 @@
     "@rails/ujs": "^7.0.0",
     "@rails/webpacker": "^5.0.0",
     "currency.js": "^2.0.0",
+    "jquery": "^3.6.0",
     "postcss": "^8.0.0",
     "webpack": "^4.46.0",
     "yarn": "^1.0.0"

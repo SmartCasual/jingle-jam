@@ -50,7 +50,7 @@ RSpec.describe StripePaymentsController, type: :request do
           stripe_request = a_request(:post, "https://api.stripe.com/v1/checkout/sessions")
             .with(body: /customer=#{stripe_customer_id}/)
 
-          post("/stripe/prep-checkout", params:)
+          post("/stripe/prep-checkout", params:, headers: { "ACCEPT" => "application/json" })
           expect(stripe_request).to have_been_made
         end
       end
