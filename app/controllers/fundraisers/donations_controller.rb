@@ -35,6 +35,7 @@ private
     when "success"
       "Donation made, thank you!"
     when "cancelled"
+      current_donator.donations.pending.order(:id).last.destroy
       "Donation cancelled."
     else
       return
