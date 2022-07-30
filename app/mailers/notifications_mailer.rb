@@ -35,7 +35,10 @@ class NotificationsMailer < ApplicationMailer
     return if email_address.blank?
     return if (donator = Donator.confirmed.find_by(email_address:)).blank?
 
-    @token_url = log_in_via_token_account_url(donator, token: donator.token, email_address: donator.email_address)
+    @token_url = log_in_via_token_account_url(donator,
+      token: donator.token_with_email_address,
+      email_address: donator.email_address,
+    )
 
     mail to: donator.email_address
   end

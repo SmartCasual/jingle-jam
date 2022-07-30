@@ -1,9 +1,9 @@
 module AccountTestHelpers
-  def expect_logged_in(_donator)
+  def expect_logged_in(donator = nil)
     expect(page).not_to have_text("Invalid credentials")
 
     within "nav .donator" do
-      expect(page).to have_content(@current_donator.display_name.upcase)
+      expect(page).to have_content((donator || @current_donator).display_name.upcase)
     end
     expect(page).to have_button("Log out")
   end

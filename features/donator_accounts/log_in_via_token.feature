@@ -4,6 +4,7 @@ Scenario: Donator with a confirmed email address requests a log in URL
   Given a donator with a confirmed email address
   When they request a log in URL
   Then they should receive a log in URL
+  And they should be able to log in with that URL
 
 Scenario: Donator with an unconfirmed email address requests a log in URL
   Given a donator with an unconfirmed email address

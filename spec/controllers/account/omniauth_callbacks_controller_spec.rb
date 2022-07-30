@@ -2,8 +2,9 @@ RSpec.describe Account::OmniauthCallbacksController, type: :controller do
   include Devise::Test::ControllerHelpers
 
   let(:request) { @request } # rubocop:disable RSpec/InstanceVariable
-  let(:donator) { create(:donator) }
+  let(:donator) { create(:donator, email_address: donator_email_address) }
   let(:email_address) { nil }
+  let(:donator_email_address) { "test@example.com" }
 
   before do
     request.env["devise.mapping"] = Devise.mappings[:donator]
@@ -38,7 +39,7 @@ RSpec.describe Account::OmniauthCallbacksController, type: :controller do
       end
 
       context "if the donator's current email address matches the one provided" do
-        let(:email_address) { donator.email_address }
+        let(:email_address) { donator_email_address }
 
         it "confirms the donator's email address" do
           expect { get :token }.to(change { donator.reload.confirmed_at })
@@ -46,7 +47,16 @@ RSpec.describe Account::OmniauthCallbacksController, type: :controller do
       end
 
       context "if the donator's current email address does not match the one provided" do
-        let(:email_address) { "not-the-same-email-address" }
+        let(:email_address) { "not-the-same-email-address@example.com" }
+
+        it "does not confirm the donator's email address" do
+          expect { get :token }.not_to(change { donator.reload.confirmed_at })
+        end
+      end
+
+      context "if the donator's current email address matches the one provided but they're both blank" do
+        let(:donator_email_address) { "" }
+        let(:email_address) { "" }
 
         it "does not confirm the donator's email address" do
           expect { get :token }.not_to(change { donator.reload.confirmed_at })
@@ -91,7 +101,7 @@ RSpec.describe Account::OmniauthCallbacksController, type: :controller do
       end
 
       context "if the donator's current email address matches the one provided" do
-        let(:email_address) { donator.email_address }
+        let(:email_address) { donator_email_address }
 
         it "confirms the donator's email address" do
           expect { get :twitch }.to(change { donator.reload.confirmed_at })
@@ -99,7 +109,16 @@ RSpec.describe Account::OmniauthCallbacksController, type: :controller do
       end
 
       context "if the donator's current email address does not match the one provided" do
-        let(:email_address) { "not-the-same-email-address" }
+        let(:email_address) { "not-the-same-email-address@example.com" }
+
+        it "does not confirm the donator's email address" do
+          expect { get :twitch }.not_to(change { donator.reload.confirmed_at })
+        end
+      end
+
+      context "if the donator's current email address matches the one provided but they're both blank" do
+        let(:donator_email_address) { "" }
+        let(:email_address) { "" }
 
         it "does not confirm the donator's email address" do
           expect { get :twitch }.not_to(change { donator.reload.confirmed_at })

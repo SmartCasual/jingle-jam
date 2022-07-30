@@ -23,9 +23,17 @@ When("someone requests a log in URL for a non-existent account") do
 end
 
 Then("they should receive a log in URL") do
-  expect(find_email_with_link(%r{/log-in-via-token/})).to be_present
+  email = find_email_with_link(%r{/log-in-via-token/})
+  expect(email).to be_present
+  @log_in_url = find_link(email, %r{/log-in-via-token/})
 end
 
 Then("they should not receive a log in URL") do
   expect(find_email_with_link(%r{/log-in-via-token/})).not_to be_present
+end
+
+Then("they should be able to log in with that URL") do
+  visit @log_in_url
+  click_on "Log in via token"
+  expect_logged_in(@donator)
 end
