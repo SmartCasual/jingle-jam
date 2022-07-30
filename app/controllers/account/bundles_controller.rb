@@ -6,6 +6,7 @@ class Account::BundlesController < ApplicationController
     @bundles_by_fundraiser = current_donator
       .donator_bundles
       .includes(bundle: :fundraiser)
+      .reject(&:fully_locked?)
       .group_by { |b| b.bundle.fundraiser }
   end
 

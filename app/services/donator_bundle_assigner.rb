@@ -6,7 +6,7 @@ class DonatorBundleAssigner
   def initialize(donator:, bundle:, fund:)
     @donator = donator
     @bundle = bundle
-    @fund = fund
+    @fund = fund.exchange_to(bundle.currency)
   end
 
   def assign
@@ -38,21 +38,35 @@ private
     end
   end
 
-  def create_bundle_and_apportion_overpayment
-    until done?
-      donator_bundle = DonatorBundle.create_from(bundle, donator:)
+  # FIXME: Reduce the cyclomatic complexity of this method.
+  def create_bundle_and_apportion_overpayment # rubocop:disable Metrics/CyclomaticComplexity
+    loop do
+      donator_bundles.reload
 
-      if (tiers = donator_bundle.unlockable_tiers_at_or_below(fund)).any?
-        tiers.each(&:unlock!)
-        self.fund -= tiers.last.bundle_tier.price
-      end
+      return if only_partial_bundles_exist?
+      return if completed_bundle_in_pro_bono_mode?
+      return if not_enough_to_unlock_lowest_tier?
+
+      donator_bundle = donator_bundles.find(&:incomplete?) || DonatorBundle.create_from(bundle, donator:)
+      unlockable_tiers = donator_bundle.unlockable_tiers_at_or_below(fund)
+
+      return if unlockable_tiers.blank?
+
+      unlockable_tiers.each(&:unlock!)
+      self.fund -= unlockable_tiers.last.bundle_tier.price
     end
   end
 
-  def done?
-    (donator_bundles.reload.any? && donator_bundles.none?(&:complete?)) ||
-      fund < bundle.lowest_tier.price ||
-      (pro_bono? && donator_bundles.any?(&:complete?))
+  def only_partial_bundles_exist?
+    donator_bundles.any? && donator_bundles.none?(&:complete?)
+  end
+
+  def completed_bundle_in_pro_bono_mode?
+    pro_bono? && donator_bundles.any?(&:complete?)
+  end
+
+  def not_enough_to_unlock_lowest_tier?
+    fund < bundle.lowest_tier.price
   end
 
   def pro_bono?

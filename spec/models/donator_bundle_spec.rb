@@ -79,6 +79,36 @@ RSpec.describe DonatorBundle, type: :model do
     end
   end
 
+  describe "#incomplete?" do
+    it "is the inverse of #complete?" do
+      expect(donator_bundle.incomplete?).to eq(!donator_bundle.complete?)
+    end
+  end
+
+  describe "#fully_locked?" do
+    subject { donator_bundle.fully_locked? }
+
+    context "when no donator bundle tiers are unlocked" do
+      it { is_expected.to be(true) }
+    end
+
+    context "when some donator bundle tiers are unlocked" do
+      before do
+        donator_bundle.donator_bundle_tiers.first.unlock!
+      end
+
+      it { is_expected.to be(false) }
+    end
+
+    context "when all donator bundle tiers are unlocked" do
+      before do
+        donator_bundle.donator_bundle_tiers.each(&:unlock!)
+      end
+
+      it { is_expected.to be(false) }
+    end
+  end
+
   describe "#next_unlockable_tier" do
     subject(:result) { donator_bundle.next_unlockable_tier }
 

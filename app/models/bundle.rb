@@ -63,4 +63,8 @@ class Bundle < ApplicationRecord
   def total_value
     highest_tier.price
   end
+
+  def currency
+    highest_tier&.price_currency
+  end
 end

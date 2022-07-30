@@ -35,12 +35,20 @@ class DonatorBundle < ApplicationRecord
     locked_tiers.none?
   end
 
+  def incomplete?
+    !complete?
+  end
+
   def next_unlockable_tier
     unlockable_tiers.first
   end
 
   def unlockable_tiers_at_or_below(amount)
     unlockable_tiers.where("price_decimals <= ?", amount.fractional)
+  end
+
+  def fully_locked?
+    locked_tiers == donator_bundle_tiers
   end
 
 private
