@@ -12,8 +12,9 @@ class PaymentAssignmentJob < ApplicationJob
     end
 
     if donation.nil?
-      # Notify error tracking
-      Rails.logger.info "Missing donation for `#{payment.stripe_payment_intent_id}`"
+      message = "Missing donation for `#{payment.stripe_payment_intent_id}`"
+      Rollbar.error(message)
+      Rails.logger.error(message)
       return
     end
 
