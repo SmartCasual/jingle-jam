@@ -82,7 +82,7 @@ en:
       action: "Card payment"
       amount: "Amount"
       currency: "Currency"
-      email_address: "Email address (optional)"
+      email_address: "Email address"
       header: "Make a donation"
       lock: "Lock slider"
       message: "Message (optional)"

@@ -5,7 +5,9 @@ module DonationTestHelpers
 
   def make_donation(amount = nil, stripe_options: {}, **options) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     options = {
-      email_address: nil,
+      email_address: "test@example.com",
+      expect_failure: false,
+      fundraiser: nil,
       message: nil,
       name: nil,
       navigate: false,
@@ -13,7 +15,6 @@ module DonationTestHelpers
       paypal: false,
       split: {},
       submit: true,
-      fundraiser: nil,
     }.merge(options)
 
     stripe_options = {
@@ -77,6 +78,8 @@ module DonationTestHelpers
           switch_to_window(main_window)
         end
 
+        return if options[:expect_failure]
+
         wait_for { Donation.count == (donation_count + 1) }
       else
         if stripe_options.delete(:stub)
@@ -84,6 +87,8 @@ module DonationTestHelpers
         end
 
         click_on "Card payment"
+        return if options[:expect_failure]
+
         wait_for { Donation.count == (donation_count + 1) }
 
         if TestData[:fake_payment_providers]

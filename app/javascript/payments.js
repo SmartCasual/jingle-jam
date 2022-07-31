@@ -41,14 +41,6 @@ export default class Payments {
           self._enableStripeButton();
 
           return stripe.redirectToCheckout({ sessionId: session.id });
-        })
-        .then(function(result) {
-          if (result.error) {
-            alert(result.error.message);
-          }
-        })
-        .catch(function(error) {
-          console.error('Error:', error);
         });
     });
   }
@@ -97,7 +89,16 @@ export default class Payments {
         "Accept": "application/json",
       },
       body: (new FormData(this.form)),
-    }).then((resp) => resp.json());
+    })
+    .then((resp) => resp.json())
+    .then((resp) => {
+      if (resp.errors) {
+        throw resp.errors;
+      } else {
+        return resp;
+      }
+    })
+    .catch((errors) => this._displayErrors(errors));
   }
 
   _disableStripeButton() {
@@ -106,5 +107,15 @@ export default class Payments {
 
   _enableStripeButton() {
     this.button.disabled = false;
+  }
+
+  _displayErrors(errors) {
+    const errorList = this.form.querySelector("ul.errors");
+    errorList.innerHTML = "";
+    errors.forEach(error => {
+      const errorItem = document.createElement("li");
+      errorItem.textContent = error;
+      errorList.appendChild(errorItem);
+    });
   }
 }

@@ -14,6 +14,7 @@ RSpec.describe StripePaymentsController, type: :request do
           human_amount: "25.00",
           amount_currency: currency,
         },
+        donator_email_address: "test@example.com",
       }
     end
 
