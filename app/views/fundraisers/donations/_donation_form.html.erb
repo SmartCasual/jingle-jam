@@ -60,7 +60,7 @@
 
   <p>
     <%= form.label :message, t("donations.form.message") %>
-    <%= form.text_field :message %>
+    <%= form.text_field :message, maxlength: Donation::MAX_MESSAGE_LENGTH %>
   </p>
 
   <p>
