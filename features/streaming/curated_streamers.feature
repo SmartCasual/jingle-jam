@@ -22,3 +22,15 @@ Scenario: Stream admin views donation stats
 Scenario: Curated streamers are listed on the homepage
   Given several curated streamers
   Then links to the curated streamers should be listed on the homepage
+
+Scenario: Curated streamers get shorter URLs
+  Given a curated streamer
+  But no active fundraisers
+  When a donator goes to the curated streamer's shorter URL
+  Then the donator should be informed that there are no active fundraisers
+  Given one active fundraiser
+  When a donator goes to the curated streamer's shorter URL
+  Then the donator should be redirected to the curated streamer's page for the active fundraiser
+  Given a second active fundraiser
+  When a donator goes to the curated streamer's shorter URL
+  Then the donator should be offered links to the curated streamer's page for both active fundraisers

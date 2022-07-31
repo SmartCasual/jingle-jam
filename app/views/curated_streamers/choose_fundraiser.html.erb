@@ -1,0 +1,15 @@
+<% if @fundraisers.any? %>
+  <h1>Which fundraiser would you like to donate to?</h1>
+
+  <ul>
+    <% @fundraisers.each do |fundraiser| %>
+      <li>
+        <%= link_to fundraiser.name, fundraiser_curated_streamer_path(fundraiser, @streamer) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <h1>No active fundraisers</h1>
+
+  <p>Unfortunately there are no fundraisers active at the moment</p>
+<% end %>
