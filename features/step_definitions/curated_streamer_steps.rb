@@ -90,3 +90,21 @@ Then("links to the curated streamers should be listed on the homepage") do
     end
   end
 end
+
+When("a donator goes to the curated streamer's shorter URL") do
+  visit curated_streamer_path(@current_curated_streamer)
+end
+
+Then("the donator should be redirected to the curated streamer's page for the active fundraiser") do
+  expect(current_path).to eq(fundraiser_curated_streamer_path(@first_active_fundraiser, @current_curated_streamer))
+end
+
+Then("the donator should be informed that there are no active fundraisers") do
+  expect(page).to have_text("Unfortunately there are no fundraisers active at the moment")
+end
+
+Then("the donator should be offered links to the curated streamer's page for both active fundraisers") do
+  expect(page).to have_text("Which fundraiser would you like to donate to?")
+  expect(page).to have_link(@first_active_fundraiser.name, href: fundraiser_curated_streamer_path(@first_active_fundraiser, @current_curated_streamer))
+  expect(page).to have_link(@second_active_fundraiser.name, href: fundraiser_curated_streamer_path(@second_active_fundraiser, @current_curated_streamer))
+end

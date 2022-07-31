@@ -54,6 +54,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :curated_streamers, path: "streams", only: [:show] do
+      member do
+        get :choose_fundraiser, path: "choose-fundraiser"
+      end
+    end
+
     resource :account, only: %i[show], controller: "account" do
       resources :donations, only: [:index], controller: "account/donations"
       resources :bundles, only: [:index, :show], controller: "account/bundles"

@@ -7,7 +7,17 @@ class CuratedStreamersController < ApplicationController
   helper DonationHelpers
 
   def show
-    @fundraiser = Fundraiser.find(params[:fundraiser_id])
+    if (fundraiser_id = params[:fundraiser_id]).present?
+      @fundraiser = Fundraiser.find(fundraiser_id)
+    elsif Fundraiser.active.count == 1
+      redirect_to fundraiser_curated_streamer_path(Fundraiser.active.first, @streamer)
+    else
+      redirect_to choose_fundraiser_curated_streamer_path(@streamer)
+    end
+  end
+
+  def choose_fundraiser
+    @fundraisers = Fundraiser.active
   end
 
   def admin; end
