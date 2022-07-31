@@ -29,3 +29,10 @@ Scenario: A donator increases their donation above the threshold
 Scenario: A donator leaves a name with their donation
   When a donator makes a £10 donation with the name "Gary Donor"
   Then a £10 donation should be recorded with the name "Gary Donor"
+
+Scenario: A donator leaves a very long donation
+  When a donator tries to make a very long donation using the web form
+  Then the donation message should be cut off in the form
+  And the donation should be recorded with the truncated message
+  When a donator bypasses the donation message truncation in the form
+  Then the donation should still be recorded with the truncated message

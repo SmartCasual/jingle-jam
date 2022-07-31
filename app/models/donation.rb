@@ -22,6 +22,8 @@
 # **`stripe_payment_intent_id`**  | `string`           |
 #
 class Donation < ApplicationRecord
+  MAX_MESSAGE_LENGTH = 100
+
   belongs_to :donator, inverse_of: :donations
   belongs_to :donated_by, inverse_of: :gifted_donations, optional: true, class_name: "Donator"
   belongs_to :curated_streamer, inverse_of: :donations, optional: true

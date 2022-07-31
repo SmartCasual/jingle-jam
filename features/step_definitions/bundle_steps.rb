@@ -34,3 +34,29 @@ Then("one key per game in the bundle should have been assigned") do
     expect(page).to have_css(".key .code", text: RegexHelpers::UUID_PATTERN)
   end
 end
+
+When("a donator tries to make a very long donation using the web form") do
+  make_donation(
+    message: "a" * 1000,
+    navigate: true,
+    submit: false,
+  )
+end
+
+Then("the donation message should be cut off in the form") do
+  expect(find_field("Message").value).to eq("a" * Donation::MAX_MESSAGE_LENGTH)
+end
+
+Then("the donation should (still )be recorded with the truncated message") do
+  make_donation(
+    message: "a" * 1000,
+    navigate: true,
+    submit: true,
+  )
+
+  expect(Donation.last.message).to eq("a" * Donation::MAX_MESSAGE_LENGTH)
+end
+
+When("a donator bypasses the donation message truncation in the form") do
+  find_field("Message").execute_script("this['maxlength'] = '#{'a' * (Donation::MAX_MESSAGE_LENGTH + 1)}'")
+end

@@ -3,7 +3,7 @@ require_relative "../../../test/support/request_test_helpers"
 module DonationTestHelpers
   include RequestTestHelpers
 
-  def make_donation(amount, stripe_options: {}, **options) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def make_donation(amount = nil, stripe_options: {}, **options) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     options = {
       email_address: nil,
       message: nil,
@@ -26,6 +26,8 @@ module DonationTestHelpers
       click_on fundraiser.name
       click_on "Donate here!"
     end
+
+    amount ||= fundraiser.bundles.first&.highest_tier&.price
 
     select amount.currency.iso_code, from: "Currency", wait: 5
     fill_in "Amount", with: amount.to_s, fill_options: { clear: :backspace }
