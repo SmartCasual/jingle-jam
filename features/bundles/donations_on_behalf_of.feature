@@ -9,3 +9,4 @@ Scenario: A donation is made on someone else's behalf
   Then a £20 donation should be recorded under the name "Anonymous"
   And one key per game in the bundle should have been assigned
   And the £20 donation should appear as a gifted donation on the other person's donation list
+  And both people should have received an email about the donation

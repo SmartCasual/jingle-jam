@@ -4,7 +4,15 @@ class NotificationsMailer < ApplicationMailer
   #
   #   en.notifications_mailer.donation_received.subject
   #
-  def donation_received(donator)
+  def donation_received(donator, gifted: false)
+    return if donator.email_address.blank?
+
+    @gifted = gifted
+
+    mail to: donator.email_address
+  end
+
+  def gift_sent(donator)
     return if donator.email_address.blank?
 
     mail to: donator.email_address

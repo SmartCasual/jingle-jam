@@ -24,7 +24,13 @@ class PaymentAssignmentJob < ApplicationJob
       donation.confirm_payment!
 
       DonatorBundleAssignmentJob.perform_later(donation.donator_id)
-      NotificationsMailer.donation_received(donation.donator).deliver_later
+
+      if donation.gifted?
+        NotificationsMailer.donation_received(donation.donator, gifted: true).deliver_later
+        NotificationsMailer.gift_sent(donation.donated_by).deliver_later
+      else
+        NotificationsMailer.donation_received(donation.donator).deliver_later
+      end
       # TODO: Notify webhooks
     end
   end

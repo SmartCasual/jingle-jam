@@ -1,3 +1,7 @@
-<h1><%= t("email.bundle_pending.header") %></h1>
+<% if @gifted %>
+  <h1><%= t("email.bundle_pending.gifted.header") %></h1>
+<% else %>
+  <h1><%= t("email.bundle_pending.header") %></h1>
+<% end %>
 
 <p><%= t("email.bundle_pending.instructions") %></p>

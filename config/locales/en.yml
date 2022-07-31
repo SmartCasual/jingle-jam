@@ -116,9 +116,14 @@ en:
     bundle_pending:
       header: "Thanks for your donation!"
       instructions: "You'll receive a link to your game keys shortly."
+      gifted:
+        header: "A donation has been made on your behalf!"
     bundle_sent:
       header: "Thanks for your donation!"
       instructions: "You can find your game keys here:"
+    gift_sent:
+      header: "Thanks for your donation gift!"
+      instructions: "The recipient will receive an email shortly."
 
   fundraisers:
     show:

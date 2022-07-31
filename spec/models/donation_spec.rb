@@ -57,4 +57,18 @@ RSpec.describe Donation do
       it { is_expected.to eq("Anonymous") }
     end
   end
+
+  describe "#gifted?" do
+    subject(:gifted?) { donation.gifted? }
+
+    context "when the donation is gifted" do
+      before { donation.donated_by = create(:donator) }
+
+      it { is_expected.to be(true) }
+    end
+
+    context "when the donation is not gifted" do
+      it { is_expected.to be(false) }
+    end
+  end
 end
