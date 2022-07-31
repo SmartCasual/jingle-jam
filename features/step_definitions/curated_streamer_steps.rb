@@ -2,6 +2,10 @@ Given("a curated streamer") do
   @current_curated_streamer = FactoryBot.create(:curated_streamer)
 end
 
+Given("several curated streamers") do
+  @current_curated_streamers = FactoryBot.create_list(:curated_streamer, 3)
+end
+
 When("a donator goes to the curated streamer's page") do
   @fundraiser = create(:fundraiser, :active)
   go_to_curated_streamer(@current_curated_streamer, fundraiser: @fundraiser)
@@ -73,4 +77,16 @@ Then("a regular user should not be able to see the stream admin page") do
   go_to_curated_streamer(@current_curated_streamer, fundraiser: @fundraiser, admin: true)
 
   expect(page).not_to have_text("#{@current_curated_streamer.twitch_username} admin")
+end
+
+Then("links to the curated streamers should be listed on the homepage") do
+  create_list(:fundraiser, 3, :active, :with_live_bundle)
+
+  go_to_homepage
+
+  Fundraiser.active.each do |fundraiser|
+    @current_curated_streamers.each do |curated_streamer|
+      expect(page).to have_link(curated_streamer.twitch_username, href: fundraiser_curated_streamer_path(fundraiser, curated_streamer))
+    end
+  end
 end

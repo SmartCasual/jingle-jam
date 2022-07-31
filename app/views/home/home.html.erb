@@ -7,7 +7,15 @@
 <% if (fundraisers = Fundraiser.active.open).any? %>
   <ul>
     <% fundraisers.each do |fundraiser| %>
-      <li><%= link_to fundraiser %></li>
+      <li>
+        <p><%= link_to fundraiser %></p>
+        <h3>Streamers</h3>
+        <ul>
+          <% CuratedStreamer.all.each do |streamer| %>
+            <li><%= link_to streamer.twitch_username, fundraiser_curated_streamer_path(fundraiser, streamer) %></li>
+          <% end %>
+        </ul>
+      </li>
     <% end %>
   </ul>
 <% else %>
