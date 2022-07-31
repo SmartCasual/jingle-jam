@@ -18,3 +18,7 @@ Scenario: Stream admin views donation stats
   Then a stream admin for that streamer should see the relevant donations on the stream admin page
   And a stream admin for a different streamer should not be able to see the stream admin page
   And a regular user should not be able to see the stream admin page
+
+Scenario: Curated streamers are listed on the homepage
+  Given several curated streamers
+  Then links to the curated streamers should be listed on the homepage
