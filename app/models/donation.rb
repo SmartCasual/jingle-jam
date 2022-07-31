@@ -79,4 +79,8 @@ class Donation < ApplicationRecord
   def state
     aasm_state
   end
+
+  def gifted?
+    donated_by.present?
+  end
 end

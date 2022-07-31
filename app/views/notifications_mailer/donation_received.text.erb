@@ -1,3 +1,7 @@
-<%= t("email.bundle_pending.header") %>
+<% if @gifted %>
+  <%= t("email.bundle_pending.gifted.header") %>
+<% else %>
+  <%= t("email.bundle_pending.header") %>
+<% end %>
 
 <%= t("email.bundle_pending.instructions") %>
