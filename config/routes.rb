@@ -15,6 +15,11 @@ Rails.application.routes.draw do
   post "/stripe/prep-checkout", to: "stripe_payments#prep_checkout_session"
   post "/stripe/webhook", to: "stripe_payments#webhook"
 
+  get "/api/donations", to: "api#donations", as: "donations_api"
+  get "/api/fundraisers", to: "api#fundraisers", as: "fundraisers_api"
+  get "/api/curated-streamers", to: "api#curated_streamers", as: "curated_streamers_api"
+  get "/api/totals", to: "api#totals", as: "totals_api"
+
   post "/paypal/prep-checkout", to: "paypal_payments#prep_checkout_session"
   post "/paypal/complete-checkout/:order_id", to: "paypal_payments#complete_checkout"
   post "/paypal/webhook", to: "paypal_payments#webhook"
