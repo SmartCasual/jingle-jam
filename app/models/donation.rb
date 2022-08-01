@@ -12,6 +12,7 @@
 # **`amount_decimals`**           | `integer`          | `default(0), not null`
 # **`donator_name`**              | `string`           |
 # **`message`**                   | `string`           |
+# **`paid_at`**                   | `datetime`         |
 # **`created_at`**                | `datetime`         | `not null`
 # **`updated_at`**                | `datetime`         | `not null`
 # **`curated_streamer_id`**       | `bigint`           |
@@ -84,5 +85,17 @@ class Donation < ApplicationRecord
 
   def gifted?
     donated_by.present?
+  end
+
+  def as_json(options={})
+    super(
+      except: [
+        :stripe_payment_intent_id,
+        :paypal_order_id
+      ],
+      include: {
+        donator: {},
+        donated_by: {},
+      })
   end
 end

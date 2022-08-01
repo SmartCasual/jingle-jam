@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_10_213803) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_30_220559) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -137,10 +138,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_10_213803) do
     t.string "paypal_order_id"
     t.string "donator_name"
     t.bigint "fundraiser_id"
+    t.datetime "paid_at"
     t.index ["curated_streamer_id"], name: "index_donations_on_curated_streamer_id"
     t.index ["donated_by_id"], name: "index_donations_on_donated_by_id"
     t.index ["donator_id"], name: "index_donations_on_donator_id"
     t.index ["fundraiser_id"], name: "index_donations_on_fundraiser_id"
+    t.index ["paid_at"], name: "index_donations_on_paid_at"
     t.check_constraint "num_nonnulls(stripe_payment_intent_id, paypal_order_id) > 0"
   end
 
