@@ -22,6 +22,7 @@ class PaymentAssignmentJob < ApplicationJob
 
     if donation.pending?
       donation.confirm_payment!
+      donation.update({ :paid_at => Time.now.utc })
 
       DonatorBundleAssignmentJob.perform_later(donation.donator_id)
 
