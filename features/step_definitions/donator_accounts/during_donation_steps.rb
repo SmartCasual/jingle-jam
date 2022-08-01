@@ -1,11 +1,17 @@
 When("a donator makes a donation without giving a name or an email address") do
-  make_donation(Money.new(10_00, "GBP"), navigate: true)
+  make_donation(Money.new(10_00, "GBP"),
+    email_address: false,
+    navigate: true,
+    expect_failure: true,
+  )
 end
 
 When("a donator makes a donation giving a name but no email address") do
   make_donation(Money.new(10_00, "GBP"),
-    navigate: true,
     name: "Test Donator",
+    email_address: false,
+    navigate: true,
+    expect_failure: true,
   )
 end
 
@@ -21,23 +27,24 @@ When("a donator makes a donation giving an email address from Stripe") do
   @expected_email_address = "test@example.com"
   make_donation(Money.new(10_00, "GBP"),
     navigate: true,
+    email_address: @expected_email_address,
     stripe_options: {
-      email_address: @expected_email_address,
+      email_address: "some-other@example.com",
     },
   )
 end
 
 When("a donator makes a donation giving an email address from Paypal") do
-  @expected_email_address = ENV.fetch("PAYPAL_TEST_DONATOR_EMAIL_ADDRESS", nil)
+  @expected_email_address = "test@example.com"
   amount = Money.new(10_00, "GBP")
 
   order_id = stub_paypal_order_creation(amount:)
   stub_paypal_payment_capture(
-    email_address: @expected_email_address,
+    email_address: ENV.fetch("PAYPAL_TEST_DONATOR_EMAIL_ADDRESS", nil),
     order_id:,
   )
 
-  make_donation(amount, navigate: true, paypal: true)
+  make_donation(amount, navigate: true, paypal: true, email_address: @expected_email_address)
 end
 
 Then("an anonymous account should have been made for the donator") do
@@ -110,4 +117,8 @@ end
 
 Then("the donator's email address should now be confirmed") do
   expect(@current_donator.reload).to be_confirmed
+end
+
+Then("they should be told that an email address is required") do
+  expect(page).to have_content("You must provide an email address")
 end

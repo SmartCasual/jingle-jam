@@ -20,6 +20,8 @@
 <h2><%= t("donations.form.header") %></h2>
 
 <%= form_for new_donation("25.00", fundraiser:), url: stripe_prep_checkout_path, html: { id: "donation-form", :'data-stripe-public-key' => ENV["STRIPE_PUBLIC_KEY"], :'data-test-mode' => Rails.env.test? } do |form| %>
+  <ul class="errors"></ul>
+
   <p>
     <%= form.label :amount_currency, t("donations.form.currency") %>
     <%= form.select :amount_currency, options_for_select(Currency.present_all, Currency::DEFAULT_CURRENCY.downcase) %>

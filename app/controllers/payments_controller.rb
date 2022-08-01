@@ -5,6 +5,11 @@ class PaymentsController < ApplicationController
   def prep_checkout_session
     return unless request.headers["Accept"] == "application/json"
 
+    if params[:donator_email_address].blank? && current_donator&.email_address.blank?
+      error "You must provide an email address"
+      return
+    end
+
     set_current_donator
     update_current_donator
     save_current_donator

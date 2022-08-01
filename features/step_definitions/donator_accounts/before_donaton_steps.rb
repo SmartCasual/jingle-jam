@@ -18,7 +18,7 @@ When("they immediately make a donation") do
   @amount = Money.new(10_00, "GBP")
 
   expect {
-    make_donation(@amount, navigate: true)
+    make_donation(@amount, navigate: true, email_address: false)
   }.to(change { @current_donator.reload.donations.count }.by(1))
 end
 
