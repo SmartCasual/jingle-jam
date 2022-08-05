@@ -1,0 +1,2 @@
+(self.webpackChunkrachni=self.webpackChunkrachni||[]).push([[549],{195:()=>{document.querySelectorAll("[data-accordion]").forEach((function(e){e.addEventListener("click",(function(){e.parentNode.classList.toggle("--is-open")}))}))},576:()=>{}},e=>{var c=c=>e(e.s=c);e.O(0,[925],(()=>(c(195),c(576))));e.O()}]);
+//# sourceMappingURL=global.js.map

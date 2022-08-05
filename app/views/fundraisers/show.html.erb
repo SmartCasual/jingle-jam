@@ -1,67 +1,76 @@
 <h1><%= @fundraiser.name %></h1>
 
-<h2><%= t("common.headers.bundles") %></h2>
+<section class="bg--shaped">
+  <img src="/assets/img/bg-shape.png" alt="">
+  <div class="container text--center">
+    <div class="bundle__links">
+      <%= link_to t("common.actions.donate_here"), new_fundraiser_donation_path(@fundraiser), class: "cta" %>
+    </div>
 
-<% if @tiers_by_bundle.any? %>
-  <ul>
-    <% @tiers_by_bundle.each do |bundle, tiers_by_price| %>
-      <li class="bundle">
-        <h3><%= bundle.name %></h3>
-        <p>Donate <%= bundle.highest_tier.price.format %> or more to receive everything in this bundle.</p>
+    <h2><%= t("common.headers.bundles") %></h2>
 
-        <ul>
-          <% tiers_by_price.each.with_index do |(tier_price, tiers), index| %>
-            <li class="tier">
-              <% if bundle.bundle_tiers.count > 1 %>
-                <h4><%= tier_price.format %></h4>
-                <p>Donate <%= tier_price.format %> or more to receive everything in this tier.</p>
-                <% if index.positive? %>
-                  <p>Includes everything in the previous tiers.</p>
-                <% end %>
-              <% end %>
+    <% if @tiers_by_bundle.any? %>
+      <div>
+        <% @tiers_by_bundle.each do |bundle, tiers_by_price| %>
+          <div>
+            <div><%= bundle.name %></div>
+            <div>Donate <%= bundle.highest_tier.price.format %> or more to receive everything in this bundle.</div>
 
-              <ul>
-                <% tiers.group_by(&:availability_text).each do |availability_text, tiers_for_availability| %>
-                  <li class="availability-tier">
+            <div class="bundle">
+              <% tiers_by_price.each.with_index do |(tier_price, tiers), index| %>
+                <div class="tier">
+                  <% if bundle.bundle_tiers.count > 1 %>
+                    <div class="bundle__headline">
+                      <h3><%= tier_price.format %></h3>
+                      <div>Donate <%= tier_price.format %> or more to receive everything in this tier.</div>
+                      <% if index.positive? %>
+                        <div>Includes everything in the previous tiers.</div>
+                      <% end %>
+                    </div>
+                  <% end %>
+
+                  <% tiers.group_by(&:availability_text).each do |availability_text, tiers_for_availability| %>
                     <% if tiers.any?(&:availability_text) %>
-                      <h5><%= availability_text || "Available now" %></h5>
+                      <div><%= availability_text || "Available now" %></div>
                     <% end %>
 
-                    <ul>
-                      <% tiers_for_availability.flat_map(&:games).each do |game| %>
-                        <li class="game">
-                          <%= link_to game.name, game_path(game) %>
-                        </li>
-                      <% end %>
-                    </ul>
-                  </li>
-                <% end %>
-              </ul>
-            </li>
-          <% end %>
-        </ul>
-      </li>
+                    <% tiers_for_availability.flat_map(&:games).each do |game| %>
+                      <div class="bundle__game">
+                        <%= link_to game_path(game) do %>
+                          <img src="https://images.unsplash.com/photo-1553481187-be93c21490a9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" alt="<%= game.name %>">
+                        <% end %>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     <% end %>
-  </ul>
-<% else %>
-  <p>
-    <%= t("fundraisers.show.no_bundles") %>
-  </p>
-<% end %>
-
-<p>
-  <%= link_to t("common.actions.donate_here"), new_fundraiser_donation_path(@fundraiser), class: "cta" %>
-</p>
-
-<p>
-  <%= link_to "See current donations", fundraiser_donations_path(@fundraiser), class: "cta" %>
-</p>
+  </div>
+</section>
 
 <% if @fundraiser.charities.any? %>
-  <h2><%= t("common.headers.charities") %></h2>
-  <ul>
-    <% @fundraiser.charities.each do |charity| %>
-      <li><%= link_to charity.name, charity_path(charity) %></li>
-    <% end %>
-  </ul>
+  <section class="pt-2">
+    <div class="container text--center">
+      <h2><%= t("common.headers.charities") %></h2>
+      <div class="charities">
+        <% @fundraiser.charities.each do |charity| %>
+          <div class="charity">
+            <div class="charity__image">
+              <%= link_to charity_path(charity) do %>
+                <img src="https://images.unsplash.com/photo-1519455953755-af066f52f1a6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80" alt="<%= charity.name %>">
+              <% end %>
+            </div>
+            <div class="charity__total">
+              <span><%= Donation.total(@fundraiser.donations.joins(:charities).where(charities: charity)).format %></span>
+              Raised so far
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
 <% end %>

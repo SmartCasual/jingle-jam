@@ -34,6 +34,8 @@ class Donation < ApplicationRecord
   has_many :charity_splits, inverse_of: :donation, dependent: :destroy
   accepts_nested_attributes_for :charity_splits
 
+  has_many :charities, through: :charity_splits, inverse_of: :donations
+
   before_save do
     if charity_splits.all? { |s| s.amount.zero? }
       self.charity_splits = []
@@ -69,6 +71,10 @@ class Donation < ApplicationRecord
   scope :created_before, -> (timestamp) {
     where("created_at < ?", timestamp)
   }
+
+  def self.total(scope)
+    scope.map(&:amount).reduce(Money.new(0), :+)
+  end
 
   def charity_name
     charity&.name
