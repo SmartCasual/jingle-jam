@@ -1,5 +1,20 @@
 <% if twitch_embed_enabled? %>
-  <div id="twitch-embed" data-channel="<%= channel %>"></div>
+  <div class="hero__video">
+    <div id="twitch-embed" data-channel="<%= channel %>"></div>
+  </div>
+  <div class="hero__content">
+    <div class="hero__links">
+      <a href="https://www.twitch.tv/yogscast" class="button" target="_blank">Watch Live</a>
+      <a href="https://www.twitch.tv/yogscast/schedule" class="button" target="_blank">Schedule</a>
+    </div>
+    <dl>
+      <dt>Total raised so far</dt>
+      <dd><%= Donation.total(Fundraiser.active.first).format %></dd>
+    </dl>
+  </div>
+  <div class="hero__image">
+    <img src="/assets/img/bg-pattern.png" alt="">
+  </div>
 
   <% content_for :head do %>
     <script src="https://embed.twitch.tv/embed/v1.js" charset="utf-8"></script>

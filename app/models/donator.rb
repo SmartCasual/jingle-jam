@@ -110,11 +110,13 @@ class Donator < ApplicationRecord
   end
 
   def total_donations(fundraiser: nil)
-    if fundraiser
+    scope = if fundraiser
       donations.where(fundraiser:)
     else
       donations
-    end.map(&:amount).reduce(Money.new(0), :+)
+    end
+
+    Donation.total(scope)
   end
 
   def token
